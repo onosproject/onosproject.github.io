@@ -419,10 +419,9 @@ include:
 
 Each of the above subsystems comprises its own distributed store and
 notification capabilities. Individual applications are free to extend
-this set with their own sets of services and to back their
-
-implementations with their own distributes stores. This is why ONOS
-provides applications with direct access to Atomix primitives, such as
+this set with their own services and to back their implementations
+with their own distributes stores. This is why ONOS provides
+applications with direct access to Atomix primitives, such as
 ``AtomicMaps`` and ``DistributedMaps``. We will see examples of such
 extensions in the next Chapter when we take a closer look at Trellis.
 
