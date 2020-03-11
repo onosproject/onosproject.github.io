@@ -461,15 +461,15 @@ and human operators.</span></p>
 parts. For completeness, the following gives a summary of the most
 commonly used ONOS services:</p>
 <blockquote>
-<div><p><strong>Host:</strong> End system (machine or virtual machine) connected to the
-network. Populated by one or more host discovery apps, generally by
-intercepting ARP, NDP, or DHCP packets.</p>
-<p><strong>Device:</strong> Infrastructure device-specific information (switches,
-ROADMs, etc.), including ports. Populated by one or more device
-discovery apps.</p>
-<p><strong>Link:</strong> Attributes of links connecting pairs of infrastructure
-devices/ports. Populated by one or more link discovery apps (e.g., by
-emitting an intercepting LLDP packets).</p>
+<div><p><strong>Host:</strong> Records end systems (machine or virtual machine) connected
+to the network. Populated by one or more host discovery apps,
+generally by intercepting ARP, NDP, or DHCP packets.</p>
+<p><strong>Device:</strong> Records infrastructure device-specific information
+(switches, ROADMs, etc.), including ports. Populated by one or more
+device discovery apps.</p>
+<p><strong>Link:</strong> Records attributes of links connecting pairs of
+infrastructure devices/ports. Populated by one or more link
+discovery apps (e.g., by emitting an intercepting LLDP packets).</p>
 <p><strong>Topology:</strong> Represents the network as a whole using a graph
 abstraction. It is built on top of the Device and Link services and
 provides a coherent graph comprised of infrastructure devices as
@@ -481,22 +481,23 @@ primitive) to elect which ONOS instance in the cluster should be the
 master for each infrastructure device. In cases when an ONOS instance
 fails (e.g., server power failure), it makes sure a new master is
 elected as soon as possible for all devices left without one.</p>
-<p><strong>Cluster:</strong> ONOS cluster configuration. It provides information about
-the Atomix cluster nodes as well as about all peer ONOS nodes. Atomix
-nodes form the actual cluster that is the basis for consensus, while
-the ONOS nodes are effectively mere clients used to scale control
-logic and I/O to network devices. Entries set by ONOS using Atomix
-membership primitive.</p>
-<p><strong>Network Config:</strong> Prescribed meta-information about the network,
+<p><strong>Cluster:</strong> Manages ONOS cluster configuration. It provides
+information about the Atomix cluster nodes as well as about all peer
+ONOS nodes. Atomix nodes form the actual cluster that is the basis
+for consensus, while the ONOS nodes are effectively mere clients
+used to scale control logic and I/O to network devices. Entries set
+by ONOS using Atomix membership primitive.</p>
+<p><strong>Network Config:</strong> Prescribes meta-information about the network,
 such as devices and their ports, hosts, links, etc. Provides outside
 information about the network and how the network should be treated by
 ONOS core and applications. Set by orchestrator apps, the ZTP control
 application, or manually by an operator.</p>
-<p><strong>Component Config:</strong> Configuration parameters for various software
-components in the ONOS core and applications. Such parameters
-(i.e. how to treat foreign flow rules, address or DHCP server, polling
-frequency, and so on) allow for tailoring the behavior of
-software. Set by the operator according to the needs of the deployment.</p>
+<p><strong>Component Config:</strong> Manages configuration parameters for various
+software components in the ONOS core and applications. Such
+parameters (i.e. how to treat foreign flow rules, address or DHCP
+server, polling frequency, and so on) allow for tailoring the
+behavior of the software. Set by the operator according to the needs of
+the deployment.</p>
 <p><strong>Packet:</strong> Allows the core services and applications to intercept
 packets (packet in) and to emit packets back into the network. This
 is the basis for most of the host and link discovery methods (e.g.,
@@ -510,40 +511,40 @@ constructs and different levels of abstraction. We discuss some of
 these in more depth in the next section, but for now we note that they
 include:</p>
 <blockquote>
-<div><p><strong>Route:</strong> Prefix to nexthop mapping. Set either by a control app or
-manually configured by an operator.</p>
-<p><strong>Mcast:</strong> Group IP, source and sink locations. Set by a control app or
-manually configured by an operator.</p>
-<p><strong>Group:</strong> Construct for aggregating ports or actions in a
-device. Flow entries can point to a defined group to allow
-sophisticated means of forwarding, such as load-balancing between
-ports in a group, failover among ports in a group, or multicast to all
-ports specified in a group.  A group can also be used for aggregating
-common actions of different flows, so that in some scenarios only one
-group entry is required to be modified for all the referencing flow
-entries instead of having to modify all of them.</p>
-<p><strong>Meter:</strong> Construct for expressing a rate-limit to enforce a quality
-of service for select network traffic handled by a device.</p>
-<p><strong>Flow Rule:</strong> Device-centric, match/action pair abstraction for
-programming data-plane forwarding behavior of a device. It requires
-that flow rule entries be composed in accordance with the table
-pipeline structure and capabilities.</p>
-<p><strong>Flow Objective:</strong> Device-centric abstraction for programming
-forwarding behavior of a device in a pipeline-agnostic manner. It
-relies on a driver behavior Pipeliner to implement the mapping between
-table-agnostic flow objectives and table-specific flow rules or
-groups.</p>
-<p><strong>Intent:</strong> Provides applications with topology-agnostic means to
-establish flows across the network. Applications submit high-level
-specifications (intents) indicating various hints and constraints,
-including the type of traffic and the source and destination hosts, or
-ingress and egress ports to request connectivity. The subsystem then
+<div><p><strong>Route:</strong> Defines a prefix to nexthop mapping. Set either by a
+control app or manually configured by an operator.</p>
+<p><strong>Mcast:</strong> Defines group IP, source and sink locations. Set by a
+control app or manually configured by an operator.</p>
+<p><strong>Group:</strong> Aggregates ports or actions in a device. Flow entries can
+point to a defined group to allow sophisticated means of forwarding,
+such as load-balancing between ports in a group, failover among
+ports in a group, or multicast to all ports specified in a group.  A
+group can also be used for aggregating common actions of different
+flows, so that in some scenarios only one group entry is required to
+be modified for all the referencing flow entries instead of having
+to modify all of them.</p>
+<p><strong>Meter:</strong> Expresses a rate-limit to enforce a quality of service
+for select network traffic handled by a device.</p>
+<p><strong>Flow Rule:</strong> Provides a device-centric, match/action pair for
+programming the data-plane forwarding behavior of a device. It
+requires that flow rule entries be composed in accordance with the
+device’s table pipeline structure and capabilities.</p>
+<p><strong>Flow Objective:</strong> Provides a device-centric abstraction for
+programming the forwarding behavior of a device in a
+pipeline-agnostic manner. It relies on the Pipeliner subsystem (see
+next section) to implement the mapping between table-agnostic flow
+objectives and table-specific flow rules or groups.</p>
+<p><strong>Intent:</strong> Provides a topology-agnostic way to establish flows
+across the network. High-level specifications, call <em>intents</em>,
+indicate various hints and constraints for the end-to-endpath,
+including the type of traffic and the source and destination hosts,
+or ingress and egress ports to request connectivity. The service
 provisions this connectivity over the appropriate paths and then
-continuously monitors the network environment, changing the paths over
-time in response to the variations in the network topology in order to
-continue meeting the objectives prescribed by the intent.</p>
+continuously monitors the network, changing the paths over time to
+continue meeting the objectives prescribed by the intent in the face
+of varying network conditions.</p>
 </div></blockquote>
-<p>Each of the above subsystems comprises its own distributed store and
+<p>Each of the above services comprises its own distributed store and
 notification capabilities. Individual applications are free to extend
 this set with their own services and to back their implementations
 with their own distributes stores. This is why ONOS provides
@@ -736,20 +737,21 @@ flow ops/sec (sustained); 1k topology events/sec (peak); 50ms to
 detect port/switch up events; 5ms to detect port/switch down events;
 3ms for flow ops; and 6ms for hand-over events (RAN).</li>
 </ul>
-<p>These numbers were measured on a deployment with threes ONOS instances
-running on three 32-Core/128GB-RAM servers. Each instance is a Docker
-container deployed using Kubernetes. Each instance bundles an
-identical (but configurable) collection of core services, control
-applications, and protocol providers, where ONOS uses Karaf to manage
-its internal modularity. The bundle also includes Atomix, although
-ONOS supports an optional configuration that scales the key/value
-store independently from the rest of ONOS.</p>
+<p>Production deployments run at least three instances of ONOS, but this
+is more for availability than performance. Each instance runs on a
+32-Core/128GB-RAM server, and is deployed as a Docker container using
+Kubernetes. Each instance bundles an identical (but configurable)
+collection of core services, control applications, and protocol
+providers, where ONOS uses Karaf as its internal modularity framework.
+The bundle also includes Atomix, although ONOS supports an optional
+configuration that scales the key/value store independently from the
+rest of ONOS.</p>
 <p>A refactoring of ONOS to more closely adhere to a microservice
 architecture is also underway. The new version, called µONOS,
 leverages ONOS’s existing modularity, but packages and scales
 different subsystems independently. This includes encapsulating Atomix
 in its own microservice, as well as running each control application
-and southbound adaptor as a separate micro-service. It also means
+and southbound adaptor as a separate microservice. It also means
 partitioning the core into distinct microservices corresponding to
 Topology Management (exporting a Network Graph API), Control
 Management (exporting a P4Runtime API), Configuration Management
