@@ -315,8 +315,8 @@ causes of network failures. For example, INT can be used to measure
 and record queuing delay individual packets experience while
 traversing a sequence of switches along an end-to-end path. As another
 example, INT can perform data reductions—in the data plane, at line
-speed—making it possible to "find the needle without having to collect
-the haystack." More speculatively, INT can even be used to verify that
+speed—making it possible to *"find the needle without having to collect
+the haystack."* More speculatively, INT can even be used to verify that
 the data plane is in fact faithfully executing the forwarding behavior
 the network operator intended. We return to the potential of INT to
 qualitatively change network in the concluding chapter of this book.
