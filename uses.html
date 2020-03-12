@@ -333,14 +333,22 @@ ordered in increasing volume, decreasing latency sensitivity, and
 decreasing overall priority. For example, user-data represents the
 lowest volume on B4, is the most latency sensitive, and is of the
 highest priority.</p>
-<p>By centralizing the decision-making process—one of the claimed
-advantages of SDN—Google has been able to drive their link
-utilizations to nearly 100%. This is two to three times better than
-the 30-40% average utilization that WAN links are typically
-provisioned for, which is necessary to allow those networks to deal
-with both traffic bursts and link/switch failures. If you can
-centrally decide how to allocate resources across the entire network,
-it is possible to run the network much closer to maximum utilization.</p>
+<p>Through a combination of centralizing the decision-making process,
+programatically rate-limiting traffic at the senders, and
+differentiating three classes of traffic, Google has been able to
+drive their link utilizations to nearly 100%. This is two to three
+times better than the 30-40% average utilization that WAN links are
+typically provisioned for, which is necessary to allow those networks
+to deal with both traffic bursts and link/switch failures. The Google
+experience with SDN is an interesting one, and shows the value of
+being able to customize the network. The following discussion with
+Amin Vahdat, Jennifer Rexford, and David Clark is especially
+insightful into the thought process around SDN:</p>
+<div class="admonition-further-reading admonition" id="reading-b4">
+<p class="first admonition-title">Further Reading</p>
+<p class="last"><a class="reference external" href="https://queue.acm.org/detail.cfm?id=2856460">A Purpose-built Global Network: Google’s Move to SDN</a>. Communications of
+the ACM, December 2015.</p>
+</div>
 </div>
 <div class="section" id="access-networks">
 <h2>2.4 Access Networks<a class="headerlink" href="#access-networks" title="Permalink to this headline">¶</a></h2>
