@@ -203,7 +203,7 @@ open source components described in this book throughout their
 production network.</p>
 <p>Finally, enterprises are the slowest to adopt SDN, but there are three
 things to note about this situation. One is that pure play SDN is
-deployed in many Universities, with the goal of supporting research
+deployed in some Universities, with the goal of supporting research
 and innovation. The second is that the most likely path-to-adoption
 for pure play SDN in enterprises is via managed edge services offered
 by cloud providers. The idea is to connect on-premise clusters running
@@ -398,21 +398,31 @@ switching fabric. And just as the <em>Open Compute Project (OCP)</em> has
 certified white-box ethernet switches, they now also certify white-box
 OLT devices. Both the fabric switches and access devices are
 controlled by a software-defined control plane, with the code that
-implements that control plane running on servers in the
-cluster. Moreover, when the fabric is constructed using switches with
+implements that control plane running on servers in the cluster.</p>
+<p>Moreover, when the fabric is constructed using switches with
 programmable pipelines, certain functionality originally provided by
 the legacy hardware can be programmed into the switches that comprise
-the fabric.</p>
+the fabric. For example, BNG-equivalent functionality, which could be
+packeted as a <em>Virtual Network Function (VNF)</em> running on a
+general-purpose processor, is instead programmed directly into a
+white-box switches. This practice is sometimes called <em>VNF
+off-loading</em> because the packet processing is moved from the compute
+servers into the switches. This is a great example of what happens
+when switch data planes become programmable: developers write software
+that is able to take advantage of the hardware in new, unanticipated
+ways.</p>
 <div class="figure align-center" id="id4">
 <span id="fig-seba"></span><a class="reference internal image-reference" href="_images/Slide21.png"><img alt="_images/Slide21.png" src="_images/Slide21.png" style="width: 500px;" /></a>
 <p class="caption"><span class="caption-number">Figure 10. </span><span class="caption-text">General hardware architecture of SEBA: SDN-Enabled Broadband
 Access.</span></p>
 </div>
-<p><em>Software-Defined Radio Access Networks (SD-RAN)</em> are still in
-the proof-of-concept stage. Disaggregating the RAN is a bigger
-challenge, but the payoff will likely be even larger, as it leads to a
-5G-empowered edge cloud. For more information about how 5G will be
-implemented according to SDN principles, we recommend:</p>
+<p>Progress on <em>Software-Defined Radio Access Networks (SD-RAN)</em> lags
+progress on software-defined broadband, with development still in the
+proof-of-concept stage. Disaggregating the RAN is a bigger challenge,
+but the payoff will likely be even larger, as it leads to a
+5G-empowered edge cloud. We revisit SD-RAN in Chapter 8, but for a
+broad introduction to how 5G is being implemented according to SDN
+principles, we recommend:</p>
 <div class="admonition-further-reading admonition" id="reading-5g">
 <p class="first admonition-title">Further Reading</p>
 <p class="last"><a class="reference external" href="https://5g.systemsapproach.org/">5G Mobile Networks: A Systems Approach</a>. August 2019.</p>
@@ -448,11 +458,13 @@ observed (experienced) while being forwarded.</p>
 qualitatively deeper insights into traffic patterns and the root
 causes of network failures. For example, INT can be used to measure
 and record queuing delay individual packets experience while
-traversing a sequence of switches along an end-to-end path. More
-speculatively, INT can even be used to verify that the data plane is
-in fact faithfully executing the forwarding behavior the network
-operator intended. We return to the potential of INT to qualitatively
-change network in the concluding chapter of this book.</p>
+traversing a sequence of switches along an end-to-end path. As another
+example, INT can perform data reductions—in the data plane, at line
+speed—making it possible to “find the needle without having to collect
+the haystack.” More speculatively, INT can even be used to verify that
+the data plane is in fact faithfully executing the forwarding behavior
+the network operator intended. We return to the potential of INT to
+qualitatively change network in the concluding chapter of this book.</p>
 </div>
 </div>
 

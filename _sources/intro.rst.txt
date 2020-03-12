@@ -22,11 +22,11 @@ collection of open source platforms over the last six years. These
 platforms are being used to deliver SDN-based solutions into
 production networks, including Tier-1 network operators.
 
-Because SDN is an approach to building networks, but it takes a set of
-software and hardware artifacts to put that approach into practice,
-and so we draw on an example set of open source components to add
-depth to the discussion. These tools and platforms are also the source
-of programming exercises that accompany this book.
+This focus on the software stack is a central theme of the
+book. Because SDN is an approach to building networks, a set of
+software and hardware artifacts are required to put that approach into
+practice.  The examples we draw upon are available on GitHub, with
+links to both source code and tutorials available throughout the book.
 
 Before getting into the details, it is helpful to understand the
 origin story for SDN, which started as an effort by the Computer
@@ -167,7 +167,7 @@ In practice, decoupling the control and data planes manifests in
 parallel but distinct data structures: the control plane maintains a
 *routing table* that includes any auxiliary information needed to
 select the best route at a given point in time (e.g., including
-alternatives paths, their respective costs, and any policy
+alternative paths, their respective costs, and any policy
 constraints), while the data plane maintains a *forwarding table* that
 is optimized for fast packet processing (e.g., determining that any
 packet arriving on Port *i* with destination address *D* should be
@@ -325,19 +325,19 @@ control/data plane disaggregation. In short, the momentum of SDN has
 had the side-effect of improving the configuration interfaces exposed
 by switch and router vendors (and we describe the state-of-the-art in
 such interfaces in Chapter 5), but doing so is not a substitute for
-fine-grain control that SDN requires.
+the granularity of control SDN requires.
 
-To be clear, all elements in a switch require configuration. The ASIC
-requires configuration of things like QoS and port channelization. The
-platform requires configuration of fans, LEDs, and other
-peripherals. The on-switch software needs to be informed what
-certificate it should use when a client connects and what log level
-should be set. The control plane components also require
-configuration. For example, the routing agent needs to know its IP
-address, who its neighbors are, and if it has any static routes. The
-key distinction is the purpose, but more quantitatively, the rate of
-updates: configuration implies potentially thousands of updates/day
-while control implies potentially thousands of updates/sec.
+To be clear, all elements in a switch require configuration. The data
+plane requires configuration of things like port speeds. The platform
+requires configuration of fans, LEDs, and other peripherals.  The
+on-switch software needs to be informed what certificate it should use
+when a client connects and what log level should be set. The control
+plane components also require configuration. For example, the routing
+agent needs to know its IP address, who its neighbors are, and if it
+has any static routes. The key distinction is the purpose, but more
+quantitatively, the rate of updates: configuration implies potentially
+thousands of updates/day while control implies potentially thousands
+of updates/sec.
 
 1.2.2 Control Plane: Centralized vs Distributed
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -441,19 +441,20 @@ collects.
 	discuss example use cases in Chapter 2, but there is a natural
 	evolution of networking that highlights the thought process.
 
-	Historically, there has one control plane instance per switch
-	and they both run together on the same box. As simple routers
-	grew into chassis routers, there wer typically N control plane
-	instances for M line cards. They ran on discrete hardware and
-	talked to each other through a management network. As chassis
-	routers grew into a multi-rack fabric built from commodity
-	switches, SDN suggested a design that aggregates forwarding
-	elements under a control plane running anywhere and structured
-	as distributed system. The advantage is that such a system can
-	use modern techniques for state distribution and management,
-	rather than being tied to standards. The key is finding
-	domains for which it is possible to optimize performance with
-	a logically centralized control plane.
+	Historically, there has been one control plane instance per
+	switch and they both run together on the same box. As simple
+	routers grew into chassis routers, there were typically N
+	control plane instances for M line cards. They ran on discrete
+	hardware and talked to each other through a management
+	network. As chassis routers grew into a multi-rack fabric
+	built from commodity switches, SDN suggested a design that
+	aggregates forwarding elements under a control plane running
+	anywhere and structured as distributed system. The advantage
+	is that such a system can use modern techniques for state
+	distribution and management, rather than being tied to
+	standards. The key is finding domains for which it is possible
+	to optimize performance with a logically centralized control
+	plane.
 
 Returning to the original question of centralized versus distributed 
 control plane, proponents of the latter often base their rationale on 
@@ -541,16 +542,16 @@ TCAMs. As a consequence, they supported only a limited number of
 entries.
 
 In short, it proved necessary for the controller to know details about
-the forwarding pipeline in order to install a set of flow rules that
-the switch could map to hardware. As a consequence, many control
-applications were implicitly tied to a particular forwarding pipeline.
-This would be analogous to writing a Java or Python program that can
-only run on an x86 processor and is not easily ported to an ARM
-processor. It proved necessary to have more control over the
-forwarding pipeline, and because we don’t want to limit ourselves to a
-single vendor’s pipeline, we also need an abstract way to specify a
-pipeline’s behavior, that can in turn be mapped onto the physical
-pipeline of any given switch.
+the pipeline in order to install a set of flow rules that the switch could
+map to hardware. As a consequence, many control applications were
+implicitly tied to a particular forwarding pipeline.  This would be
+analogous to writing a Java or Python program that can only run on an
+x86 processor and is not easily ported to an ARM processor. It proved
+necessary to have more control over the forwarding pipeline, and
+because we don’t want to limit ourselves to a single vendor’s
+pipeline, we also need an abstract way to specify a pipeline’s
+behavior, that can in turn be mapped onto the physical pipeline of any
+given switch.
 
 The second problem was that the protocol stack changed in unexpected
 ways, meaning that the assumption that all header fields you might

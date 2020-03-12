@@ -120,11 +120,13 @@ link. The deparser reconstructs the over-the-wire representation for
 each packet from all the in-memory header fields processed by earlier
 stages.
 
-Not shown in the figure is a collection of metadata about each packet
-traversing the pipeline, including the input port and arrival
-timestamp, as well as information read and written by the individual
-stages. This metadata can also be used by the Match-Action Unit, for
-example matching on the input port.
+Not shown in the figure is a collection of metadata about the packets
+traversing the pipeline. This includes both per-packet state, such as
+the input port and arrival timestamp, and flow-level state computed
+across successive packets, such as switch counters and queue
+depth. This metadata, which has an ASIC counterpart (e.g., a register),
+is available for individual stages to read and write. It can also be
+used by the Match-Action Unit, for example matching on the input port.
 
 .. _fig-pisa1:
 .. figure:: figures/Slide11.png
@@ -292,7 +294,7 @@ What exactly does ``arch.p4`` define? Essentially three things:
    architecture, but their interface is.
 	
 3. Extensions to core P4 language types, including alternative match
-   types (.e.g., ``range`` and ``lpm`` described in Section 4.4.3).
+   types (e.g., ``range`` and ``lpm`` described in Section 4.4.3).
 
 The P4 compiler (like all compilers) has a hardware-agnostic
 *frontend* that generates an *Abstract Syntax Tree (AST)* for the
@@ -695,7 +697,7 @@ effectively applies a mask to select which bits in the key to include
 in the comparison. ``lpm``, ``exact`` and ``ternary`` are part of the
 core P4 language types, where their definitions can be found in
 ``core.p4``. P4 architectures can expose additional match types. For
-example, PSA also defines ``range` and ``selector`` matches.
+example, PSA also defines ``range`` and ``selector`` matches.
 
 The final step of the ingress routine is to “apply” the table we just
 defined. This is done only if the parser (or previous pipeline strage)

@@ -302,11 +302,13 @@ metadata into the packet before it is transmitted on the output
 link. The deparser reconstructs the over-the-wire representation for
 each packet from all the in-memory header fields processed by earlier
 stages.</p>
-<p>Not shown in the figure is a collection of metadata about each packet
-traversing the pipeline, including the input port and arrival
-timestamp, as well as information read and written by the individual
-stages. This metadata can also be used by the Match-Action Unit, for
-example matching on the input port.</p>
+<p>Not shown in the figure is a collection of metadata about the packets
+traversing the pipeline. This includes both per-packet state, such as
+the input port and arrival timestamp, and flow-level state computed
+across successive packets, such as switch counters and queue
+depth. This metadata, which has an ASIC counterpart (e.g., a register),
+is available for individual stages to read and write. It can also be
+used by the Match-Action Unit, for example matching on the input port.</p>
 <div class="figure align-center" id="id10">
 <span id="fig-pisa1"></span><a class="reference internal image-reference" href="_images/Slide11.png"><img alt="_images/Slide11.png" src="_images/Slide11.png" style="width: 650px;" /></a>
 <p class="caption"><span class="caption-number">Figure 15. </span><span class="caption-text">High-level overview of PISA’s multi-stage pipeline.</span></p>
@@ -448,7 +450,7 @@ ciphers to encrypt/decrypt the packet payload, and so on. The
 implementation of such externs is <em>not</em> specified in P4 by the
 architecture, but their interface is.</li>
 <li>Extensions to core P4 language types, including alternative match
-types (.e.g., <code class="docutils literal notranslate"><span class="pre">range</span></code> and <code class="docutils literal notranslate"><span class="pre">lpm</span></code> described in Section 4.4.3).</li>
+types (e.g., <code class="docutils literal notranslate"><span class="pre">range</span></code> and <code class="docutils literal notranslate"><span class="pre">lpm</span></code> described in Section 4.4.3).</li>
 </ol>
 <p>The P4 compiler (like all compilers) has a hardware-agnostic
 <em>frontend</em> that generates an <em>Abstract Syntax Tree (AST)</em> for the
@@ -837,7 +839,7 @@ effectively applies a mask to select which bits in the key to include
 in the comparison. <code class="docutils literal notranslate"><span class="pre">lpm</span></code>, <code class="docutils literal notranslate"><span class="pre">exact</span></code> and <code class="docutils literal notranslate"><span class="pre">ternary</span></code> are part of the
 core P4 language types, where their definitions can be found in
 <code class="docutils literal notranslate"><span class="pre">core.p4</span></code>. P4 architectures can expose additional match types. For
-example, PSA also defines <code class="docutils literal notranslate"><span class="pre">range`</span> <span class="pre">and</span> <span class="pre">``selector</span></code> matches.</p>
+example, PSA also defines <code class="docutils literal notranslate"><span class="pre">range</span></code> and <code class="docutils literal notranslate"><span class="pre">selector</span></code> matches.</p>
 <p>The final step of the ingress routine is to “apply” the table we just
 defined. This is done only if the parser (or previous pipeline strage)
 marked the IP header as valid.</p>
