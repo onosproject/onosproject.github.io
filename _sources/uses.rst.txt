@@ -142,8 +142,8 @@ leaf-spine fabric, but we postpone a more complete description until
 Chapter 7, where we describe the specifics of the Trellis
 implementation.
 
-2.3 Traffic Engineering
----------------------------
+2.3 Wide-Area Networks
+----------------------
 
 Another cloud-inspired use case is traffic engineering applied to the
 wide-area links between datacenters. For example, Google has publicly
@@ -155,7 +155,7 @@ of B4, “provisioning the network” means dynamically building
 end-to-end paths using the same Equal-Cost Multipath (ECMP) technique
 mentioned in the previous subsection, but the same idea could be
 applied to provisioning MPLS circuits or DWDM wavelengths between
-sites in the network.
+sites in a wide-area network.
 
 B4 identifies three classes of applications: (1) copying user data
 (e.g., email, documents, audio/video) to remote datacenters for
@@ -177,14 +177,14 @@ to deal with both traffic bursts and link/switch failures. The Google
 experience with SDN is an interesting one, and shows the value of
 being able to customize the network. The following discussion with
 Amin Vahdat, Jennifer Rexford, and David Clark is especially
-insightful into the thought process around SDN:
+insightful about the thought process in adopting SDN:
 
 .. _reading_b4:
 .. admonition:: Further Reading
 
    `A Purpose-built Global Network: Google's Move to SDN
-   <https://queue.acm.org/detail.cfm?id=2856460>`__. Communications of
-   the ACM, December 2015.
+   <https://queue.acm.org/detail.cfm?id=2856460>`__. ACM Queue,
+   December 2015.
 
 2.4 Access Networks
 -------------------------
@@ -264,7 +264,7 @@ white-box switches. This practice is sometimes called *VNF
 off-loading* because the packet processing is moved from the compute
 servers into the switches. This is a great example of what happens
 when switch data planes become programmable: developers write software
-that is able to take advantage of the hardware in new, unanticipated
+that is able to take advantage of the hardware in new and unanticipated
 ways.
 
 .. _fig-seba:
@@ -276,7 +276,7 @@ ways.
     Access.
 
 Progress on *Software-Defined Radio Access Networks (SD-RAN)* lags
-progress on software-defined broadband, with development still in the
+software-defined broadband, with development still in the
 proof-of-concept stage. Disaggregating the RAN is a bigger challenge,
 but the payoff will likely be even larger, as it leads to a
 5G-empowered edge cloud. We revisit SD-RAN in Chapter 8, but for a
