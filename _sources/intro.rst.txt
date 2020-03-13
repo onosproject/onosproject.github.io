@@ -24,9 +24,10 @@ production networks, including Tier-1 network operators.
 
 This focus on the software stack is a central theme of the
 book. Because SDN is an approach to building networks, a set of
-software and hardware artifacts are required to put that approach into
-practice.  The examples we draw upon are available on GitHub, with
-links to both source code and tutorials available throughout the book.
+software and hardware artifacts is required to put that approach into
+practice.  The open source examples we draw upon are available on
+GitHub, with links to both code and tutorials available throughout the
+book.
 
 Before getting into the details, it is helpful to understand the
 origin story for SDN, which started as an effort by the Computer
