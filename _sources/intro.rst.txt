@@ -38,9 +38,9 @@ well-documented in an article by Feamster, Rexford, and Zegura:
 .. _reading_history:
 .. admonition:: Further Reading
 
-   `The Road to SDN: An Intellectual History of Programmable
-   Networks. SIGCOMM CCR, April 2014
+   `The Road to SDN: An Intellectual History of Programmable Networks
    <https://www.sigcomm.org/sites/default/files/ccr/papers/2014/April/0000000-0000012.pdf>`__.
+   SIGCOMM CCR, April 2014.
 
 We add two footnotes to that history. The first is a 2001 National
 Academy report:
@@ -49,8 +49,9 @@ Academy report:
 .. admonition:: Further Reading
 
    `Looking Over the Fence at Networks: A Neighbor’s View of
-   Networking Research. The National Academies
-   Press, 2001 <https://www.nap.edu/read/10183/chapter/1>`__.
+   Networking Research
+   <https://www.nap.edu/read/10183/chapter/1>`__. The National
+   Academies Press, 2001.
 
 This report brought the ossification of the Internet into focus as a
 major challenge, and in doing so, catalyzed what turned out to be a
@@ -64,9 +65,9 @@ intellectual case for SDN:
 .. _reading_shenker:
 .. admonition:: Further Reading
 
-   `The Future of Networking and the Past of Protocols. Open
-   Networking Summit, October 2011
+   `The Future of Networking and the Past of Protocols
    <https://www.youtube.com/watch?v=YHeyuD89n1Y>`__.
+   Open Networking Summit, October 2011.
 
 Understanding the central thesis of Shenker’s talk—that the practice
 of building and operating networks is in dire need of abstractions to
@@ -277,9 +278,9 @@ research community:
 .. _reading_openflow:
 .. admonition:: Further Reading
 
-   `OpenFlow: Enabling Innovation in Campus Networks. SIGCOMM CCR,
-   March 2008.
+   `OpenFlow: Enabling Innovation in Campus Networks
    <https://www.net.t-labs.tu-berlin.de/teaching/ss09/IR_seminar/papers/openflow-wp-latest.pdf>`__.
+   SIGCOMM CCR, March 2008.
 
 Today, the OpenFlow specification has been through multiple revisions,
 and work is underway to replace it with a more flexible (i.e.,
