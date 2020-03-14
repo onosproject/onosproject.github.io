@@ -48,7 +48,7 @@ As :numref:`Figure %s <fig-onos>` suggests, the design is highly
 modular, with a given deployment configured to include the subset of
 modules it requires. We delay a discussion about the exact form for
 the modularity (e.g., Karaf, Kubernetes) until the concluding section,
-where we take up the issue of scalabilitd. Until then, the focus is
+where we take up the issue of scalability. Until then, the focus is
 on the functional organization of ONOS.
 
 There are three other things to note about :numref:`Figure %s
