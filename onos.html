@@ -251,13 +251,15 @@ management plane that provisions new hardware added to the network,
 making sure the right software, certificates, configuration
 parameters, and pipeline definition are installed. This example is
 illustrated in <a class="reference internal" href="#fig-ztp"><span class="std std-numref">Figure 27</span></a>, where one takeaway is
-that ONOS does not have a minimal/fixed NBI: there are potentially
-multiple layers of applications and services running on ONOS, each
-providing some value on top of the applications and services below
-it. This also points to an important way in which ONOS is <em>not</em> like a
-conventional operating system: there is no syscall-equivalent
-interface demarking the boundary between a privileged kernel and user
-space. In other words, ONOS currently operates in a single trust domain.</p>
+that ONOS does not have a fixed NBI: there are potentially multiple
+layers of applications and services running on ONOS, each providing
+some value on top of the applications and services below it. Declaring
+zero-touch provisioning to be <em>in</em> ONOS versus <em>on</em> ONOS is an
+arbitrary statement, which points to an important way in which ONOS is
+<em>not</em> like a conventional operating system: There is no
+syscall-equivalent interface demarking the boundary between a
+privileged kernel and multiple user domains. In other words, ONOS
+currently operates in a single trust domain.</p>
 <div class="figure align-center" id="id4">
 <span id="fig-ztp"></span><a class="reference internal image-reference" href="_images/Slide28.png"><img alt="_images/Slide28.png" src="_images/Slide28.png" style="width: 400px;" /></a>
 <p class="caption"><span class="caption-number">Figure 27. </span><span class="caption-text">Example of a Zero-Touch Provisioning (ZTP) application taking a

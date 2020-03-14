@@ -76,13 +76,15 @@ management plane that provisions new hardware added to the network,
 making sure the right software, certificates, configuration
 parameters, and pipeline definition are installed. This example is
 illustrated in :numref:`Figure %s <fig-ztp>`, where one takeaway is
-that ONOS does not have a minimal/fixed NBI: there are potentially
-multiple layers of applications and services running on ONOS, each
-providing some value on top of the applications and services below
-it. This also points to an important way in which ONOS is *not* like a
-conventional operating system: there is no syscall-equivalent
-interface demarking the boundary between a privileged kernel and user
-space. In other words, ONOS currently operates in a single trust domain.
+that ONOS does not have a fixed NBI: there are potentially multiple
+layers of applications and services running on ONOS, each providing
+some value on top of the applications and services below it. Declaring
+zero-touch provisioning to be *in* ONOS versus *on* ONOS is an
+arbitrary statement, which points to an important way in which ONOS is
+*not* like a conventional operating system: There is no
+syscall-equivalent interface demarking the boundary between a
+privileged kernel and multiple user domains. In other words, ONOS
+currently operates in a single trust domain.
 
 .. _fig-ztp:
 .. figure:: figures/Slide28.png 
