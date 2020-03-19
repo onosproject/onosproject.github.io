@@ -253,7 +253,10 @@ book, but the idea is straightforward: the packet forwarding mechanism
 is augmented to load balance outgoing packets among a group (e.g., a
 pair) of links (egress ports) rather than having just a single “best”
 output link (egress port). This both improves bandwidth and results in
-an automatic recover mechanism should any single link fail.</p>
+an automatic recover mechanism should any single link fail. It is also
+the case that switch forwarding pipelines have explicit support for
+port groups, so once equivalences are established, they can be pushed
+all the way into the data plane.</p>
 <p>Fourth, with respect to scalability, Trellis has demonstrated the
 ability to support up to 120k routes and 250k flows. This is in a
 configuration that includes two spine switches and eight leaf
@@ -291,15 +294,15 @@ pair of hosts.</span></p>
 </div>
 <p>When Host 1 sends a packet with destination address 10.0.2.1 it is by
 default forwarded to the server’s ToR/leaf switch. (Because of link
-aggregation the packet could show up at either ToR, but the behavior
-is exactly the same for both.) Leaf 1 matches the destination IP
-address, learns this packet needs to cross the fabric and emerge at
-Leaf 2 to reach subnet 10.0.2/24, and so pushes the MPLS label 102
-onto the packet. Because of ECMP, Leaf 1 can forward the resulting
-packet to either spine, at which point that switch matches the MPLS
-label 102, pops the label off the header, and forwards it to Leaf 2.
-Finally, Leaf 2 matches the destination IP address and forwards the
-packet along to Host 2.</p>
+bonding the packet could show up at either ToR, but the behavior is
+exactly the same for both.) Leaf 1 matches the destination IP address,
+learns this packet needs to cross the fabric and emerge at Leaf 2 to
+reach subnet 10.0.2/24, and so pushes the MPLS label 102 onto the
+packet. Because of ECMP, Leaf 1 can forward the resulting packet to
+either spine, at which point that switch matches the MPLS label 102,
+pops the label off the header, and forwards it to Leaf 2.  Finally,
+Leaf 2 matches the destination IP address and forwards the packet
+along to Host 2.</p>
 <p>What you should take away from this example is that SR is highly
 stylized. For a given combination of leaf and spine switches, Trellis
 pre-computes the possible paths and installs the corresponding
@@ -314,22 +317,23 @@ spine switches.</p>
 </div>
 <div class="section" id="routes-and-multicast-trees">
 <h2>7.3 Routes and Multicast Trees<a class="headerlink" href="#routes-and-multicast-trees" title="Permalink to this headline">¶</a></h2>
-<p>On top of Segment Routing, which establies data paths between leaf
-switches, Trellis also takes advantage of the Route and Mcast services
-introduced in Chapter 6 to determine which switches serve each IP
-prefix, and where to find all the hosts connected to each multicast
-group, respectively.</p>
+<p>In addition to Segment Routing, which establies data paths between
+leaf switches, Trellis also takes advantage of the Route and Mcast
+services introduced in Chapter 6. They determine which of the
+leaf-spine switches serve each IP prefix, and where to find all the
+hosts connected to each multicast group, respectively.</p>
 <p>Trellis does not run distributed protocols like BGP or OSPF to learn
-about routes, or IGMP or PIM to manage multicast trees.  Instead, it
-computes the right answers based on global information, and then
+about routes, or IGMP or PIM to construct multicast trees.  Instead,
+it computes the right answers based on global information, and then
 pushes these mappings to the Route and Mcast services. This is
 straightforward to do because Trellis imposes the simplifying
 constraint that each rack corresponds to exactly one IP subnet.</p>
-<p>To make this discussion more concrete, consider that ONOS Services can
-be invoked via a RESTful API, or alternatively, through a CLI that is
-a thin wrapper around the RESTful <code class="docutils literal notranslate"><span class="pre">GET</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span></code> and <code class="docutils literal notranslate"><span class="pre">DELETE</span></code>
-calls.  Using the CLI because it is cleaner, one can query the Route
-service to learn the existing routes it knows about:</p>
+<p>To make this discussion more concrete, consider that all the ONOS
+Services described in Chapter 6 can be invoked via a RESTful API, or
+alternatively, through a CLI that is a thin wrapper around REST’s
+<code class="docutils literal notranslate"><span class="pre">GET</span></code>, <code class="docutils literal notranslate"><span class="pre">POST</span></code> and <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> calls.  Using the CLI to illustrate
+(because it is easier to read), one can query the Route service to
+learn the existing routes as follows:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>onos&gt; routes
 
 B: Best route, R: Resolved route
@@ -370,7 +374,7 @@ into a locally running Quagga process that is configured to peer with
 BPG neighbors. Whenever FPM learns about an external route, is adds
 the corresponding prefix-to-nexthop mapping to the Route service,
 indicating that the destination prefix is reachable via the leaf
-switches that connect the fabric to upstream routers (e.g., Switches 3
+switches that connect the fabric to upstream networks (e.g., Switches 3
 and 4 in <a class="reference internal" href="#fig-netconfig"><span class="std std-numref">Figure 33</span></a>).</p>
 <p>The story with multicast is similar. Again using the ONOS CLI, it is
 possible to create a new muticast route and add a sink to it. For example:</p>
@@ -390,8 +394,8 @@ part of an access network that delivers IPTV to subscribers, it is the
 operator’s channel-management software that issues calls similar to
 the one’s shown above (except, of course, using the RESTful API rather
 than the CLI). So the next time you use your TV remote to change
-channels, it is possible you are triggering calls down the SDN stack
-described throughout this book!</p>
+channels, it is possible you are triggering function invocations up
+and down the SDN stack described throughout this book!</p>
 </div>
 </div>
 
