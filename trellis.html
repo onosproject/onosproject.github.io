@@ -99,7 +99,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Chapter 7:  Leaf-Spine Fabric</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#feature-set">7.1 Feature Set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#segment-routing">7.2 Segment Routing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#routes-and-multicast-trees">7.3 Routes and Multicast Trees</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#routes-and-multicast">7.3 Routes and Multicast</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="future.html">Chapter 8:  Future of SDN</a></li>
@@ -203,9 +203,16 @@ connected to those access networks, and (b) off-loading access
 network functionality into the fabric switches.</li>
 </ul>
 <p>This chapter does not give a comprehensive description of every
-Trellis feature, but it does illustrate some of the thought processes
-involved in building a comprehensive and production-grade network
-using SDN.</p>
+Trellis feature, especially those related to Trellis being deployed in
+support of access networks. It focuses on the more narrow datacenter
+fabric use case, which is sufficient to illustrate the approach to
+building a production-grade network using SDN principles. More
+information about the full range of Trellis design decisions is
+available online:</p>
+<div class="admonition-further-reading admonition" id="reading-trellis">
+<p class="first admonition-title">Further Reading</p>
+<p class="last"><a class="reference external" href="https://docs.trellisfabric.org/">Trellis</a>.</p>
+</div>
 <div class="section" id="feature-set">
 <h2>7.1 Feature Set<a class="headerlink" href="#feature-set" title="Permalink to this headline">¶</a></h2>
 <p>SDN provides an opportunity to customize the network, but for
@@ -305,18 +312,19 @@ Leaf 2 matches the destination IP address and forwards the packet
 along to Host 2.</p>
 <p>What you should take away from this example is that SR is highly
 stylized. For a given combination of leaf and spine switches, Trellis
-pre-computes the possible paths and installs the corresponding
-match/action rules in the underlying switches. The complexity having
-to do with balancing load across multiple paths is delegated to ECMP,
-which is similarly unaware of any end-to-end paths. From an
-implementation perspective, the Trellis control application that
-implements SR passes these match/action rules to ONOS, which in turn
-installs them on the underlying switches. Trellis also maintains its
-own Atomix map to manage the set of ECMP groups connecting leaf and
-spine switches.</p>
+first assigns all identifiers, with each rack configured to share an
+IP prefix and be on the same VLAN. Trellis then pre-computes the
+possible paths and installs the corresponding match/action rules in
+the underlying switches. The complexity having to do with balancing
+load across multiple paths is delegated to ECMP, which is similarly
+unaware of any end-to-end paths. From an implementation perspective,
+the Trellis control application that implements SR passes these
+match/action rules to ONOS, which in turn installs them on the
+underlying switches. Trellis also maintains its own Atomix map to
+manage the set of ECMP groups connecting leaf and spine switches.</p>
 </div>
-<div class="section" id="routes-and-multicast-trees">
-<h2>7.3 Routes and Multicast Trees<a class="headerlink" href="#routes-and-multicast-trees" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="routes-and-multicast">
+<h2>7.3 Routes and Multicast<a class="headerlink" href="#routes-and-multicast" title="Permalink to this headline">¶</a></h2>
 <p>In addition to Segment Routing, which establies data paths between
 leaf switches, Trellis also takes advantage of the Route and Mcast
 services introduced in Chapter 6. They determine which of the
@@ -391,14 +399,14 @@ addresses (<code class="docutils literal notranslate"><span class="pre">sinks</s
 programmatic inteface for network operators to define a multicast tree
 through a sequence of such calls. For example, when Trellis runs as
 part of an access network that delivers IPTV to subscribers, one
-option is for the operator’s channel-management software to issue
-calls similar to the one’s shown above (except, of course, using the
-RESTful API rather than the CLI). Another option is to have user
-devices issue IGMP messages, which Trellis intercepts using the Packet
-Service (similar to how the Host service interceptsARP and DHCP
-packets). So the next time you use your TV remote to change channels,
-it is possible you are triggering procedure invocations up and down the
-SDN stack described throughout this book!</p>
+option is for software running on the operator’s set-top boxes to
+issue calls similar to the one’s shown above (except, of course, using
+the RESTful API rather than the CLI). Another option is to have
+set-top boxes send IGMP messages, which Trellis intercepts using the
+Packet Service (similar to how the Host service intercepts ARP and
+DHCP packets). So the next time you use your TV remote to change
+channels, it is possible you are triggering procedure invocations up
+and down the SDN software stack described throughout this book!</p>
 </div>
 </div>
 

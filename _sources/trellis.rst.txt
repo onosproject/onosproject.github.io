@@ -27,9 +27,17 @@ details.
   network functionality into the fabric switches.
 
 This chapter does not give a comprehensive description of every
-Trellis feature, but it does illustrate some of the thought processes
-involved in building a comprehensive and production-grade network
-using SDN.
+Trellis feature, especially those related to Trellis being deployed in
+support of access networks. It focuses on the more narrow datacenter
+fabric use case, which is sufficient to illustrate the approach to
+building a production-grade network using SDN principles. More
+information about the full range of Trellis design decisions is
+available online:
+
+.. _reading_trellis:
+.. admonition:: Further Reading
+
+   `Trellis <https://docs.trellisfabric.org/>`__.
 
 7.1 Feature Set
 ---------------
@@ -149,18 +157,19 @@ along to Host 2.
 
 What you should take away from this example is that SR is highly
 stylized. For a given combination of leaf and spine switches, Trellis
-pre-computes the possible paths and installs the corresponding
-match/action rules in the underlying switches. The complexity having
-to do with balancing load across multiple paths is delegated to ECMP,
-which is similarly unaware of any end-to-end paths. From an
-implementation perspective, the Trellis control application that
-implements SR passes these match/action rules to ONOS, which in turn
-installs them on the underlying switches. Trellis also maintains its
-own Atomix map to manage the set of ECMP groups connecting leaf and
-spine switches.
+first assigns all identifiers, with each rack configured to share an
+IP prefix and be on the same VLAN. Trellis then pre-computes the
+possible paths and installs the corresponding match/action rules in
+the underlying switches. The complexity having to do with balancing
+load across multiple paths is delegated to ECMP, which is similarly
+unaware of any end-to-end paths. From an implementation perspective,
+the Trellis control application that implements SR passes these
+match/action rules to ONOS, which in turn installs them on the
+underlying switches. Trellis also maintains its own Atomix map to
+manage the set of ECMP groups connecting leaf and spine switches.
 
-7.3 Routes and Multicast Trees
-------------------------------------------
+7.3 Routes and Multicast
+------------------------
 
 In addition to Segment Routing, which establies data paths between
 leaf switches, Trellis also takes advantage of the Route and Mcast
@@ -248,12 +257,12 @@ Again, there is no PIM running, but instead, Trellis offers a
 programmatic inteface for network operators to define a multicast tree
 through a sequence of such calls. For example, when Trellis runs as
 part of an access network that delivers IPTV to subscribers, one
-option is for the operator's channel-management software to issue
-calls similar to the one's shown above (except, of course, using the
-RESTful API rather than the CLI). Another option is to have user
-devices issue IGMP messages, which Trellis intercepts using the Packet
-Service (similar to how the Host service interceptsARP and DHCP
-packets). So the next time you use your TV remote to change channels,
-it is possible you are triggering procedure invocations up and down the
-SDN stack described throughout this book!
+option is for software running on the operator's set-top boxes to
+issue calls similar to the one's shown above (except, of course, using
+the RESTful API rather than the CLI). Another option is to have
+set-top boxes send IGMP messages, which Trellis intercepts using the
+Packet Service (similar to how the Host service intercepts ARP and
+DHCP packets). So the next time you use your TV remote to change
+channels, it is possible you are triggering procedure invocations up
+and down the SDN software stack described throughout this book!
     
