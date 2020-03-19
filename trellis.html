@@ -322,12 +322,12 @@ leaf switches, Trellis also takes advantage of the Route and Mcast
 services introduced in Chapter 6. They determine which of the
 leaf-spine switches serve each IP prefix, and where to find all the
 hosts connected to each multicast group, respectively.</p>
-<p>Trellis does not run distributed protocols like BGP or OSPF to learn
-about routes, or IGMP or PIM to construct multicast trees.  Instead,
-it computes the right answers based on global information, and then
-pushes these mappings to the Route and Mcast services. This is
-straightforward to do because Trellis imposes the simplifying
-constraint that each rack corresponds to exactly one IP subnet.</p>
+<p>Trellis does not run distributed protocols like OSPF to learn about
+routes or PIM to construct multicast trees.  Instead, it computes the
+right answers based on global information, and then pushes these
+mappings to the Route and Mcast services. This is straightforward to
+do because Trellis imposes the simplifying constraint that each rack
+corresponds to exactly one IP subnet.</p>
 <p>To make this discussion more concrete, consider that all the ONOS
 Services described in Chapter 6 can be invoked via a RESTful API, or
 alternatively, through a CLI that is a thin wrapper around REST’s
@@ -387,15 +387,18 @@ addresses (<code class="docutils literal notranslate"><span class="pre">sinks</s
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">onos&gt; mcast-sink-delete -sAddr * -gAddr 224.0.0.1 -h  00:AA:00:00:00:03/None</span>
 </pre></div>
 </div>
-<p>Again, there is no PIM or IGMP running, but instead, Trellis offers a
+<p>Again, there is no PIM running, but instead, Trellis offers a
 programmatic inteface for network operators to define a multicast tree
 through a sequence of such calls. For example, when Trellis runs as
-part of an access network that delivers IPTV to subscribers, it is the
-operator’s channel-management software that issues calls similar to
-the one’s shown above (except, of course, using the RESTful API rather
-than the CLI). So the next time you use your TV remote to change
-channels, it is possible you are triggering function invocations up
-and down the SDN stack described throughout this book!</p>
+part of an access network that delivers IPTV to subscribers, one
+option is for the operator’s channel-management software to issue
+calls similar to the one’s shown above (except, of course, using the
+RESTful API rather than the CLI). Another option is to have user
+devices issue IGMP messages, which Trellis intercepts using the Packet
+Service (similar to how the Host service interceptsARP and DHCP
+packets). So the next time you use your TV remote to change channels,
+it is possible you are triggering procedure invocations up and down the
+SDN stack described throughout this book!</p>
 </div>
 </div>
 
