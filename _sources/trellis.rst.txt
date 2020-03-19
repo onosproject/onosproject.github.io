@@ -156,19 +156,97 @@ installs them on the underlying switches. Trellis also maintains its
 own Atomix map to manage the set of ECMP groups connecting leaf and
 spine switches.
 
-Finally, Trellis takes advantage of the Host, Route, and Mcast
-services implemented by ONOS. These are used to determine which IP
-subnet each host is connected to, which switches serve each IP prefix,
-and where to find all the hosts connected to each multicast group,
-respectively. These are all relatively straightforward because Trellis
-imposes the simplifying constraint that each rack corresponds to
-exactly one IP subnet. Trellis does not run distributed protocols like
-BGP or PIM to learn about routes or multicast trees, but instead
-computes the right answers based on global information, and directly
-pushes the mappings to the Route an Mcast services, respectively. For
-any routes that are external to Trellis (i.e., the route is learned
-through BGP), the corresponding prefix to nexthop mapping is still
-passed to ONOS through the Route service, indicating that the
-destination prefix is reachable via the leaf switches that connect the
-fabric to upstream routers (e.g., Switches 3 and 4 in :numref:`Figure
-%s <fig-netconfig>`).
+7.3 Routes and Multicast Trees
+------------------------------------------
+
+On top of Segment Routing, which establies data paths between leaf
+switches, Trellis also takes advantage of the Route and Mcast services
+introduced in Chapter 6 to determine which switches serve each IP
+prefix, and where to find all the hosts connected to each multicast
+group, respectively.
+
+Trellis does not run distributed protocols like BGP or OSPF to learn
+about routes, or IGMP or PIM to manage multicast trees.  Instead, it
+computes the right answers based on global information, and then
+pushes these mappings to the Route and Mcast services. This is
+straightforward to do because Trellis imposes the simplifying
+constraint that each rack corresponds to exactly one IP subnet.
+
+To make this discussion more concrete, consider that ONOS Services can
+be invoked via a RESTful API, or alternatively, through a CLI that is
+a thin wrapper around the RESTful ``GET``, ``POST`` and ``DELETE``
+calls.  Using the CLI because it is cleaner, one can query the Route
+service to learn the existing routes it knows about:
+
+.. code-block:: text
+
+    onos> routes
+
+    B: Best route, R: Resolved route
+
+    Table: ipv4
+    B R  Network            Next Hop        Source (Node)
+         0.0.0.0/0          172.16.0.1      FPM (127.0.0.1)
+    > *  1.1.0.0/18         10.0.1.20       STATIC
+    > *  10.0.99.0/24       10.0.1.1        FPM (127.0.0.1)
+      *  10.0.99.0/24       10.0.6.1        FPM (127.0.0.1)
+       Total: 2
+
+    Table: ipv6
+    B R  Network                                     Next Hop                                Source (Node)
+    > *  2000::7700/120                              fe80::288:ff:fe00:1                     FPM (127.0.0.1)
+    > *  2000::8800/120                              fe80::288:ff:fe00:2                     FPM (127.0.0.1)
+    > *  2000::9900/120                              fe80::288:ff:fe00:1                     FPM (127.0.0.1)
+      *  2000::9900/120                              fe80::288:ff:fe00:2                     FPM (127.0.0.1)
+       Total: 3
+
+Similarly, one can add a static route to the Route Service:
+
+.. code-block:: console
+
+    onos> route-add <prefix> <nexthop>
+    onos> route-add 1.1.0.0/18 10.0.1.20
+    onos> route-add 2020::101/120 2000::1	
+
+One thing to note about these examples is that there are two possible
+sources for routes. One is that the route is ``STATIC``, which usually
+means that Trellis inserted it, with full knowledge of the what prefix
+it has assigned to each rack in the cluster. (Human operators could
+also add a ``STATIC`` route using the CLI, but this would be an
+exception rather than the rule.)
+
+The second possibility is that ``FPM`` was the source. FPM is yet
+another ONOS Service (one of the Trellis suite of services), and its
+job is to learn routes from external sources, which it does by tapping
+into a locally running Quagga process that is configured to peer with
+BPG neighbors. Whenever FPM learns about an external route, is adds
+the corresponding prefix-to-nexthop mapping to the Route service,
+indicating that the destination prefix is reachable via the leaf
+switches that connect the fabric to upstream routers (e.g., Switches 3
+and 4 in :numref:`Figure %s <fig-netconfig>`).
+
+The story with multicast is similar. Again using the ONOS CLI, it is
+possible to create a new muticast route and add a sink to it. For example:
+
+.. code-block:: console
+
+    onos> mcast-host-join -sAddr * -gAddr 224.0.0.1 -srcs 00:AA:00:00:00:01/None -srcs 00:AA:00:00:00:05/None -sinks 00:AA:00:00:00:03/None -sinks 00:CC:00:00:00:01/None
+
+specifies *Any-Source Multicast (ASM)*  (``sAddr *``), a multicast group address
+(``gAddr``), the group source addresses (``srcs``) and the group sink
+addresses (``sinks``). A sink can then be removed as follows:
+
+.. code-block:: console
+
+    onos> mcast-sink-delete -sAddr * -gAddr 224.0.0.1 -h  00:AA:00:00:00:03/None
+
+Again, there is no PIM or IGMP running, but instead, Trellis offers a
+programmatic inteface for network operators to define a multicast tree
+through a sequence of such calls. For example, when Trellis runs as
+part of an access network that delivers IPTV to subscribers, it is the
+operator's channel-management software that issues calls similar to
+the one's shown above (except, of course, using the RESTful API rather
+than the CLI). So the next time you use your TV remote to change
+channels, it is possible you are triggering calls down the SDN stack
+described throughout this book!
+    
