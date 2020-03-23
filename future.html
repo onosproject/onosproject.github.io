@@ -222,15 +222,17 @@ value SDN brings to the table, which leads to optimism that
 <p class="caption"><span class="caption-number">Figure 35. </span><span class="caption-text">INT generates fine-grain measurements, which in turn feed a closed
 control loop that verifies the network’s behavior.</span></p>
 </div>
-<p><a class="reference internal" href="#fig-closed-loop"><span class="std std-numref">Figure 35</span></a> illustrates the basic idea.
-The software stack described in this book is augmented with the
+<p><a class="reference internal" href="#fig-closed-loop"><span class="std std-numref">Figure 35</span></a> illustrates the basic idea.  The
+software stack described in this book is augmented with the
 measurement, code generation, and verification elements needed for
 verifiable closed-loop control. Fine-grained measurements can be
 implemented using INT (Inband Network Telemetry), which allows every
 packet to be stamped by the forwarding elements to indicate the path
 it took, the queueing delay it experienced, and the rules it matched.
 These measurements can then be analyzed and fed back into code
-generation and formal verification tools.</p>
+generation and formal verification tools. This closed loop complements
+the intrinsic value of disaggregation, which makes it possible to
+reason about correctness-by-construction.</p>
 <p>The goal is to enable network operators to specify a network’s
 behavior top-down, and then verifying the correctness across each
 interface. At the lowest level, P4 programs specify how packets are
@@ -243,7 +245,7 @@ data plane captures <em>ground truth</em> for the network—i.e., how it
 forwards packets—and is therefore an attractive platform for deploying
 verification technologies. By observing and then validating behavior
 at the data plane level, it is possible to reduce the trusted
-computing base—the switch operating system, driver, and other
+computing base: the switch operating system, driver, and other
 low-level components do not need to be trusted. Moreover, whereas the
 control plane tends to be written in a general-purpose language and is
 correspondingly complex, the data plane is necessarily simple: it is
@@ -271,19 +273,19 @@ collection of edge services and devices, including support for
 immersive user interfaces (e.g., AR/VR), mission-critical applications
 (e.g., public safety, autonomous vehicles), and the Internet-of-Things
 (IoT). Many of these new applications will be feasible only if SDN
-principles are applied to the Radio Access Network (RAN), and because
-of this, mobile network operators are working to make Software-Defined
-RAN (SD-RAN) happen.</p>
+principles are applied to the Radio Access Network (RAN), resulting in
+increased feature velocity. Because of this, mobile network operators
+are working to make Software-Defined RAN (SD-RAN) happen.</p>
 <p>To understand SD-RAN at a technical level, it is important to
-recognize that the base stations that make up the RAN are, at their
-core, packet forwarding engines. The set of base stations in a given
-geographic area coordinate with each other to allocate the shared—and
-extremely scarce—radio spectrum. They make hand-off decisions, decide
-to jointly serve a given user (think of this as a RAN variant of link
-aggregation), and make packet scheduling decisions based on the
-observed signal quality. Today these are purely local decisions, but
-transforming it into a global optimization problem is in SDN’s
-wheelhouse.</p>
+recognize that the base stations that make up the RAN are, for all
+practical purposes, packet forwarders. The set of base stations in a
+given geographic area coordinate with each other to allocate the
+shared—and extremely scarce—radio spectrum. They make hand-off
+decisions, decide to jointly serve a given user (think of this as a
+RAN variant of link aggregation), and make packet scheduling decisions
+based on the observed signal quality. Today these are purely local
+decisions, but transforming it into a global optimization problem is
+in SDN’s wheelhouse.</p>
 <p>The idea of SD-RAN is for each base station to report locally
 collected statistics about radio transmission quality back to a
 central SDN controller, which combines information from a set of base
@@ -306,7 +308,7 @@ and extending ONOS.</span></p>
 </div>
 <p>Like the verified closed-loop control example, the scenario just
 described is within reach, with a retargeting of ONOS at the SD-RAN
-use case well underway. <a class="reference internal" href="#fig-ric"><span class="std std-numref">Figure 36</span></a> shows the
+use case already underway. <a class="reference internal" href="#fig-ric"><span class="std std-numref">Figure 36</span></a> shows the
 design, which introduces some new components, but largely builds on
 the existing ONOS architecture. In some cases, the changes are
 superficial. For example, ONOS adopts terminology coming out of the
@@ -317,9 +319,9 @@ interface by which control applications communicate with the RIC, the
 <strong>A1</strong> interface by which the operator configures the RAN, and the
 <strong>E2</strong> interface by which the RIC communicates with the underlying RAN
 elements. The details of these interfaces is beyond the scope of this
-book, but the important takeaway is that with respect to ONOS, they
-are no different than supporting any other standard north- and
-south-facing interface (e.g., gNMI, gNOI, OpenFlow).</p>
+book, but the important takeaway for our purposes is that they are no
+different than supporting any other standard north- and south-facing
+interface (e.g., gNMI, gNOI, OpenFlow).</p>
 <table class="docutils footnote" frame="void" id="id2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">

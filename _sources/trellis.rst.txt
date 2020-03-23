@@ -32,12 +32,13 @@ support of access networks. It focuses on the more narrow datacenter
 fabric use case, which is sufficient to illustrate the approach to
 building a production-grade network using SDN principles. More
 information about the full range of Trellis design decisions is
-available online:
+available on the Trellis website:
 
 .. _reading_trellis:
 .. admonition:: Further Reading
 
-   `Trellis <https://docs.trellisfabric.org/>`__.
+   `Trellis <https://docs.trellisfabric.org/>`__. Open Networking
+   Foundation, 2020.
 
 7.1 Feature Set
 ---------------
