@@ -174,8 +174,8 @@ The ONOS-based RIC takes advantage of the Topology Service described
 in Chapter 6, but it also introduces two new services: *Control* and
 *Telemetry*. The Control Service, which builds on the Atomix key/value
 store, manages the control state for all the base stations and user
-devices, including which base station is serving each user device (as
-well as the set of  “potential links” that could serve the device).
+devices, including which base station is serving each user device, as
+well as the set of  “potential links” that could serve the device.
 The Telemetry Service, which builds on a *Time Series Database
 (TSDB)*, tracks all the link quality information being reported back
 by the RAN elements. Various of the control applications then analyze
@@ -190,7 +190,7 @@ companion book:
 .. admonition:: Further Reading
 
    `5G Mobile Networks: A Systems Approach
-   <https://5g.systemsapproach.org/>`__. August 2019.
+   <https://5g.systemsapproach.org/>`__. March 2020.
 
 Finally, circling back to the previous section, applying closed-loop
 verification to a disaggregated and software-defined cellular network
