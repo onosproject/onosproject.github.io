@@ -552,7 +552,7 @@ will be unified, and in all likelihood, specified in P4.
 
 A critical part of ONOS’s flexibility is its ability to accommodate
 different control protocols. While the nature of control interactions
-and associated abstractions was certainly inspired by OpenFlow
+and associated abstractions was certainly inspired by the OpenFlow
 protocol, ONOS is designed to ensure that the core (and the
 applications written on top of the core) are insulated from the
 specifics of the control protocol.
@@ -590,13 +590,14 @@ bundles the API with the code that implements the corresponding
 protocol. The second type—of which *DeviceProvider*, *HostProvider*,
 and *LinkProvider* are the examples shown in the figure—interact
 indirectly with the environment using some other ONOS service. We saw
-an example of this in Section 6.2.2, where Host Location Provider
-corresponds to the Host Provider plugin; the latter defines the API
-for host discovery and the former defines one specific approach to
-discovering hosts (e.g., using *PacketService* to intercept ARP, NDP
-and DHCP packets). Similarly, *LldpLinkProvider* (corresponding to the
-*LinkProvider* SBI plugin) uses *PacketService* to intercept LLDP and
-BDDP packets to surmise links between infrastructure devices.
+an example of this in Section 6.2.2, where Host Location Provider (an
+ONOS service) sits behind *HostProvider* (an SBI plugin); the latter
+defines the API for host discovery and the former defines one specific
+approach to discovering hosts (e.g., using Packet Service to intercept
+ARP, NDP and DHCP packets). Similarly, Lldp Link Provider
+(corresponding to the *LinkProvider* SBI plugin) uses Packet Service
+to intercept LLDP and BDDP packets to surmise links between
+infrastructure devices.
 
 6.4.2 Device Drivers
 ~~~~~~~~~~~~~~~~~~~~

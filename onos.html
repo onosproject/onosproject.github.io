@@ -669,7 +669,7 @@ will be unified, and in all likelihood, specified in P4.</p>
 <h2>6.4 Southbound Interface<a class="headerlink" href="#southbound-interface" title="Permalink to this headline">¶</a></h2>
 <p>A critical part of ONOS’s flexibility is its ability to accommodate
 different control protocols. While the nature of control interactions
-and associated abstractions was certainly inspired by OpenFlow
+and associated abstractions was certainly inspired by the OpenFlow
 protocol, ONOS is designed to ensure that the core (and the
 applications written on top of the core) are insulated from the
 specifics of the control protocol.</p>
@@ -700,13 +700,14 @@ bundles the API with the code that implements the corresponding
 protocol. The second type—of which <em>DeviceProvider</em>, <em>HostProvider</em>,
 and <em>LinkProvider</em> are the examples shown in the figure—interact
 indirectly with the environment using some other ONOS service. We saw
-an example of this in Section 6.2.2, where Host Location Provider
-corresponds to the Host Provider plugin; the latter defines the API
-for host discovery and the former defines one specific approach to
-discovering hosts (e.g., using <em>PacketService</em> to intercept ARP, NDP
-and DHCP packets). Similarly, <em>LldpLinkProvider</em> (corresponding to the
-<em>LinkProvider</em> SBI plugin) uses <em>PacketService</em> to intercept LLDP and
-BDDP packets to surmise links between infrastructure devices.</p>
+an example of this in Section 6.2.2, where Host Location Provider (an
+ONOS service) sits behind <em>HostProvider</em> (an SBI plugin); the latter
+defines the API for host discovery and the former defines one specific
+approach to discovering hosts (e.g., using Packet Service to intercept
+ARP, NDP and DHCP packets). Similarly, Lldp Link Provider
+(corresponding to the <em>LinkProvider</em> SBI plugin) uses Packet Service
+to intercept LLDP and BDDP packets to surmise links between
+infrastructure devices.</p>
 </div>
 <div class="section" id="device-drivers">
 <h3>6.4.2 Device Drivers<a class="headerlink" href="#device-drivers" title="Permalink to this headline">¶</a></h3>
