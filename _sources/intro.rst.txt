@@ -632,8 +632,9 @@ working towards:
 
 Which is to say, SDN is not just about shifting control from vendors
 to operators, but ultimately, it is about shifting control from
-vendors to operators to users. We'll return to our predictions about
-the future of SDN in Chapter 8.
+vendors to operators to users. That's the long-term goal, but we
+return to our more modest predictions about the next phase of SDN in
+Chapter 8.
 
 .. _reading_future:
 .. admonition:: Further Reading
