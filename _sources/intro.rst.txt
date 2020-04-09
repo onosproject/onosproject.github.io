@@ -125,10 +125,15 @@ in turn enable a rich marketplace of networking applications.
 
 The value of such a transformation is clear. Opening a vertically
 integrated, closed, and proprietary market is a proven way to increase
-the pace of innovation. To understand this opportunity in more depth,
-we need to get into the technical details (which we introduce in the
-next section), but appreciating the backstory of SDN as a means to
-transform the networking industry is an important place to start.
+the pace of innovation. Or to restate in market-centric terms: the
+goal is to shift control from the vendors that sell networking
+equipment to the network operators that build networks to meet their
+users' needs.
+
+To understand this opportunity in more depth, we need to get into the
+technical details (which we introduce in the next section), but
+appreciating the backstory of SDN as a means to transform the
+networking industry is an important place to start.
 
 1.2 Technical Landscape
 -----------------------
@@ -451,10 +456,10 @@ collects.
 	network. As chassis routers grew into a multi-rack fabric
 	built from commodity switches, SDN suggested a design that
 	aggregates forwarding elements under a control plane running
-	anywhere and structured as distributed system. The advantage
+	anywhere and structured as a distributed system. The advantage
 	is that such a system can use modern techniques for state
 	distribution and management, rather than being tied to
-	standards. The key is finding domains for which it is possible
+	standards. The key is to find domains for which it is possible
 	to optimize performance with a logically centralized control
 	plane.
 
@@ -615,3 +620,23 @@ expansive view.
 .. [#] From Nick McKeown's 2013 presentation entitled *Software
        Defined Networking*.
 
+Another way to frame SDN is to think of it as having two phases. In
+Phase 1, the network operators (owners) took ownership of the control
+plane, and now in Phase 2, they are taking control of how packets are
+processed in the data plane. Phase 2 is still a work-in-progress, but
+Nick McKeown points to the aspirational end state this movement is
+working towards:
+
+    *"Networks will [hopefully] be programmed by many, and operated by
+    few."*
+
+Which is to say, SDN is not just about shifting control from vendors
+to operators, but ultimately, it is about shifting control from
+vendors to operators to users.
+
+.. _reading_future:
+.. admonition:: Further Reading
+
+   `Future:Net 2019
+   <https://www.vmware.com/futurenet/2019-event/>`__.
+   October 2019.
