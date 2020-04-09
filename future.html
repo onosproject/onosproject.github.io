@@ -253,16 +253,37 @@ ultimately compiled to an efficient, feed-forward pipeline
 architecture with simple data types and limited state. While verifying
 general-purpose software is impossible in the general case, data plane
 verification is both powerful and practical.</p>
-<p>Second, in addition to building tools for analyzing network programs,
-it is important to also develop technologies that provide higher
-levels of assurance through <em>defense-in-depth</em>. This addresses one of
-the main weaknesses of current approaches to network verification—they
-are based on mathematical models of the network components, and
-therefore can produce incorrect answers when those components behave
-in different ways than are captured in the model. By exploiting the
-ability of P4 data planes to collect rich telemetry and other
-monitoring data, it is possible to develop network verification tools
-that combine statically-verified components with runtime verification.</p>
+<p>This claim of practicality is grounded in the current
+state-of-the-art.  Once the forwarding behavior is defined and known,
+then forwarding table state defines forwarding behavior. For example,
+if everything is known to be IPv4 forwarded, then the forwarding table
+state in all routers is enough to define the network behavior. This
+idea has been reduced to practice by techniques like Veriflow and
+Header Space Analysis (HSA), and is now available commercially.
+Knowing that this state is enough to verify networks with fixed
+forwarding behavior means that we are “merely” adding one new
+degree-of-freedom: allowing the network operator to program the
+forwarding behavior (and evolve it over time) using P4. The use of P4
+to program the data plane is key: the language carefully excludes
+features such as loops and pointer-based data structures, which
+typically make analysis impractical. To read more about the
+opportunity, we recommend the following paper:</p>
+<div class="admonition-further-reading admonition" id="reading-p4">
+<p class="first admonition-title">Further Reading</p>
+<p class="last"><a class="reference external" href="http://yuba.stanford.edu/~nickm/papers/p4v.pdf">p4v: Practical Verification for Programmable Data Planes</a>. ACM
+SIGCOMM 2018.</p>
+</div>
+<p>The second insight is that, in addition to building tools for
+analyzing network programs, it is important to also develop
+technologies that provide higher levels of assurance through
+<em>defense-in-depth</em>. This addresses one of the main weaknesses of
+current approaches to network verification—they are based on
+mathematical models of the network components, and therefore can
+produce incorrect answers when those components behave in different
+ways than are captured in the model. By exploiting the ability of P4
+data planes to collect rich telemetry and other monitoring data, it is
+possible to develop network verification tools that combine
+statically-verified components with runtime verification.</p>
 </div>
 <div class="section" id="sd-ran">
 <h2>8.2 SD-RAN<a class="headerlink" href="#sd-ran" title="Permalink to this headline">¶</a></h2>
@@ -336,7 +357,7 @@ in Chapter 6, but it also introduces two new services: <em>Control</em> and
 <em>Telemetry</em>. The Control Service, which builds on the Atomix key/value
 store, manages the control state for all the base stations and user
 devices, including which base station is serving each user device, as
-well as the set of  “potential links” that could serve the device.
+well as the set of  “potential links” that could connect the device.
 The Telemetry Service, which builds on a <em>Time Series Database
 (TSDB)</em>, tracks all the link quality information being reported back
 by the RAN elements. Various of the control applications then analyze
