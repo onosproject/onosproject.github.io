@@ -123,6 +123,22 @@ data planes to collect rich telemetry and other monitoring data, it is
 possible to develop network verification tools that combine
 statically-verified components with runtime verification.
 
+.. _fig-phase3:
+.. figure:: figures/Slide37.png
+    :width: 600px
+    :align: center
+
+    Projecting into the future, with Phase 3 of SDN focusing on
+    verifiable, top-down control of network behavior.
+
+To put this all in a larger historical context, Section 1.3 suggests
+we are now in the second phase of SDN. :numref:`Figure %s
+<fig-phase3>` extends this into the future with a third phase. During
+Phase 3, verifiable closed loop control will empower network operators
+to take full ownership of the software that defines their networks,
+giving them the ability to tailor their networks in ways that
+differentiate them from their competitors.
+
 8.2 SD-RAN
 ----------
 

@@ -284,6 +284,17 @@ ways than are captured in the model. By exploiting the ability of P4
 data planes to collect rich telemetry and other monitoring data, it is
 possible to develop network verification tools that combine
 statically-verified components with runtime verification.</p>
+<div class="figure align-center" id="id4">
+<span id="fig-phase3"></span><a class="reference internal image-reference" href="_images/Slide37.png"><img alt="_images/Slide37.png" src="_images/Slide37.png" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-number">Figure 36. </span><span class="caption-text">Projecting into the future, with Phase 3 of SDN focusing on
+verifiable, top-down control of network behavior.</span></p>
+</div>
+<p>To put this all in a larger historical context, Section 1.3 suggests
+we are now in the second phase of SDN. <a class="reference internal" href="#fig-phase3"><span class="std std-numref">Figure 36</span></a> extends this into the future with a third phase. During
+Phase 3, verifiable closed loop control will empower network operators
+to take full ownership of the software that defines their networks,
+giving them the ability to tailor their networks in ways that
+differentiate them from their competitors.</p>
 </div>
 <div class="section" id="sd-ran">
 <h2>8.2 SD-RAN<a class="headerlink" href="#sd-ran" title="Permalink to this headline">¶</a></h2>
@@ -322,14 +333,14 @@ on each base station, just as an SDN-controlled ethernet switch still
 has a local packet scheduler), but they do exert near real-time
 control over the base stations, with control loops measured in less
 than ten milliseconds.</p>
-<div class="figure align-center" id="id4">
+<div class="figure align-center" id="id5">
 <span id="fig-ric"></span><a class="reference internal image-reference" href="_images/Slide36.png"><img alt="_images/Slide36.png" src="_images/Slide36.png" style="width: 500px;" /></a>
-<p class="caption"><span class="caption-number">Figure 36. </span><span class="caption-text">3GPP-compliant RAN Intelligent Controller (RIC) built by adapting
+<p class="caption"><span class="caption-number">Figure 37. </span><span class="caption-text">3GPP-compliant RAN Intelligent Controller (RIC) built by adapting
 and extending ONOS.</span></p>
 </div>
 <p>Like the verified closed-loop control example, the scenario just
 described is within reach, with a retargeting of ONOS at the SD-RAN
-use case already underway. <a class="reference internal" href="#fig-ric"><span class="std std-numref">Figure 36</span></a> shows the
+use case already underway. <a class="reference internal" href="#fig-ric"><span class="std std-numref">Figure 37</span></a> shows the
 design, which introduces some new components, but largely builds on
 the existing ONOS architecture. In some cases, the changes are
 superficial. For example, ONOS adopts terminology coming out of the
