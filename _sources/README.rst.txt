@@ -3,8 +3,8 @@ About This Book
 
 This `repository <https://github.com/SystemsApproach/SDN>`__ contains
 source for *Softwarwe-Defined Networks: A Systems Approach*, available under
-terms of the `Creative Commons (CC BY 4.0)
-<https://creativecommons.org/licenses/by/4.0>`__ license. The
+terms of the `Creative Commons (CC BY-NC-ND 4.0)
+<https://creativecommons.org/licenses/by-nc-nd/4.0>`__ license. The
 community is invited to contribute corrections, improvements, updates,
 and new material under the same terms.
 
@@ -14,15 +14,14 @@ following information:
 | *Title: Software-Defined Networks: A Systems Approach* 
 | *Authors: Larry Peterson, Carmelo Cascone, Brian O'Connor, and Thomas Vachuska* 
 | *Source:* https://github.com/SystemsApproach/SDN 
-| *License:* \ `CC BY 4.0 <https://creativecommons.org/licenses/by/4.0>`__
+| *License:* \ `CC BY-NC-ND 4.0 <https://creativecommons.org/licenses/by-nc-nd/4.0>`__
 
 Read the Book
 -------------
 
 An online version of the book is published at
-`https://sdn.systemsapproach.org <https://sdn.systemsapproach.org>`__. You
-can also find PDF and eBook versions
-`here <https://github.com/SystemsApproach/SDN/releases>`__.
+`https://sdn.systemsapproach.org
+<https://sdn.systemsapproach.org>`__.
 
 To track progress and receive notices about new versions, you can follow
 the project on
