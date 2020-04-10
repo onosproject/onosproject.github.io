@@ -621,20 +621,20 @@ expansive view.
        Defined Networking*.
 
 Another way to frame SDN is to think of it as having two phases. In
-Phase 1, the network operators (owners) took ownership of the control
-plane, and now in Phase 2, they are taking control of how packets are
-processed in the data plane. Phase 2 is still a work-in-progress, but
-Nick McKeown points to the aspirational end state this movement is
-working towards:
+Phase 1, network operators took ownership of the control plane, and
+now in Phase 2, they are taking control of how packets are processed
+in the data plane. Phase 2 is still a work-in-progress, but as Nick
+McKeown posits, the aspirational end state is one in which:
 
     *"Networks will [hopefully] be programmed by many, and operated by
     few."*
 
 Which is to say, SDN is not just about shifting control from vendors
 to operators, but ultimately, it is about shifting control from
-vendors to operators to users. That's the long-term goal. We return to
-more modest predictions about the next phase of the SDN journey in
-Chapter 8.
+vendors to operators to users. That's the long-term goal, inspired by
+what commodity servers and open source software did for the computing
+industry. We return to more modest predictions about the next phase of
+the SDN journey in Chapter 8.
 
 .. _reading_future:
 .. admonition:: Further Reading
