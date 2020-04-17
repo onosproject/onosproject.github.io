@@ -203,9 +203,9 @@ attributes make it possible for <em>anyone</em> to build the same end-to-end
 system that is running today in production networks.</p>
 <div class="section" id="software-stack">
 <h2>3.1 Software Stack<a class="headerlink" href="#software-stack" title="Permalink to this headline">¶</a></h2>
-<p>An overview of the software stack is given in <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 11</span></a>, which includes a <em>White-Box Switch</em> running a local
+<p>An overview of the software stack is given in <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a>, which includes a <em>White-Box Switch</em> running a local
 <em>Switch OS</em>, controlled by a global Network OS hosting a collection of
-<em>Control Applications</em>. <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 11</span></a> also calls out
+<em>Control Applications</em>. <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a> also calls out
 a corresponding set of exemplar open source components (<em>Trellis</em>,
 <em>ONOS</em>, and <em>Stratum</em>) on the right, as well as a related <em>P4
 Toolchain</em> on the left. This chapter introduces these components, with
@@ -214,7 +214,7 @@ later chapters giving more detail.</p>
 interfaces: one between the Control Apps and the Network OS, and a
 second between the Network OS and the underlying white-box
 switches. These two interfaces are depicted as “API shims” in
-<a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 11</span></a>, and in the context of the exemplar
+<a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a>, and in the context of the exemplar
 components, correspond to a combination of <em>gNMI</em>, <em>gNOI</em> and
 <em>FlowObjective</em> in the first case, and a combination of <em>gNMI</em>, <em>gNOI</em>
 and either <em>P4Runtime</em> or <em>OpenFlow</em> in the second case. That gRPC is
@@ -223,10 +223,10 @@ implementation choice, but one that we will take for granted from here
 on.</p>
 <div class="figure align-center" id="id3">
 <span id="fig-stack"></span><a class="reference internal image-reference" href="_images/Slide8.png"><img alt="_images/Slide8.png" src="_images/Slide8.png" style="width: 550px;" /></a>
-<p class="caption"><span class="caption-number">Figure 11. </span><span class="caption-text">Overall architecture of the SDN software stack.</span></p>
+<p class="caption"><span class="caption-number">Figure 12. </span><span class="caption-text">Overall architecture of the SDN software stack.</span></p>
 </div>
 <p>It is important to keep in mind that the software components listed in
-<a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 11</span></a> correspond to active open source
+<a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a> correspond to active open source
 projects, and as a consequence, they continue to evolve (as do their
 APIs). Specific versions of each component—and their associated
 APIs—have been integrated and deployed into both trial and production
@@ -238,20 +238,20 @@ the config/ops interface to each switch, there are solutions that use
 NETCONF instead.</p>
 <p>For the purpose of this book, we do not attempt to track all possible
 combinations of component versions and APIs, but opt instead to focus
-on the single consistent stack enumerated in <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 11</span></a>, since it represents our best judgement as to the “right”
+on the single consistent stack enumerated in <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a>, since it represents our best judgement as to the “right”
 approach based on experience (so far) with earlier versions up-and-down
 the stack.</p>
 <div class="section" id="switch-vs-host-implementation">
 <h3>3.1.1 Switch vs Host Implementation<a class="headerlink" href="#switch-vs-host-implementation" title="Permalink to this headline">¶</a></h3>
 <p>The top-to-bottom view of the software stack shown in <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure
-11</span></a> is from the perspective of a single switch, but it is
+12</span></a> is from the perspective of a single switch, but it is
 important to also keep the network perspective in
-mind. <a class="reference internal" href="#fig-e2e"><span class="std std-numref">Figure 12</span></a> gives such a perspective by
+mind. <a class="reference internal" href="#fig-e2e"><span class="std std-numref">Figure 13</span></a> gives such a perspective by
 focusing on an end-to-end path through the network, connecting a pair
 of VMs.</p>
 <div class="figure align-center" id="id4">
 <span id="fig-e2e"></span><a class="reference internal image-reference" href="_images/Slide19.png"><img alt="_images/Slide19.png" src="_images/Slide19.png" style="width: 500px;" /></a>
-<p class="caption"><span class="caption-number">Figure 12. </span><span class="caption-text">End-to-End Perspective of a Software-Defined Network, including
+<p class="caption"><span class="caption-number">Figure 13. </span><span class="caption-text">End-to-End Perspective of a Software-Defined Network, including
 the end hosts and the Virtual Machines (VMs) they host.</span></p>
 </div>
 <p>This perspective highlights two important aspects of the system. The
@@ -280,7 +280,7 @@ important topic, this book does not explore the full range of
 possibilities for a vSwitch like OvS or other end-host optimizations,
 but instead treats it just like any other switch along the end-to-end
 path.</p>
-<p>Another implementation detail shown in <a class="reference internal" href="#fig-e2e"><span class="std std-numref">Figure 12</span></a>
+<p>Another implementation detail shown in <a class="reference internal" href="#fig-e2e"><span class="std std-numref">Figure 13</span></a>
 is that the host may have a <em>Smart Network Interface Card (SmartNIC)</em>
 that assists (or possibly even replaces) the vSwitch. Vendors have a
 long history of off-loading kernel functionality onto NICs (e.g.,
@@ -296,7 +296,7 @@ another switching element along the end-to-end path.</p>
 <div class="section" id="white-box-switch">
 <h2>3.2 White-Box Switch<a class="headerlink" href="#white-box-switch" title="Permalink to this headline">¶</a></h2>
 <p>Starting at the bottom and working our way up the stack shown in
-<a class="reference internal" href="#fig-stack"><span class="std std-numref">Figures 11</span></a> and <a class="reference internal" href="#fig-e2e"><span class="std std-numref">12</span></a>, the
+<a class="reference internal" href="#fig-stack"><span class="std std-numref">Figures 12</span></a> and <a class="reference internal" href="#fig-e2e"><span class="std std-numref">13</span></a>, the
 network data plane is implemented by an interconnected set of
 white-box switches. Our focus for now is on a single switch, where the
 overall network topology is dictated by the Control Applications
@@ -314,7 +314,7 @@ forwarding pipeline. The first (<code class="docutils literal notranslate"><span
 forwarding behavior. The second (<code class="docutils literal notranslate"><span class="pre">arch.p4</span></code>) specifies the logical
 architecture of the target forwarding chip. The P4 compiler
 generates target files that are loaded into both the Network OS and
-the switch. These target files are not named in <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 11</span></a> (we will return to the details in Chapters 4 and 5), but
+the switch. These target files are not named in <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a> (we will return to the details in Chapters 4 and 5), but
 both components need to know about the output because one <em>implements</em>
 the forwarding behavior (the switch), and the other <em>controls</em> the
 forwarding behavior (the Network OS).</p>
@@ -336,7 +336,7 @@ it to generate the API that sits between the control and data planes.</p>
 <p>Moving up from the base hardware, each switch runs a local Switch
 OS. Not to be confused with the Network OS that manages a network of
 switches, this Switch OS runs on a commodity processor internal to
-the switch (not shown in <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 11</span></a>). It is
+the switch (not shown in <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a>). It is
 responsible for handling API calls issued to the switch, for example
 from the Network OS. This includes taking the appropriate action on
 the switch’s internal resources, which sometimes affects the switching
@@ -359,7 +359,7 @@ Stratum-managed API is defined as follows:</p>
 <li><strong>P4Runtime:</strong> An interface for controlling forwarding behavior at
 runtime. It is the key for populating forwarding tables and
 manipulating forwarding state, and it does so in a P4 program and
-hardware agnostic way. (For completeness, <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 11</span></a> also lists OpenFlow as an alternative control interface.)</li>
+hardware agnostic way. (For completeness, <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a> also lists OpenFlow as an alternative control interface.)</li>
 <li><strong>gNMI (gRPC Network Management Interface):</strong> Used to set and
 retrieve configuration state. gNMI is usually paired with OpenConfig
 YANG models that define the structure of the configuration and state
@@ -430,7 +430,7 @@ developers to deal with different pipelines. Defining a general
 interface is the subject of ongoing research.</td></tr>
 </tbody>
 </table>
-<p>Finally, although <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 11</span></a> does not show any
+<p>Finally, although <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a> does not show any
 details about the internals of ONOS, to better appreciate the role it
 plays in the larger scheme of things, we note that the most critical
 subsystem in any Network OS is a <em>Scalable Key/Value Store</em>. Because
@@ -485,13 +485,13 @@ it uses standard BGP (as implemented by the open source Quagga
 server).</p>
 <div class="figure align-center" id="id5">
 <span id="fig-trellis"></span><a class="reference internal image-reference" href="_images/Slide9.png"><img alt="_images/Slide9.png" src="_images/Slide9.png" style="width: 600px;" /></a>
-<p class="caption"><span class="caption-number">Figure 13. </span><span class="caption-text">Trellis suite of control apps managing a (potentially distributed)
+<p class="caption"><span class="caption-number">Figure 14. </span><span class="caption-text">Trellis suite of control apps managing a (potentially distributed)
 leaf-spine fabric.</span></p>
 </div>
 <p>Finally, Trellis is sometimes deployed at a single site with multiple
 mobile base stations connected via Trellis leaf-switches. But Trellis
 can also be extended to multiple sites deeper into the network using
-multiple stages of spines, as shown in <a class="reference internal" href="#fig-trellis"><span class="std std-numref">Figure 13</span></a>. Chapter 7 describes all of this in more detail.</p>
+multiple stages of spines, as shown in <a class="reference internal" href="#fig-trellis"><span class="std std-numref">Figure 14</span></a>. Chapter 7 describes all of this in more detail.</p>
 </div>
 </div>
 

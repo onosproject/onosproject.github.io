@@ -219,10 +219,10 @@ value SDN brings to the table, which leads to optimism that
 <em>verifiable closed-loop control</em> is now within reach.</p>
 <div class="figure align-center" id="id3">
 <span id="fig-closed-loop"></span><a class="reference internal image-reference" href="_images/Slide30.png"><img alt="_images/Slide30.png" src="_images/Slide30.png" style="width: 600px;" /></a>
-<p class="caption"><span class="caption-number">Figure 35. </span><span class="caption-text">INT generates fine-grain measurements, which in turn feed a closed
+<p class="caption"><span class="caption-number">Figure 36. </span><span class="caption-text">INT generates fine-grain measurements, which in turn feed a closed
 control loop that verifies the network’s behavior.</span></p>
 </div>
-<p><a class="reference internal" href="#fig-closed-loop"><span class="std std-numref">Figure 35</span></a> illustrates the basic idea.  The
+<p><a class="reference internal" href="#fig-closed-loop"><span class="std std-numref">Figure 36</span></a> illustrates the basic idea.  The
 software stack described in this book is augmented with the
 measurement, code generation, and verification elements needed for
 verifiable closed-loop control. Fine-grained measurements can be
@@ -233,6 +233,25 @@ These measurements can then be analyzed and fed back into code
 generation and formal verification tools. This closed loop complements
 the intrinsic value of disaggregation, which makes it possible to
 reason about correctness-by-construction.</p>
+<div class="sidebar">
+<p class="first sidebar-title">Top-Down Verification</p>
+<p>The approach to verifying networks described in this section is
+similar the one used in chip design. At the top is a behavorial
+model; then at the register-transfer level is a Verilog or VHDL
+model; and eventually at the bottom are transistors, polygons and
+metal. Tools are used to formally verify correctness across each
+boundary and abstraction level.</p>
+<p>This is a model for what we are talking about here: Verifying
+across boundaries in a top-down design approach. This is made
+possible by the new SDN interfaces and abstractions defined by the
+software stack, which extends all the way to the programmable
+forwarding pipelines provided by the switching chip.</p>
+<p class="last">As experience with hardware verification demonstrates, this
+approach works best in composed systems, where each minimal
+component can be verified or reliably tested on its own. Formal
+tools are then applied as components are composed at layer
+boundaries.</p>
+</div>
 <p>The goal is to enable network operators to specify a network’s
 behavior top-down, and then verifying the correctness across each
 interface. At the lowest level, P4 programs specify how packets are
@@ -286,11 +305,11 @@ possible to develop network verification tools that combine
 statically-verified components with runtime verification.</p>
 <div class="figure align-center" id="id4">
 <span id="fig-phase3"></span><a class="reference internal image-reference" href="_images/Slide37.png"><img alt="_images/Slide37.png" src="_images/Slide37.png" style="width: 600px;" /></a>
-<p class="caption"><span class="caption-number">Figure 36. </span><span class="caption-text">Projecting into the future, with Phase 3 of SDN focusing on
+<p class="caption"><span class="caption-number">Figure 37. </span><span class="caption-text">Projecting into the future, with Phase 3 of SDN focusing on
 verifiable, top-down control of network behavior.</span></p>
 </div>
 <p>To put this all in an historical context, Section 1.3 suggests we are
-now in the second phase of SDN. <a class="reference internal" href="#fig-phase3"><span class="std std-numref">Figure 36</span></a>
+now in the second phase of SDN. <a class="reference internal" href="#fig-phase3"><span class="std std-numref">Figure 37</span></a>
 extends this into the future with a third phase, during which
 verifiable closed loop control will empower network operators to take
 full ownership of the software that defines their networks. This gives
@@ -336,12 +355,12 @@ control over the base stations, with control loops measured in less
 than ten milliseconds.</p>
 <div class="figure align-center" id="id5">
 <span id="fig-ric"></span><a class="reference internal image-reference" href="_images/Slide36.png"><img alt="_images/Slide36.png" src="_images/Slide36.png" style="width: 500px;" /></a>
-<p class="caption"><span class="caption-number">Figure 37. </span><span class="caption-text">3GPP-compliant RAN Intelligent Controller (RIC) built by adapting
+<p class="caption"><span class="caption-number">Figure 38. </span><span class="caption-text">3GPP-compliant RAN Intelligent Controller (RIC) built by adapting
 and extending ONOS.</span></p>
 </div>
 <p>Like the verified closed-loop control example, the scenario just
 described is within reach, with a retargeting of ONOS at the SD-RAN
-use case already underway. <a class="reference internal" href="#fig-ric"><span class="std std-numref">Figure 37</span></a> shows the
+use case already underway. <a class="reference internal" href="#fig-ric"><span class="std std-numref">Figure 38</span></a> shows the
 design, which introduces some new components, but largely builds on
 the existing ONOS architecture. In some cases, the changes are
 superficial. For example, ONOS adopts terminology coming out of the

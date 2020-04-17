@@ -462,17 +462,33 @@ or in special probe packets. Similarly, INT traffic sinks retrieve and
 report the collected results of these instructions, allowing the
 traffic sinks to monitor the exact data plane state that the packets
 observed (experienced) while being forwarded.</p>
+<p>The idea is illustrated in <a class="reference internal" href="#fig-int"><span class="std std-numref">Figure 11</span></a>, which shows
+an example packet travsering a path from source switch <em>S1</em> to sink
+switch <em>S5</em> via transit switch <em>S2</em>. The INT metadata added by each
+swith along the path both indicates what data is to be collect for the
+packet, and records the corresponding data for each switch.</p>
+<div class="figure align-center" id="id5">
+<span id="fig-int"></span><a class="reference internal image-reference" href="_images/Slide38.png"><img alt="_images/Slide38.png" src="_images/Slide38.png" style="width: 700px;" /></a>
+<p class="caption"><span class="caption-number">Figure 11. </span><span class="caption-text">Illustration of Inband Network Telemetry (INT), with each packet
+collecting measurement data as it traverses the network.</span></p>
+</div>
 <p>INT is still early-stage, but it has the potential to provide
 qualitatively deeper insights into traffic patterns and the root
 causes of network failures. For example, INT can be used to measure
 and record queuing delay individual packets experience while
-traversing a sequence of switches along an end-to-end path. As another
-example, INT can perform data reductions—in the data plane, at line
-speed—making it possible to <em>“find the needle without having to collect
-the haystack.”</em> More speculatively, INT can even be used to verify that
-the data plane is in fact faithfully executing the forwarding behavior
-the network operator intended. We return to the potential of INT to
-qualitatively change network in the concluding chapter of this book.</p>
+traversing a sequence of switches along an end-to-end path, with a
+packet like the one shown in the figure reporting: <em>“I visited Switch
+1 &#64;780ns, Switch 2 &#64;1.3µs, Switch 5 &#64;2.4µs.”</em> By correlating this
+information across packet flows that may have followed different
+routes, it is even possible to determine which flows shared buffer
+capacity at each switch.</p>
+<p>Similarly, packets can report the decision making process that
+directed their delivery, for example, with something like: <em>“In Switch
+1, I followed rules 75 and 250; in Switch 2, I followed rules 3 and
+80.”</em> This opens the door to using INT to verify that the data plane
+is faithfully executing the forwarding behavior the network operator
+intended. We return to the potential of INT to impact how we build and
+operate networks in the concluding chapter of this book.</p>
 </div>
 </div>
 

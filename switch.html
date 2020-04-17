@@ -216,7 +216,7 @@ to build a high-performance switch, analogous to a home-built PC. But
 just as the PC ecosystem includes commodity server vendors like Dell
 and HP, you can buy a pre-built (OCP-compliant) switch from white-box
 switch vendors such as EdgeCore, Delta and others.</p>
-<p><a class="reference internal" href="#fig-switch"><span class="std std-numref">Figure 14</span></a> gives a high-level schematic of a
+<p><a class="reference internal" href="#fig-switch"><span class="std std-numref">Figure 15</span></a> gives a high-level schematic of a
 white-box switch. The <em>Network Processing Unit (NPU)</em>—a merchant
 silicon switching chip—is optimized to parse packet headers and make
 forwarding decisions. NPUs are able to process and forward packets at
@@ -226,7 +226,7 @@ figure. As of this writing, the state-of-the-art for these chips is
 25.6 Tbps with 400-Gbps ports.</p>
 <div class="figure align-center" id="id9">
 <span id="fig-switch"></span><a class="reference internal image-reference" href="_images/Slide10.png"><img alt="_images/Slide10.png" src="_images/Slide10.png" style="width: 500px;" /></a>
-<p class="caption"><span class="caption-number">Figure 14. </span><span class="caption-text">High-Level schematic of a white-box switch.</span></p>
+<p class="caption"><span class="caption-number">Figure 15. </span><span class="caption-text">High-Level schematic of a white-box switch.</span></p>
 </div>
 <p>Note that our use of the term NPU is a bit non-standard. Historically,
 NPU was the name given to more narrowly-defined network processing
@@ -239,7 +239,7 @@ prefer the NPU nomenclature because it is consistent with the
 industry-wide trend to build programmable domain-specific processors,
 including GPUs (Graphic Processing Units) for graphics and TPUs
 (Tensor Processing Units) for AI.</p>
-<p><a class="reference internal" href="#fig-switch"><span class="std std-numref">Figure 14</span></a> shows the NPU as a combination of
+<p><a class="reference internal" href="#fig-switch"><span class="std std-numref">Figure 15</span></a> shows the NPU as a combination of
 SRAM-based memory that buffers packets while they are being processed,
 and an ASIC-based forwarding pipeline that implements a series of
 (Match, Action) pairs. We describe the forwarding pipeline in more
@@ -251,7 +251,7 @@ OS runs, exporting an API that allows an off-switch, Network OS to
 control the data plane. This control processor communicates with the
 NPU, and is connected to an external management network, over a
 standard PCIe bus.</p>
-<p><a class="reference internal" href="#fig-switch"><span class="std std-numref">Figure 14</span></a> also shows other commodity
+<p><a class="reference internal" href="#fig-switch"><span class="std std-numref">Figure 15</span></a> also shows other commodity
 components that make this all practical. In particular, it is possible
 to buy pluggable transceiver modules that take care of all the media
 access details—be it 40-Gigabit Ethernet, 10-Gigabit PON, or SONET—as
@@ -261,7 +261,7 @@ components over a standardized bus (e.g., SFI). Again, the key
 takeaway is that the networking industry is now entering into the same
 commoditized world that the computing industry has enjoyed for the
 last two decades.</p>
-<p>Finally, although not shown in <a class="reference internal" href="#fig-switch"><span class="std std-numref">Figure 14</span></a>, each
+<p>Finally, although not shown in <a class="reference internal" href="#fig-switch"><span class="std std-numref">Figure 15</span></a>, each
 white-box switch includes a BIOS, which much like its microprocessor
 counterpart, is firmware that provisions and boots a bare-metal
 switch. A standard BIOS called the <em>Open Network Install Environment
@@ -291,7 +291,7 @@ case—a programmable pipeline—and return to its fixed-function
 counterpart at the end.</p>
 <p>At an architectural level, the programmable pipeline is often referred
 to as a <em>Protocol Independent Switching Architecture (PISA)</em>.
-<a class="reference internal" href="#fig-pisa1"><span class="std std-numref">Figure 15</span></a> gives a high-level overview of PISA,
+<a class="reference internal" href="#fig-pisa1"><span class="std std-numref">Figure 16</span></a> gives a high-level overview of PISA,
 which includes three major components. The first is a <em>Parser</em>, which
 is programmed to define what header fields (and their location in the
 packet) are to be recognized and matched by later stages. The second
@@ -311,9 +311,9 @@ is available for individual stages to read and write. It can also be
 used by the Match-Action Unit, for example matching on the input port.</p>
 <div class="figure align-center" id="id10">
 <span id="fig-pisa1"></span><a class="reference internal image-reference" href="_images/Slide11.png"><img alt="_images/Slide11.png" src="_images/Slide11.png" style="width: 650px;" /></a>
-<p class="caption"><span class="caption-number">Figure 15. </span><span class="caption-text">High-level overview of PISA’s multi-stage pipeline.</span></p>
+<p class="caption"><span class="caption-number">Figure 16. </span><span class="caption-text">High-level overview of PISA’s multi-stage pipeline.</span></p>
 </div>
-<p>The individual Match-Action Units in <a class="reference internal" href="#fig-pisa1"><span class="std std-numref">Figure 15</span></a>
+<p>The individual Match-Action Units in <a class="reference internal" href="#fig-pisa1"><span class="std std-numref">Figure 16</span></a>
 deserve a closer look. The memory shown in the figure is typically
 built using a combination of SRAM and TCAM: it implements a table that
 stores bit patterns to be matched in the packets being processed. The
@@ -341,7 +341,7 @@ like P4, and depend on a compiler to generate the equivalent low-level
 program. We will get to the specifics of P4 in a later section, so for
 now we substitute an even more abstract representation of the desired
 forwarding pipeline: the graphical depiction included in
-<a class="reference internal" href="#fig-pisa2"><span class="std std-numref">Figure 16</span></a>. (To be consistent with other
+<a class="reference internal" href="#fig-pisa2"><span class="std std-numref">Figure 17</span></a>. (To be consistent with other
 examples, we call this program <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code>.) This example program
 first matches L2 header fields, then matches either IPv4 or IPv6
 header fields, and finally applies some ACL rules to the packets
@@ -352,8 +352,8 @@ filter rules). This is an example of the OpenFlow pipeline shown in
 pipeline onto the underlying PISA stages, the P4 compiler is also
 responsible for allocating the available PISA resources, in this case,
 slots (rows) for the available Match-Action Units (of which
-<a class="reference internal" href="#fig-pisa2"><span class="std std-numref">Figure 16</span></a> shows four, just as in <a class="reference internal" href="#fig-pisa1"><span class="std std-numref">Figure
-15</span></a>). Allocating slots in the available Match-Action units
+<a class="reference internal" href="#fig-pisa2"><span class="std std-numref">Figure 17</span></a> shows four, just as in <a class="reference internal" href="#fig-pisa1"><span class="std std-numref">Figure
+16</span></a>). Allocating slots in the available Match-Action units
 is the P4/PISA counterpart of register allocation for a conventional
 programming language running on a general-purpose microprocessor. In
 our example, we assume there are many more IPv4 Match-Action rules
@@ -361,7 +361,7 @@ than IPv6 or ACL rules, so the compiler allocates entries in the
 available Match-Action Units accordingly.</p>
 <div class="figure align-center" id="id11">
 <span id="fig-pisa2"></span><a class="reference internal image-reference" href="_images/Slide12.png"><img alt="_images/Slide12.png" src="_images/Slide12.png" style="width: 650px;" /></a>
-<p class="caption"><span class="caption-number">Figure 16. </span><span class="caption-text">Depiction of the desired forwarding behavior (as specified by a
+<p class="caption"><span class="caption-number">Figure 17. </span><span class="caption-text">Depiction of the desired forwarding behavior (as specified by a
 pictorial representation of a P4 program) mapped onto PISA.</span></p>
 </div>
 </div>
@@ -373,7 +373,7 @@ abstract (canonical) pipeline that is general enough to fairly
 represent the available hardware, plus a definition of how the
 abstract pipeline maps onto the physical pipeline. With such a logical
 model for the pipeline, we will be able to support pipeline-agnostic
-controllers, as illustrated in <a class="reference internal" href="#fig-logical"><span class="std std-numref">Figure 17</span></a>.</p>
+controllers, as illustrated in <a class="reference internal" href="#fig-logical"><span class="std std-numref">Figure 18</span></a>.</p>
 <p>Ideally, there will be just one logical pipeline, and the P4 compiler
 will be responsible for mapping that logical pipeline into various
 physical counterparts. Unfortunately, the marketplace has not yet
@@ -385,12 +385,12 @@ in practice, it is only those built for the high-end of the market
 that come into play.</p>
 <div class="figure align-center" id="id12">
 <span id="fig-logical"></span><a class="reference internal image-reference" href="_images/Slide16.png"><img alt="_images/Slide16.png" src="_images/Slide16.png" style="width: 600px;" /></a>
-<p class="caption"><span class="caption-number">Figure 17. </span><span class="caption-text">Defining a logical pipeline as a general approach to supporting a
+<p class="caption"><span class="caption-number">Figure 18. </span><span class="caption-text">Defining a logical pipeline as a general approach to supporting a
 pipeline-agnostic control plane.</span></p>
 </div>
 <p>How do we specify the logical pipeline? This is also done with a P4
-program, resulting in the situation shown in <a class="reference internal" href="#fig-psa"><span class="std std-numref">Figure 18</span></a>. Notice that we are revisiting the two P4 programs
-introduced in <a class="reference internal" href="arch.html#fig-stack"><span class="std std-numref">Figure 11</span></a>. The first program
+program, resulting in the situation shown in <a class="reference internal" href="#fig-psa"><span class="std std-numref">Figure 19</span></a>. Notice that we are revisiting the two P4 programs
+introduced in <a class="reference internal" href="arch.html#fig-stack"><span class="std std-numref">Figure 12</span></a>. The first program
 (<code class="docutils literal notranslate"><span class="pre">forward.p4</span></code>) defines the functionality we want from the available
 switching chip. This program is written by the developers that want to
 establish the behavior of the data plane. The second program
@@ -406,22 +406,22 @@ having a single common architecture that enables executing the same P4
 program on different ASICs from different vendors, and having an
 architecture that best represents the differentiating capabilities of
 any given ASIC.</p>
-<p>The example shown in <a class="reference internal" href="#fig-psa"><span class="std std-numref">Figure 18</span></a> is called the
+<p>The example shown in <a class="reference internal" href="#fig-psa"><span class="std std-numref">Figure 19</span></a> is called the
 <em>Portable Switch Architecture (PSA)</em>. It is intended to provide P4
 developers implementing forwarding programs like <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code> with
 an abstract target machine, analogous to a Java Virtual Machine. The
 goal is the same as for Java: to support a <em>write-once-run-anywhere</em>
-programming paradigm. (Note that <a class="reference internal" href="#fig-psa"><span class="std std-numref">Figure 18</span></a>
+programming paradigm. (Note that <a class="reference internal" href="#fig-psa"><span class="std std-numref">Figure 19</span></a>
 includes the generic <code class="docutils literal notranslate"><span class="pre">arch.p4</span></code> as the the architecture model spec,
 but in practice the architecture model would PSA specific, such as
 <code class="docutils literal notranslate"><span class="pre">psa.p4</span></code>.)</p>
 <div class="figure align-center" id="id13">
 <span id="fig-psa"></span><a class="reference internal image-reference" href="_images/Slide13.png"><img alt="_images/Slide13.png" src="_images/Slide13.png" style="width: 650px;" /></a>
-<p class="caption"><span class="caption-number">Figure 18. </span><span class="caption-text">P4 architecture known as the Portable Switch Architecture
+<p class="caption"><span class="caption-number">Figure 19. </span><span class="caption-text">P4 architecture known as the Portable Switch Architecture
 (PSA). Includes the generic <code class="docutils literal notranslate"><span class="pre">arch.p4</span></code> as the the architecture
 model spec, but for PSA this would be a replaced by <code class="docutils literal notranslate"><span class="pre">psa.p4</span></code>.</span></p>
 </div>
-<p>When compared to the simpler PISA model used in <a class="reference internal" href="#fig-pisa1"><span class="std std-numref">Figure 15</span></a> and <a class="reference internal" href="#fig-pisa2"><span class="std std-numref">16</span></a>, we see two major
+<p>When compared to the simpler PISA model used in <a class="reference internal" href="#fig-pisa1"><span class="std std-numref">Figure 16</span></a> and <a class="reference internal" href="#fig-pisa2"><span class="std std-numref">17</span></a>, we see two major
 differences. First, the pipeline includes a new fixed-function stage:
 the <em>Traffic Manager</em>. This stage is responsible for queuing,
 replicating, and scheduling packets. This stage can be configured in
@@ -433,7 +433,7 @@ Traffic Manager), and <em>egress processing</em> (to the right of the Traffic
 Manager).</p>
 <p>What exactly does <code class="docutils literal notranslate"><span class="pre">arch.p4</span></code> define? Essentially three things:</p>
 <ol class="arabic simple">
-<li>As implied by <a class="reference internal" href="#fig-psa"><span class="std std-numref">Figure 18</span></a>, it defines the
+<li>As implied by <a class="reference internal" href="#fig-psa"><span class="std std-numref">Figure 19</span></a>, it defines the
 inter-block interface signatures in terms of input and output
 signals (think “function parameters and return type”). The goal of
 a P4 programmer is that of providing an implementation for each
@@ -459,11 +459,11 @@ outputs an ASIC-specific executable. <code class="docutils literal notranslate">
 of type and interface definitions.</p>
 <div class="section" id="v1model">
 <h3>4.3.1 V1Model<a class="headerlink" href="#v1model" title="Permalink to this headline">¶</a></h3>
-<p>The PSA shown in <a class="reference internal" href="#fig-psa"><span class="std std-numref">Figure 18</span></a> is still a
+<p>The PSA shown in <a class="reference internal" href="#fig-psa"><span class="std std-numref">Figure 19</span></a> is still a
 work-in-progress. It represents an idealized architecture that sits
 between the P4 developer and the underlying hardware, but the
 architectural model that developers are coding to today is somewhat
-simpler. That model, called V1Model, is shown in <a class="reference internal" href="#fig-v1model"><span class="std std-numref">Figure 19</span></a>. <a class="footnote-reference" href="#id2" id="id1">[1]</a> It does not include a re-parsing step after the
+simpler. That model, called V1Model, is shown in <a class="reference internal" href="#fig-v1model"><span class="std std-numref">Figure 20</span></a>. <a class="footnote-reference" href="#id2" id="id1">[1]</a> It does not include a re-parsing step after the
 Traffic Manager. Instead it implicitly bridges all metadata from
 ingress to egress processing. Also, V1Model includes a checksum
 verification/update block, whereas PSA treats checksums as an extern,
@@ -486,7 +486,7 @@ respective ASICs. Until that happens, PSA will remain a mostly “on
 paper” artifact.</p>
 <div class="figure align-center" id="id14">
 <span id="fig-v1model"></span><a class="reference internal image-reference" href="_images/Slide22.png"><img alt="_images/Slide22.png" src="_images/Slide22.png" style="width: 650px;" /></a>
-<p class="caption"><span class="caption-number">Figure 19. </span><span class="caption-text">V1Model used in practice to abstract away the details of different
+<p class="caption"><span class="caption-number">Figure 20. </span><span class="caption-text">V1Model used in practice to abstract away the details of different
 physical forwarding pipelines. Developers write P4 to this
 abstract architectural model.</span></p>
 </div>
@@ -494,7 +494,7 @@ abstract architectural model.</span></p>
 descriptive than you might think. In practice, every P4 program starts
 with the following template, which literally has a code block for
 every programmable element in the abstract depiction shown in
-<a class="reference internal" href="#fig-v1model"><span class="std std-numref">Figure 19</span></a></p>
+<a class="reference internal" href="#fig-v1model"><span class="std std-numref">Figure 20</span></a></p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;core.p4&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;v1model.p4&gt;</span><span class="cp"></span>
 
@@ -1049,21 +1049,21 @@ of the OpenFlow protocol) and the Broadcom SDK sits below OF-DPA (it
 implements the proprietary interface that knows about the low-level
 chip details), but OF-DPA is the layer that provides an abstract
 representation of the Tomahawk’s fixed forwarding
-pipeline. <a class="reference internal" href="#fig-ofdpa1"><span class="std std-numref">Figure 20</span></a> shows the resulting
+pipeline. <a class="reference internal" href="#fig-ofdpa1"><span class="std std-numref">Figure 21</span></a> shows the resulting
 software stack, where OF-Agent and OF-DPA are open source (the
 OF-Agent corresponds to a software module called Indigo, originally
 written by BigSwitch), whereas the Broadcom SDK is
-proprietary. <a class="reference internal" href="#fig-ofdpa2"><span class="std std-numref">Figure 21</span></a> then depicts what the
+proprietary. <a class="reference internal" href="#fig-ofdpa2"><span class="std std-numref">Figure 22</span></a> then depicts what the
 OF-DPA pipeline looks like.</p>
 <div class="figure align-center" id="id15">
 <span id="fig-ofdpa1"></span><a class="reference internal image-reference" href="_images/Slide15.png"><img alt="_images/Slide15.png" src="_images/Slide15.png" style="width: 300px;" /></a>
-<p class="caption"><span class="caption-number">Figure 20. </span><span class="caption-text">Software stack for Tomahawk fixed-function forwarding pipeline.</span></p>
+<p class="caption"><span class="caption-number">Figure 21. </span><span class="caption-text">Software stack for Tomahawk fixed-function forwarding pipeline.</span></p>
 </div>
 <div class="figure align-center" id="id16">
 <span id="fig-ofdpa2"></span><a class="reference internal image-reference" href="_images/ofdpa.png"><img alt="_images/ofdpa.png" src="_images/ofdpa.png" style="width: 650px;" /></a>
-<p class="caption"><span class="caption-number">Figure 21. </span><span class="caption-text">Logical fixed-function pipeline defined by OF-DPA.</span></p>
+<p class="caption"><span class="caption-number">Figure 22. </span><span class="caption-text">Logical fixed-function pipeline defined by OF-DPA.</span></p>
 </div>
-<p>We do not delve into the details of <a class="reference internal" href="#fig-ofdpa2"><span class="std std-numref">Figure 21</span></a>,
+<p>We do not delve into the details of <a class="reference internal" href="#fig-ofdpa2"><span class="std std-numref">Figure 22</span></a>,
 but the reader will recognize tables for several well-known protocols.
 For our purposes, what is instructive is to see how OF-DPA maps onto
 its programmable pipeline counterparts. In the programmable case, it’s
@@ -1108,7 +1108,7 @@ Open Compute Project.</p>
 <p>This discussion about logical pipelines and their relationship to P4
 programs is subtle, and worth restating. On the one hand, there is
 obvious value in having an abstract representation of a physical
-pipeline, as introduced as a general concept in <a class="reference internal" href="#fig-logical"><span class="std std-numref">Figure 17</span></a>. When used in this way, a logical pipeline is an
+pipeline, as introduced as a general concept in <a class="reference internal" href="#fig-logical"><span class="std std-numref">Figure 18</span></a>. When used in this way, a logical pipeline is an
 example of the tried-and-true idea of introducing a hardware
 abstraction layer. In our case, it helps with control plane
 portability.  OF-DPA is a specific example of a hardware abstraction
@@ -1124,14 +1124,14 @@ they instead define the building blocks (including signatures) that
 can be used by a P4 developer to define a pipeline, whether logical or
 physical. In a sense, then, P4 architectures are equivalent to a
 traditional switch SDK, as illustrated by the five side-by-side
-examples in <a class="reference internal" href="#fig-compare"><span class="std std-numref">Figure 22</span></a>.</p>
+examples in <a class="reference internal" href="#fig-compare"><span class="std std-numref">Figure 23</span></a>.</p>
 <div class="figure align-center" id="id17">
 <span id="fig-compare"></span><a class="reference internal image-reference" href="_images/Slide23.png"><img alt="_images/Slide23.png" src="_images/Slide23.png" style="width: 800px;" /></a>
-<p class="caption"><span class="caption-number">Figure 22. </span><span class="caption-text">Five example Pipeline/SDK/ASIC stacks. The two leftmost stacks,
+<p class="caption"><span class="caption-number">Figure 23. </span><span class="caption-text">Five example Pipeline/SDK/ASIC stacks. The two leftmost stacks,
 plus the fourth stack, exist today; the middle stack is
 hypothetical; and the rightmost stack is a work-in-progress.</span></p>
 </div>
-<p>Each example in <a class="reference internal" href="#fig-compare"><span class="std std-numref">Figure 22</span></a> consists of three
+<p>Each example in <a class="reference internal" href="#fig-compare"><span class="std std-numref">Figure 23</span></a> consists of three
 layers: a switching chip ASIC, a vendor-specific SDK for programming
 the ASIC, and a definition of the forwarding pipeline. By providing a
 programmatic interface, the SDKs in the middle layer effectively

@@ -190,7 +190,7 @@ spirit to a GPU.</p>
 with the Debian distribution of Linux, and augments it with support
 for hardware that is unique to switches, including the <em>Small
 Form-factor Pluggable (SFP)</em> interface module shown in <a class="reference internal" href="switch.html#fig-switch"><span class="std std-numref">Figure
-14</span></a>.</p>
+15</span></a>.</p>
 <p>This chapter does not go into these low-level device driver details,
 but instead focuses on the <em>Northbound Interface (NBI)</em> exported by
 the Switch OS to the control plane, whether that control plane runs
@@ -208,7 +208,7 @@ majority of this chapter focuses on those APIs.</p>
 SDN-ready Northbound Interface for the Switch OS running on a
 white-box switch. The details are drawn from Stratum, an open source
 project at the ONF that started with production-quality code made
-available by Google. <a class="reference internal" href="#fig-stratum"><span class="std std-numref">Figure 23</span></a> gives a
+available by Google. <a class="reference internal" href="#fig-stratum"><span class="std std-numref">Figure 24</span></a> gives a
 high-level overview of Stratum, and to re-emphasize, it’s the exposed
 interfaces—P4Runtime, gNMI, and gNOI—that are the important take-aways
 of this chapter. We show these few implementation details in this
@@ -216,7 +216,7 @@ section only as a way of grounding the description of an end-to-end
 workflow for developers implementing SDN-based solutions.</p>
 <div class="figure align-center" id="id3">
 <span id="fig-stratum"></span><a class="reference internal image-reference" href="_images/Slide17.png"><img alt="_images/Slide17.png" src="_images/Slide17.png" style="width: 500px;" /></a>
-<p class="caption"><span class="caption-number">Figure 23. </span><span class="caption-text">High-level schematic of Stratum, a Thin Switch OS running on top
+<p class="caption"><span class="caption-number">Figure 24. </span><span class="caption-text">High-level schematic of Stratum, a Thin Switch OS running on top
 of Open Networking Linux.</span></p>
 </div>
 <p>Stratum exports three primary Northbound Interfaces: (1) P4Runtime is
@@ -254,7 +254,7 @@ Section 4.5. Barefoot provides a similar SDK for their Tofino
 chip. You can think of these SDKs as similar to device drivers in a
 traditional OS: they are used to indirectly read and write memory
 locations on the corresponding chip. The second is the <em>ONL Platform
-(ONLP)</em>, which exports the Platform API shown in <a class="reference internal" href="#fig-stratum"><span class="std std-numref">Figure 23</span></a>. This API provides access hardware counters, monitors,
+(ONLP)</em>, which exports the Platform API shown in <a class="reference internal" href="#fig-stratum"><span class="std std-numref">Figure 24</span></a>. This API provides access hardware counters, monitors,
 status variables, and so on.</p>
 <p>As a simple example, which helps illustrate the fundamental difference
 between fixed-function and programmable pipelines, Broadcom’s SDK
@@ -262,7 +262,7 @@ defines a <code class="docutils literal notranslate"><span class="pre">bcm_l3_ro
 table, whereas Barefoot’s corresponding pipeline-independent method is
 <code class="docutils literal notranslate"><span class="pre">bf_table_write</span></code>.</p>
 <p>Internal to Stratum, the rest of the components shown in
-<a class="reference internal" href="#fig-stratum"><span class="std std-numref">Figure 23</span></a> are primarily designed to make
+<a class="reference internal" href="#fig-stratum"><span class="std std-numref">Figure 24</span></a> are primarily designed to make
 Stratum vendor-agnostic. In the case of a programmable chip like
 Tofino, Stratum is largely pass-through: P4Runtime calls that come
 from above are directly passed through to the Barefoot SDK. In the
@@ -275,25 +275,25 @@ entries in one of the ASIC tables.</p>
 </div>
 <div class="section" id="p4runtime">
 <h2>5.2 P4Runtime<a class="headerlink" href="#p4runtime" title="Permalink to this headline">¶</a></h2>
-<p>You can think of the P4Runtime interface shown in <a class="reference internal" href="#fig-stratum"><span class="std std-numref">Figure 23</span></a> as the server-side RPC stub for controlling the
+<p>You can think of the P4Runtime interface shown in <a class="reference internal" href="#fig-stratum"><span class="std std-numref">Figure 24</span></a> as the server-side RPC stub for controlling the
 switch. There is a corresponding client-side stub, which is similarly
 included in the SDN Controller. Together, they implement the
 <em>P4Runtime Contract</em> between the controller and the switch. The
-toolchain for generating this contract is shown in <a class="reference internal" href="#fig-toolchain"><span class="std std-numref">Figure 24</span></a>, where as in earlier figures, we represent the
+toolchain for generating this contract is shown in <a class="reference internal" href="#fig-toolchain"><span class="std std-numref">Figure 25</span></a>, where as in earlier figures, we represent the
 original P4 forwarding program as an abstract graph rather than with
 actual P4 source code.</p>
 <div class="figure align-center" id="id4">
 <span id="fig-toolchain"></span><a class="reference internal image-reference" href="_images/Slide18.png"><img alt="_images/Slide18.png" src="_images/Slide18.png" style="width: 600px;" /></a>
-<p class="caption"><span class="caption-number">Figure 24. </span><span class="caption-text">P4 toolchain achieves ASIC-independence and auto-generates
+<p class="caption"><span class="caption-number">Figure 25. </span><span class="caption-text">P4 toolchain achieves ASIC-independence and auto-generates
 P4Runtime Contract (represented as a Protocol Buffer
 specification).</span></p>
 </div>
-<p>One key takeaway from <a class="reference internal" href="#fig-toolchain"><span class="std std-numref">Figure 24</span></a> is that the
+<p>One key takeaway from <a class="reference internal" href="#fig-toolchain"><span class="std std-numref">Figure 25</span></a> is that the
 P4 compiler generates both the binary that is loaded into each
 switching chip, and the <em>runtime interface</em> used to control the
 switching chip (indirectly via the Switch OS).<a class="footnote-reference" href="#id2" id="id1">[1]</a> The compiler does
 this with the help of a vendor-specific backend, where <a class="reference internal" href="#fig-toolchain"><span class="std std-numref">Figure
-24</span></a> shows two possible examples. Note that these
+25</span></a> shows two possible examples. Note that these
 vendor-specific backends have to be written for a specific
 architecture model (as defined by <code class="docutils literal notranslate"><span class="pre">arch.p4</span></code> in this example).  In
 other words, today it is a combination of the P4 language, the
@@ -560,15 +560,15 @@ configuration system includes other elements as well. In our case,
 there are three important points to make about the relationship
 between Stratum and the OpenConfig models.</p>
 <p>The first is that Stratum depends on a YANG toolchain. <a class="reference internal" href="#fig-yang"><span class="std std-numref">Figure
-25</span></a> shows the steps involved in translating a set of
+26</span></a> shows the steps involved in translating a set of
 YANG-based OpenConfig models into the client-side and server-side gRPC
 stubs used by gNMI. The gNMI Server shown in the figure is the same as
-the gNMI interface portal shown in <a class="reference internal" href="#fig-stratum"><span class="std std-numref">Figure 23</span></a>. The toolchain supports multiple target programming
+the gNMI interface portal shown in <a class="reference internal" href="#fig-stratum"><span class="std std-numref">Figure 24</span></a>. The toolchain supports multiple target programming
 languages (Stratum happens to use C++), where the client and server
 sides of the gRPC need not be written in the same language.</p>
 <div class="figure align-center" id="id5">
 <span id="fig-yang"></span><a class="reference internal image-reference" href="_images/Slide25.png"><img alt="_images/Slide25.png" src="_images/Slide25.png" style="width: 550px;" /></a>
-<p class="caption"><span class="caption-number">Figure 25. </span><span class="caption-text">YANG toolchain used to generate gRPC-based runtime for gNMI.</span></p>
+<p class="caption"><span class="caption-number">Figure 26. </span><span class="caption-text">YANG toolchain used to generate gRPC-based runtime for gNMI.</span></p>
 </div>
 <p>Keep in mind that YANG is not tied to either gRPC or gNMI. The
 toolchain is able to start with the very same OpenConfig models, but
@@ -674,7 +674,7 @@ Controllers/Apps to interact with SAI using P4Runtime and gNMI,
 and (2) enable SAI extensions using P4 so as to improve feature
 velocity in the data plane. Both goals rely on a new representation of
 the SAI behavioral model and pipeline based on a P4 program (the so
-called <code class="docutils literal notranslate"><span class="pre">sai.p4</span></code> program shown in <a class="reference internal" href="switch.html#fig-compare"><span class="std std-numref">Figure 22</span></a>
+called <code class="docutils literal notranslate"><span class="pre">sai.p4</span></code> program shown in <a class="reference internal" href="switch.html#fig-compare"><span class="std std-numref">Figure 23</span></a>
 of Section 4.6). If you take one thing away from this reconciliation
 effort, it should be that embracing a programmable pipeline (and
 corresponding toolchain) is what facilitates doing something like
