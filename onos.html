@@ -575,41 +575,41 @@ rest of this section.</p>
 <p>There are three types of flow objectives: <em>Filtering</em>, <em>Next</em>, and
 <em>Forwarding</em>. Filtering objectives determine whether or not traffic
 should be permitted to enter the pipeline, based on a traffic
-<em>Selector</em>. This selector abstracts the “match” part of a match-action
-rule. Next objectives indicate what kind of <em>Treatment</em> the traffic
-should receive. This treatment abstracts the “action” part of a
-match-action rule.  Forwarding objectives determine which traffic is
-to be allowed to egress the pipeline, effectively adding a second
-opportunity apply a match rule to the traffic.</p>
-<p>The challenge is to map these pipeline-agnostic objectives onto
-pipeline-dependent rules. In ONOS, this mapping is managed by the Flow
-Objective Service, as depicted in <a class="reference internal" href="#fig-flowobj"><span class="std std-numref">Figure 33</span></a>. For simplicity, the example focuses on the selector
+<em>Selector</em>. You can think of selectors as abstracting the “match” part
+of a match-action rule. Next objectives indicate what kind of
+<em>Treatment</em> the traffic should receive. You can think of treatments as
+abstracting the “action” part of a match-action rule.  Forwarding
+objectives determine what traffic is to be allowed to egress the
+pipeline, effectively adding a second opportunity apply a match rule
+to the traffic.</p>
+<p>The challenge is to map these pipeline-agnostic objectives onto the
+corresponding pipeline-dependent rules. In ONOS, this mapping is
+managed by the Flow Objective Service, as depicted in <a class="reference internal" href="#fig-flowobj"><span class="std std-numref">Figure
+33</span></a>. For simplicity, the example focuses on the selector
 (match) specified by a Filtering objective, where the key is to
-express the fact that you want to match on a particular switch port,
-MAC address, VLAN tag, and IP address without regard for which
-sequence of pipeline tables implements such a combination.</p>
+express the fact that you want to select a particular input port, MAC
+address, VLAN tag, and IP address combintation, without regard for
+the exact sequence of pipeline tables that implement that combination.</p>
 <div class="figure align-center" id="id9">
 <span id="fig-flowobj"></span><a class="reference internal image-reference" href="_images/Slide39.png"><img alt="_images/Slide39.png" src="_images/Slide39.png" style="width: 500px;" /></a>
 <p class="caption"><span class="caption-number">Figure 33. </span><span class="caption-text">Flow Objective Service manages the mapping of pipeline-agnostic
 objectives onto pipeline-specific rules.</span></p>
 </div>
-<p>Internally, ONOS manages the binding between the pipeline-agnostic
-objectives and the device-specific handlers. These handlers are
-implemented using the ONOS device driver mechanism. The device driver
-behavior that abstracts the implementation of how flow objective
-directives should map to flow rule operations is called <em>Pipeliner</em>.
-<a class="reference internal" href="#fig-flowobj"><span class="std std-numref">Figure 33</span></a> shows Pipeliners for two example
-switch pipelines.</p>
-<p>Each Pipeliner is able to map Flow objectives onto both Flow Rules (in
+<p>Internally, the Flow Objective Service is organized as a collection of
+device-specific handlers, each of which is implemented using the ONOS
+device driver mechanism. The device driver behavior that abstracts the
+implementation of how flow objective directives should map to flow
+rule operations is called a <em>Pipeliner</em>.  <a class="reference internal" href="#fig-flowobj"><span class="std std-numref">Figure 33</span></a> shows Pipeliners for two example switch pipelines.</p>
+<p>Pipeliners are able to map flow objectives onto both flow rules (in
 the case of fixed-function pipelines) and P4-programmed pipelines. The
-example given in <a class="reference internal" href="#fig-flowobj"><span class="std std-numref">Figure 33</span></a> assumes the former
-case, which implies a mapping to OpenFlow 1.3. In the latter case,
+example given in <a class="reference internal" href="#fig-flowobj"><span class="std std-numref">Figure 33</span></a> shows the former
+case, which includes a mapping to OpenFlow 1.3. In the latter case,
 Pipeliner leverages <em>Pipeconf</em>, a structure that maintains
 associations among the following elements:</p>
 <ol class="arabic simple">
 <li>A model of the pipeline for each target switch.</li>
 <li>A target-specific driver needed to to deploy flow instructions to the switch.</li>
-<li>A pipeline-specific translator to map Flow Objectives into the target pipeline.</li>
+<li>A pipeline-specific translator to map flow objectives into the target pipeline.</li>
 </ol>
 <p>Pipeconf maintains these bindings using information extracted from the
 <code class="docutils literal notranslate"><span class="pre">.p4info</span></code> file output by the P4 compiler, as described in Section
@@ -618,12 +618,12 @@ associations among the following elements:</p>
 end-to-end workflow for a developer involves being aware of both a P4
 architecture model (e.g., <code class="docutils literal notranslate"><span class="pre">v1model.p4</span></code>) when programming the data
 plane and this ONOS model when programming the control plane using
-Flow Objectives. Eventually, these various layers of pipeline models
+flow objectives. Eventually, these various layers of pipeline models
 will be unified, and in all likelihood, specified in P4.</p>
-<p>Programmatically, Flow Objectives are a data structure, packaged with
+<p>Programmatically, flow objectives are a data structure, packaged with
 associated constructor routines. The control application builds a list
 of objectives and passes them to ONOS to be executed. The following
-code example shows Flow Objectives being constructed to specify an
+code example shows flow objectives being constructed to specify an
 end-to-end flow through the network. The process of applying them to
 the underlying devices is done elsewhere, and not included in the
 example.</p>
