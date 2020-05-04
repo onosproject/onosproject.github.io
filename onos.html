@@ -218,7 +218,7 @@ Atomix.</li>
 <li>A Southbound Interface (SBI) constructed from a collection plugins
 including shared protocol libraries and device-specific drivers.</li>
 </ol>
-<div class="figure align-center" id="id3">
+<div class="figure align-center" id="id5">
 <span id="fig-onos"></span><a class="reference internal image-reference" href="_images/Slide26.png"><img alt="_images/Slide26.png" src="_images/Slide26.png" style="width: 700px;" /></a>
 <p class="caption"><span class="caption-number">Figure 27. </span><span class="caption-text">Three-layer architecture of ONOS, hosting a set of control
 applications.</span></p>
@@ -260,7 +260,7 @@ arbitrary statement, which points to an important way in which ONOS is
 syscall-equivalent interface demarking the boundary between a
 privileged kernel and multiple user domains. In other words, ONOS
 currently operates in a single trust domain.</p>
-<div class="figure align-center" id="id4">
+<div class="figure align-center" id="id6">
 <span id="fig-ztp"></span><a class="reference internal image-reference" href="_images/Slide28.png"><img alt="_images/Slide28.png" src="_images/Slide28.png" style="width: 400px;" /></a>
 <p class="caption"><span class="caption-number">Figure 28. </span><span class="caption-text">Example of a Zero-Touch Provisioning (ZTP) application taking a
 “role spec” for a switch being installed as input, with ONOS
@@ -281,7 +281,7 @@ fixed-function and programmable pipelines. As highlighted in
 <a class="reference internal" href="#fig-layers"><span class="std std-numref">Figure 29</span></a>, doing this job in the face of varied
 forwarding pipelines is a complexity ONOS is explicitly designed to
 address.</p>
-<div class="figure align-center" id="id5">
+<div class="figure align-center" id="id7">
 <span id="fig-layers"></span><a class="reference internal image-reference" href="_images/Slide27.png"><img alt="_images/Slide27.png" src="_images/Slide27.png" style="width: 500px;" /></a>
 <p class="caption"><span class="caption-number">Figure 29. </span><span class="caption-text">ONOS manages the mapping of an abstract specification of
 network-wide behavior to a collection of per-device instructions.</span></p>
@@ -322,13 +322,16 @@ introduction is available at:</p>
 algorithm to provide a rich set of programming primitives that ONOS
 uses to manage the distributed state and make it easy for control apps
 to access.</p>
-<p>This is a common design paradigm. What’s unique about ONOS—or any
-Network OS, for that matter—is the set of maps it defines: the
-semantics of the keys it stores and the types of the values associated
-with those keys. It is this data model that makes a Network OS a
-Network OS (and not a ride-share application or a social network).
-This section mostly focuses on this set of data models and the
-corresponding services built around them, although we start with a
+<p>This is a common design paradigm, which results in a system that is
+both scalable (runs on enough virtualized instances to handle the
+request workload) and highly available (run on enough instances to
+continue offering service in the face of failure). What’s unique about
+ONOS—or any Network OS, for that matter—is the set of maps it defines:
+the semantics of the keys it stores and the types of the values
+associated with those keys. It is this data model that makes a Network
+OS a Network OS (and not a ride-share application or a social
+network).  This section mostly focuses on this set of data models and
+the corresponding services built around them, although we start with a
 brief introduction to the primitives that Atomix supports.</p>
 <div class="section" id="atomix-primitives">
 <h3>6.2.1 Atomix Primitives<a class="headerlink" href="#atomix-primitives" title="Permalink to this headline">¶</a></h3>
@@ -355,8 +358,17 @@ inserted/updated/removed entries by registering event listeners on a
 map.</p>
 <p>Maps are the workhorse primitive used by ONOS, as we will see in the
 next subsection. We conclude this section by looking at another role
-that Atomix plays in ONOS: coordinating all the ONOS instances. There
-are two aspects to this coordination.</p>
+that Atomix plays in ONOS: coordinating all the ONOS instances.<a class="footnote-reference" href="#id2" id="id1">[1]</a>
+There are two aspects to this coordination.</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>For the purpose of this discussion, assume ONOS is packaged as
+a whole, and then scaled across multiple virtualized instances.
+An alternative partitioning of ONOS functionality into
+independently scaled microservices is discussed in Section 6.5.</td></tr>
+</tbody>
+</table>
 <p>First, as a horizontally scalable service, the number of ONOS
 instances running at any given time depends on the workload and the
 level of replication needed to guarantee availability in the face of
@@ -387,7 +399,7 @@ applications and other services interact with those pairs.
 <a class="reference internal" href="#fig-services1"><span class="std std-numref">Figure 30</span></a> depicts the respective layers,
 where the middle three components—Topology, Link, and Device—are
 example ONOS services.</p>
-<div class="figure align-center" id="id6">
+<div class="figure align-center" id="id8">
 <span id="fig-services1"></span><a class="reference internal image-reference" href="_images/Slide29.png"><img alt="_images/Slide29.png" src="_images/Slide29.png" style="width: 350px;" /></a>
 <p class="caption"><span class="caption-number">Figure 30. </span><span class="caption-text">ONOS provides a set of services, such as the Topology, Device, and
 Link Services, on top of a corresponding table (Map) implemented
@@ -406,7 +418,7 @@ subgraph. <a class="reference internal" href="#fig-services2"><span class="std s
 illustrate some other aspects of the ONOS core, this time simplified
 to show the Atomix maps as an attribute of some (but not all) of the
 services. There are several things of note about this example.</p>
-<div class="figure align-center" id="id7">
+<div class="figure align-center" id="id9">
 <span id="fig-services2"></span><a class="reference internal image-reference" href="_images/Slide33.png"><img alt="_images/Slide33.png" src="_images/Slide33.png" style="width: 550px;" /></a>
 <p class="caption"><span class="caption-number">Figure 31. </span><span class="caption-text">Dependency graph of services (some with their own key/value maps)
 involved in building a Path Service.</span></p>
@@ -439,22 +451,22 @@ priori</em>. This often happens when the control plane is tailored for a
 particular topology, as is the case for the leaf-spine topology
 discussed throughout this book. For such scenarios, the Topology
 Service accepts configuration instructions from a control application
-(or high-level service) sitting above it in the dependency graph.<a class="footnote-reference" href="#id2" id="id1">[1]</a>
+(or high-level service) sitting above it in the dependency graph.<a class="footnote-reference" href="#id4" id="id3">[2]</a>
 ONOS includes such a configuration service, called <em>Network Config</em>,
 as depicted in <a class="reference internal" href="#fig-services3"><span class="std std-numref">Figure 32</span></a>. Network Config, in
 turn, accepts configuration directives from either a human operator or
 an automated orchestrator, such as the example ZTP control application
 from <a class="reference internal" href="#fig-ztp"><span class="std std-numref">Figure 28</span></a>.</p>
-<table class="docutils footnote" frame="void" id="id2" rules="none">
+<table class="docutils footnote" frame="void" id="id4" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>The Topology Service still collects ground-truth information
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td>The Topology Service still collects ground-truth information
 from the underlying network, verifies that it matches the
 configuration directives passed in from above, and notifies the
 Network Config Service when there is a discrepancy.</td></tr>
 </tbody>
 </table>
-<div class="figure align-center" id="id8">
+<div class="figure align-center" id="id10">
 <span id="fig-services3"></span><a class="reference internal image-reference" href="_images/Slide34.png"><img alt="_images/Slide34.png" src="_images/Slide34.png" style="width: 300px;" /></a>
 <p class="caption"><span class="caption-number">Figure 32. </span><span class="caption-text">Network Config Service, supporting both provisioning applications
 and human operators.</span></p>
@@ -590,7 +602,7 @@ managed by the Flow Objective Service, as depicted in <a class="reference intern
 express the fact that you want to select a particular input port, MAC
 address, VLAN tag, and IP address combintation, without regard for
 the exact sequence of pipeline tables that implement that combination.</p>
-<div class="figure align-center" id="id9">
+<div class="figure align-center" id="id11">
 <span id="fig-flowobj"></span><a class="reference internal image-reference" href="_images/Slide39.png"><img alt="_images/Slide39.png" src="_images/Slide39.png" style="width: 500px;" /></a>
 <p class="caption"><span class="caption-number">Figure 33. </span><span class="caption-text">Flow Objective Service manages the mapping of pipeline-agnostic
 objectives onto pipeline-specific rules.</span></p>
@@ -695,7 +707,7 @@ register themselves with the SBI plugin framework, and can start
 acting as a conduit for passing information and control directives
 between ONOS applications and core services (above) and the network
 environment (below), as illustrated in <a class="reference internal" href="#fig-plugins"><span class="std std-numref">Figure 34</span></a>.</p>
-<div class="figure align-center" id="id10">
+<div class="figure align-center" id="id12">
 <span id="fig-plugins"></span><a class="reference internal image-reference" href="_images/Slide35.png"><img alt="_images/Slide35.png" src="_images/Slide35.png" style="width: 550px;" /></a>
 <p class="caption"><span class="caption-number">Figure 34. </span><span class="caption-text">ONOS Southbound Interface (SBI) is extended by Provider Plugins.</span></p>
 </div>
@@ -758,14 +770,18 @@ rest of ONOS.</p>
 <p>A refactoring of ONOS to more closely adhere to a microservice
 architecture is also underway. The new version, called µONOS,
 leverages ONOS’s existing modularity, but packages and scales
-different subsystems independently. This includes encapsulating Atomix
-in its own microservice, as well as running each control application
-and southbound adaptor as a separate microservice. It also means
-partitioning the core into distinct microservices corresponding to
-Topology Management (exporting a Network Graph API), Control
-Management (exporting a P4Runtime API), Configuration Management
-(exporting a gNMI API), and Operations Management (exporting a gNOI
-API).</p>
+different subsystems independently. Although in principle each ONOS
+service introduced in this chapter could be packaged as an independent
+microservice, doing so is much too fine-grain to be
+practical. Instead, µONOS adopts the following approach. First, it
+encapsulates Atomix in its own microservice. Second, it runs each each
+control application and southbound adaptor as a separate
+microservice. Third, it partitions the core into four distinct
+microservices: (1) a <em>Topology Management</em> microservice that exports a
+Network Graph API; (2) a <em>Control Management</em> microservice that
+exports a P4Runtime API; (3) a <em>Configuration Management</em> microservice
+that exports a gNMI API; and (4) an <em>Operations Management</em>
+microservice that exports a gNOI API.</p>
 </div>
 </div>
 
