@@ -573,27 +573,35 @@ extensions in the next Chapter when we take a closer look at Trellis.</p>
 a given configuration of ONOS, there is a corresponding API. For
 example, the “Topology” interface shown in <a class="reference internal" href="#fig-onos"><span class="std std-numref">Figure 27</span></a> is exactly the API offered by the Topology Service shown
 in <a class="reference internal" href="#fig-services1"><span class="std std-numref">Figure 30</span></a>. Second, because ONOS permits
-applications to define and use their own Atomix primitives, it is fair
-to consider the Atomix programmatic interface as another part of the
-ONOS NBI. Third, the ONOS NBI includes gNMI and gNOI. These are
+applications to define and use their own Atomix tables, it is fair to
+consider the Atomix programmatic interface as another part of the ONOS
+NBI. Third, the ONOS NBI includes gNMI and gNOI. These are
 standardized interfaces, defined independent of ONOS, but supported as
 part of the ONOS NBI. Note that the implementation sitting behind gNMI
-and gNOI are also Atomix-based maps. Finally, and most interestingly,
-ONOS offers a set of interfaces for controlling the underlying
-switches. <a class="reference internal" href="#fig-onos"><span class="std std-numref">Figure 27</span></a> depicts two: Flow Rules and
-Flow Objectives. The first is borrowed from OpenFlow, and hence, is
-pipeline-aware. The second is pipeline-agnostic, and the focus of the
-rest of this section.</p>
-<p>There are three types of flow objectives: <em>Filtering</em>, <em>Next</em>, and
-<em>Forwarding</em>. Filtering objectives determine whether or not traffic
+and gNOI are also ONOS services wrapped around Atomix maps. Finally,
+and most interestingly, ONOS offers a set of interfaces for
+controlling the underlying switches. <a class="reference internal" href="#fig-onos"><span class="std std-numref">Figure 27</span></a>
+depicts two: Flow Rules and Flow Objectives. The first is borrowed
+from OpenFlow, and hence, is pipeline-aware. The second is
+pipeline-agnostic, and the focus of the rest of this section.</p>
+<p>There are three types of flow objectives: <em>Filtering</em>, <em>Forwarding</em>,
+and <em>Next</em>. Filtering objectives determine whether or not traffic
 should be permitted to enter the pipeline, based on a traffic
-<em>Selector</em>. You can think of selectors as abstracting the “match” part
-of a match-action rule. Next objectives indicate what kind of
-<em>Treatment</em> the traffic should receive. You can think of treatments as
-abstracting the “action” part of a match-action rule.  Forwarding
-objectives determine what traffic is to be allowed to egress the
-pipeline, effectively adding a second opportunity apply a match rule
-to the traffic.</p>
+<em>Selector</em>. Forwarding objectives determine what traffic is to be
+allowed to egress the pipeline, generally by matching select fields in
+the packet with a forwarding table. Next objectives indicate what kind
+of <em>Treatment</em> the traffic should receive, such as how the header is
+to be rewritten. If this sounds like an abstract three-stage pipeline:</p>
+<p class="centered">
+<strong>Filtering → Forwarding → Next</strong></p><p>then you understand the idea behind Flow Objectives. For example, the
+Filter objective (stage) might specify that packets matching a
+particular MAC address, VLAN tag, and IP address be allowed to enter
+the pipeline; the corresponding Forwarding objective (stage) then
+looks up the IP address in a routing table; and finally the Next
+objective (stage) rewrites the headers as necessary and assigns the
+packet to an output port. All three stages, of course, are agnostic as
+to exactly what combination of tables in the underlying switch are
+used to implement the corresponding sequence of match/action pairs.</p>
 <p>The challenge is to map these pipeline-agnostic objectives onto the
 corresponding pipeline-dependent rules. In ONOS, this mapping is
 managed by the Flow Objective Service, as depicted in <a class="reference internal" href="#fig-flowobj"><span class="std std-numref">Figure
