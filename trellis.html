@@ -100,6 +100,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#feature-set">7.1 Feature Set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#segment-routing">7.2 Segment Routing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#routes-and-multicast">7.3 Routes and Multicast</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customized-forwarding">7.4  Customized Forwarding</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="future.html">Chapter 8:  Future of SDN</a></li>
@@ -406,6 +407,86 @@ Packet Service (similar to how the Host service intercepts ARP and
 DHCP packets). So the next time you use your TV remote to change
 channels, it is possible you are triggering procedure invocations up
 and down the SDN software stack described throughout this book!</p>
+</div>
+<div class="section" id="customized-forwarding">
+<h2>7.4  Customized Forwarding<a class="headerlink" href="#customized-forwarding" title="Permalink to this headline">¶</a></h2>
+<p>Trellis is an example use case for SDN. It is a set of control
+applications running top of a Network OS, which in turn runs on top of
+a collection white-box switches arranged in a leaf-spine topology,
+where each switch runs a local Switch OS. In this way, Trellis serves
+as a capstone for our bottom-up tour of the SDN software stack.</p>
+<p>But if we knew from the outset that a leaf-spine fabric supporting the
+Trellis feature-set was exactly what we wanted, we might go back to
+lower layers and tailor them for that purpose. This is what has
+happened over time with Trellis, resulting in a customized forwarding
+plane implemented by a P4 program called <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>. We conclude
+this chapter by giving a high-level summary of <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>,
+highlighting how its design meshes with the rest of the software
+stack.</p>
+<p>Before doing that, it is important to acknowledge that knowing exactly
+what you want from a network from the outset is an impossibly high
+bar. Networks evolve based on experience using and operating them. No
+one knew how to write <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> on day one, but after iterating
+through a series of of implementations of every layer up-and-down the
+stack (including the introduction of Tofino as a programmable
+forwarding pipeline), <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> emerged. <em>The point is that
+treating the network as a programmable platform frees you to
+continually and rapidly evolve it.</em></p>
+<p>Said another way, we introduced <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code> as our canonical
+example of “a forwarding plane customized to do exactly what we want”
+in Chapter 4, but then spent the rest of the chapter describing all
+the machinery that makes something like <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code> possible.  In
+short, <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> is an example <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code>, which we only now
+able to describe because of how it relates to the control plane.</p>
+<p>There are three things of note about <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>. First, it is
+loosely based on the Broadcom OF-DPA pipeline, which makes sense
+because Trellis was originally implemented on top of a set of
+Tomahawk-based switches. The <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> pipeline is simpler than
+OF-DPA, as it eliminates tables that Trellis does not need. This makes
+<code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> easier to control.</p>
+<p>Second, <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> is designed to mimic ONOS’s FlowObjective API,
+thereby simplifying the process of mapping FlowObjectives onto
+P4Runtime operations. This is best illustrated by <a class="reference internal" href="#fig-fabric"><span class="std std-numref">Figure 37</span></a> which shows <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>’s ingress pipeline. The
+egress pipeline is not shown, but it is a straightforward rewriting of
+the header fields in the common case.</p>
+<div class="figure align-center" id="id3">
+<span id="fig-fabric"></span><a class="reference internal image-reference" href="_images/Slide40.png"><img alt="_images/Slide40.png" src="_images/Slide40.png" style="width: 500px;" /></a>
+<p class="caption"><span class="caption-number">Figure 37. </span><span class="caption-text">Logical pipeline supported by <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>, designed to parallel
+the Filtering, Forwarding, and Next stages of the FlowObjective API.</span></p>
+</div>
+<p>Third, <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> is designed to be configurable, making it
+possible to selectively include additional functionality. This is not
+easy when writing code that is optimized for an ASIC-based forwarding
+pipeline, and in practice it makes heavy use of pre-processor
+conditionals (i.e., <code class="docutils literal notranslate"><span class="pre">#ifdefs</span></code>). <a class="reference internal" href="#fig-fabric-p4"><span class="std std-numref">Figure 38</span></a>
+shows <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>’s main control block, annotated to highlight
+optional functionality. The details of the options are beyond to scope
+of this book, but at a high level:</p>
+<ul class="simple">
+<li><strong>SPGW (Serving and Packet Gateway)</strong> Augments IP functionality in
+support of 4G Mobile Networks.</li>
+<li><strong>BNG (Broadband Network Gateway)</strong> Augments IP functionality in
+support of Fiber-to-the-Home.</li>
+<li><strong>INT (Inband Network Telemetry)</strong> Adds metric collection and
+telemetry output directives.</li>
+</ul>
+<p>For example, a companion file, <code class="docutils literal notranslate"><span class="pre">spgw.p4</span></code> (not shown), implements the
+forwarding plane for the SPGW extension, which includes the GTP tunnel
+encapsulation/decapsulation required by the cellular network standard.
+Similarly, <code class="docutils literal notranslate"><span class="pre">bng.p4</span></code> (not shown) implements PPPoE termination, which
+is used by some Passive Optical Networks deployments.</p>
+<div class="figure align-center" id="id4">
+<span id="fig-fabric-p4"></span><a class="reference internal image-reference" href="_images/Slide41.png"><img alt="_images/Slide41.png" src="_images/Slide41.png" style="width: 800px;" /></a>
+<p class="caption"><span class="caption-number">Figure 38. </span><span class="caption-text">Main <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> ingress processing block, including optional
+extensions in support of SPGW, BNG, and INT.</span></p>
+</div>
+<p>In addition to selecting which extensions to include, the pre-processor
+also defines several constants, including the size of each logical
+table.  Clearly, this implementation is a low-level approach to
+building configurable forwarding pipelines. Designing higher level
+language constructs for composition, including the ability to
+dynamically add functions to the pipeline at runtime, is a subject of
+on-going research.</p>
 </div>
 </div>
 
