@@ -427,7 +427,7 @@ stack.</p>
 what you want from a network from the outset is an impossibly high
 bar. Networks evolve based on experience using and operating them. No
 one knew how to write <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> on day one, but after iterating
-through a series of of implementations of every layer up-and-down the
+through a series of implementations of every layer up-and-down the
 stack (including the introduction of Tofino as a programmable
 forwarding pipeline), <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> emerged. <em>The point is that
 treating the network as a programmable platform frees you to
@@ -435,9 +435,11 @@ continually and rapidly evolve it.</em></p>
 <p>Said another way, we introduced <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code> as our canonical
 example of “a forwarding plane customized to do exactly what we want”
 in Chapter 4, but then spent the rest of the chapter describing all
-the machinery that makes something like <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code> possible.  In
-short, <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> is an example <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code>, which we only now
-able to describe because of how it relates to the control plane.</p>
+the machinery that makes something like <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code> possible,
+without ever revisiting what network-specific functionality it might
+actually implement.  In short, <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> is a specific example of
+<code class="docutils literal notranslate"><span class="pre">forward.p4</span></code>, which we only now able to describe because of how it
+relates to the control plane.</p>
 <p>There are three things of note about <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>. First, it is
 loosely based on the Broadcom OF-DPA pipeline, which makes sense
 because Trellis was originally implemented on top of a set of
