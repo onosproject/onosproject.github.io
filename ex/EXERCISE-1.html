@@ -1,0 +1,556 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Exercise 1: P4Runtime basics &mdash; Software-Defined Networks: A Systems Approach Version 0.3-dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/bridge.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/rtd_theme_mods.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Software-Defined Networks: A Systems Approach
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0.3-dev
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Chapter 1:  Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uses.html">Chapter 2:  Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arch.html">Chapter 3:  Basic Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../switch.html">Chapter 4:  White-Box Switches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stratum.html">Chapter 5:  Switch OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../onos.html">Chapter 6:  Network OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../future.html">Chapter 8:  Future of SDN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">About This Book</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Software-Defined Networks: A Systems Approach</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Exercise 1: P4Runtime basics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ex/EXERCISE-1.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="exercise-1-p4runtime-basics">
+<h1>Exercise 1: P4Runtime basics<a class="headerlink" href="#exercise-1-p4runtime-basics" title="Permalink to this headline">¶</a></h1>
+<p>This exercise provides a hands-on introduction to the P4Runtime API. You will be
+asked to:</p>
+<ol class="simple">
+<li>Take a look at the starter P4 code</li>
+<li>Compile it for the BMv2 software switch and understand the output (the P4Info
+and BMv2 JSON files)</li>
+<li>Start Mininet with a 2x2 topology of <code class="docutils literal notranslate"><span class="pre">stratum_bmv2</span></code> switches</li>
+<li>Use the P4Runtime Shell to manually insert table entries in one of the
+switches to provide connectivity between hosts</li>
+</ol>
+<div class="section" id="look-at-the-p4-program">
+<h2>1. Look at the P4 program<a class="headerlink" href="#look-at-the-p4-program" title="Permalink to this headline">¶</a></h2>
+<p>To get started, let’s have a look a the P4 program:
+<a class="reference external" href="p4src/main.p4">p4src/main.p4</a></p>
+<p>In the rest of the exercises, you will be asked to build a leaf-spine data
+center fabric based on IPv6. To make things easier, we provide a starter P4
+program which contains:</p>
+<ul class="simple">
+<li>Header definitions</li>
+<li>Parser implementation</li>
+<li>Ingress and egress pipeline implementation (incomplete)</li>
+<li>Checksum verification/update</li>
+</ul>
+<p>The implementation already provides logic for L2 bridging and ACL behaviors. We
+suggest you start by taking a <strong>quick look</strong> at the whole program to understand
+its structure. When you’re done, try answering the following questions, while
+referring to the P4 program to understand the different parts in more details.</p>
+<p><strong>Parser</strong></p>
+<ul class="simple">
+<li>List all the protocol headers that can be extracted from a packet.</li>
+<li>Which header is expected to be the first one when parsing a new packet</li>
+</ul>
+<p><strong>Ingress pipeline</strong></p>
+<ul class="simple">
+<li>For the L2 bridging case, which table is used to replicate NDP requests to
+all host-facing ports? What type of match is used in that table?</li>
+<li>In the ACL table, what’s the difference between <code class="docutils literal notranslate"><span class="pre">send_to_cpu</span></code> and
+<code class="docutils literal notranslate"><span class="pre">clone_to_cpu</span></code> actions?</li>
+<li>In the apply block, what is the first table applied to a packet? Are P4Runtime
+packet-out treated differently?</li>
+</ul>
+<p><strong>Egress pipeline</strong></p>
+<ul class="simple">
+<li>For multicast packets, can they be replicated to the ingress port?</li>
+</ul>
+<p><strong>Deparser</strong></p>
+<ul class="simple">
+<li>What is the first header to be serialized on the wire and in which case?</li>
+</ul>
+</div>
+<div class="section" id="compile-p4-program">
+<h2>2. Compile P4 program<a class="headerlink" href="#compile-p4-program" title="Permalink to this headline">¶</a></h2>
+<p>The next step is to compile the P4 program for the BMv2 <code class="docutils literal notranslate"><span class="pre">simple_switch</span></code> target.
+For this, we will use the open source P4_16 compiler (<a class="reference external" href="https://github.com/p4lang/p4c">p4c</a>) which includes
+a backend for this specific target, named <code class="docutils literal notranslate"><span class="pre">p4c-bm2-ss</span></code>.</p>
+<p>To compile the program, open a terminal window on the tutorial repo and type the
+following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">p4</span><span class="o">-</span><span class="n">build</span>
+</pre></div>
+</div>
+<p>You should see the following output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>*** Building P4 program...
+docker run --rm -v /home/sdn/ngsdn-tutorial:/workdir -w /workdir
+ opennetworking/p4c:stable \
+                p4c-bm2-ss --arch v1model -o p4src/build/bmv2.json \
+                --p4runtime-files p4src/build/p4info.txt --Wdisable=unsupported \
+                p4src/main.p4
+*** P4 program compiled successfully! Output files are in p4src/build
+</pre></div>
+</div>
+<p>We have instrumented the tutorial Makefile to use a containerized version of the
+<code class="docutils literal notranslate"><span class="pre">p4c-bm2-ss</span></code> compiler. If you look at the arguments when calling <code class="docutils literal notranslate"><span class="pre">p4c-bm2-ss</span> </code>,
+you will notice that we are asking the compiler to:</p>
+<ul class="simple">
+<li>Compile for the v1model architecture (<code class="docutils literal notranslate"><span class="pre">--arch</span></code> argument);</li>
+<li>Put the main output in <code class="docutils literal notranslate"><span class="pre">p4src/build/bmv2.json</span></code> (<code class="docutils literal notranslate"><span class="pre">-o</span></code>);</li>
+<li>Generate a P4Info file in <code class="docutils literal notranslate"><span class="pre">p4src/build/p4info.txt</span></code> (<code class="docutils literal notranslate"><span class="pre">--p4runtime-files</span></code>);</li>
+<li>Ignore some warnings about unsupported features (<code class="docutils literal notranslate"><span class="pre">--Wdisable=unsupported</span></code>).
+It’s ok to ignore such warnings here, as they are generated because of a bug
+in p4c.</li>
+</ul>
+<div class="section" id="take-a-look-at-the-compiler-output">
+<h3>Take a look at the compiler output<a class="headerlink" href="#take-a-look-at-the-compiler-output" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="bmv2-json">
+<h4>bmv2.json<a class="headerlink" href="#bmv2-json" title="Permalink to this headline">¶</a></h4>
+<p>This file defines a configuration for the BMv2 <code class="docutils literal notranslate"><span class="pre">simple_switch</span></code> target in JSON
+format. When <code class="docutils literal notranslate"><span class="pre">simple_switch</span></code> receives a new packet, it uses this configuration
+to process the packet in a way that is consistent with the P4 program.</p>
+<p>This is quite a big file, but don’t worry, there’s no need to understand its
+content for the sake of this tutorial. If you want to learn more, a
+specification of the BMv2 JSON format is provided here:
+<a class="reference external" href="https://github.com/p4lang/behavioral-model/blob/master/docs/JSON_format">https://github.com/p4lang/behavioral-model/blob/master/docs/JSON_format.md</a></p>
+</div>
+<div class="section" id="p4info-txt">
+<h4>p4info.txt<a class="headerlink" href="#p4info-txt" title="Permalink to this headline">¶</a></h4>
+<p>This file contains an instance of a P4Info schema for our P4 program, expressed
+using the Protobuf Text format.</p>
+<p>Take a look at this file and try to answer the following questions:</p>
+<ol class="simple">
+<li>What is the fully qualified name of the <code class="docutils literal notranslate"><span class="pre">l2_exact_table</span></code>? What is its numeric
+ID?</li>
+<li>To which P4 entity does the ID <code class="docutils literal notranslate"><span class="pre">16812802</span></code> belong to? A table, an action, or
+something else? What is the corresponding fully qualified name?</li>
+<li>For the <code class="docutils literal notranslate"><span class="pre">IngressPipeImpl.set_egress_port</span></code> action, how many parameters are
+defined for this action? What is the bitwidth of the parameter named
+<code class="docutils literal notranslate"><span class="pre">port_num</span></code>?</li>
+<li>At the end of the file, look for the definition of the
+<code class="docutils literal notranslate"><span class="pre">controller_packet_metadata</span></code> message with name <code class="docutils literal notranslate"><span class="pre">packet_out</span></code> at the end of the
+file. Now look at the definition of <code class="docutils literal notranslate"><span class="pre">header</span> <span class="pre">cpu_out_header_t</span></code> in the P4
+program. Do you see any relationship between the two?</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="section" id="start-mininet-topology">
+<h2>3. Start Mininet topology<a class="headerlink" href="#start-mininet-topology" title="Permalink to this headline">¶</a></h2>
+<p>It’s now time to start an emulated network of <code class="docutils literal notranslate"><span class="pre">stratum_bmv2</span></code> switches. We will
+program one of the switches using the compiler output obtained in the previous
+step.</p>
+<p>To start the topology, use the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">start</span>
+</pre></div>
+</div>
+<p>This command will start two Docker containers, one for mininet and one for ONOS.
+You can ignore the ONOS one for now, we will use that in exercise 3 and 4.</p>
+<p>To make sure the container is started without errors, you can use the <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">mn-log</span></code> command to show the Mininet log. Verify that you see the following
+output (press Ctrl-C to exit):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make mn-log
+docker-compose logs -f mininet
+Attaching to mininet
+mininet    | *** Error setting resource limits. Mininet&#39;s performance may be affected.
+mininet    | *** Creating network
+mininet    | *** Adding hosts:
+mininet    | h1a h1b h1c h2 h3 h4
+mininet    | *** Adding switches:
+mininet    | leaf1 leaf2 spine1 spine2
+mininet    | *** Adding links:
+mininet    | (h1a, leaf1) (h1b, leaf1) (h1c, leaf1) (h2, leaf1) (h3, leaf2) (h4, leaf2) (spine1, leaf1) (spine1, leaf2) (spine2, leaf1) (spine2, leaf2)
+mininet    | *** Configuring hosts
+mininet    | h1a h1b h1c h2 h3 h4
+mininet    | *** Starting controller
+mininet    |
+mininet    | *** Starting 4 switches
+mininet    | leaf1 stratum_bmv2 @ 50001
+mininet    | leaf2 stratum_bmv2 @ 50002
+mininet    | spine1 stratum_bmv2 @ 50003
+mininet    | spine2 stratum_bmv2 @ 50004
+mininet    |
+mininet    | *** Starting CLI:
+</pre></div>
+</div>
+<p>You can ignore the “*** Error setting resource limits…”.</p>
+<p>The parameters to start the mininet container are specified in
+<a class="reference external" href="docker-compose.yml">docker-compose.yml</a>. The container is configured to execute
+the topology script defined in <a class="reference external" href="mininet/topo-v6.py">mininet/topo-v6.py</a>.</p>
+<p>The topology includes 4 switches, arranged in a 2x2 fabric topology, as well as
+6 hosts attached to leaf switches. 3 hosts <code class="docutils literal notranslate"><span class="pre">h1a</span></code>, <code class="docutils literal notranslate"><span class="pre">h1b</span></code>, and <code class="docutils literal notranslate"><span class="pre">h1c</span></code>, are
+configured to be part of the same IPv6 subnet. In the next step you will be
+asked to use P4Runtime to insert table entries to be able to ping between
+two hosts of this subnet.</p>
+<p><img alt="topo-v6" src="ex/img/topo-v6.png" /></p>
+<div class="section" id="stratum-bmv2-temporary-files">
+<h3>stratum_bmv2 temporary files<a class="headerlink" href="#stratum-bmv2-temporary-files" title="Permalink to this headline">¶</a></h3>
+<p>When starting the Mininet container, a set of files related to the execution of
+each <code class="docutils literal notranslate"><span class="pre">stratum_bmv2</span></code> instance are generated in the <code class="docutils literal notranslate"><span class="pre">tmp</span></code> directory located inside
+this tutorial repo (i.e., <code class="docutils literal notranslate"><span class="pre">ngsdn-tutorial/tmp</span></code>). Example of these files are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">tmp/leaf1/stratum_bmv2.log</span></code>: contains the stratum_bmv2 log for switch
+<code class="docutils literal notranslate"><span class="pre">leaf1</span></code>;</li>
+<li><code class="docutils literal notranslate"><span class="pre">tmp/leaf1/chassis-config.txt</span></code>: the Stratum “chassis config” file used to
+specify the initial port configuration to use at switch startup; This file is
+automatically generated by the <code class="docutils literal notranslate"><span class="pre">StratumBmv2Switch</span></code> class invoked by
+<a class="reference external" href="mininet/topo-v6.py">mininet/topo-v6.py</a>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">tmp/leaf1/write-reqs.txt</span></code>: a log of all P4Runtime write requests processed by
+the switch (the file might not exist if the switch has not received any write
+request).</li>
+</ul>
+</div>
+</div>
+<div class="section" id="program-leaf1-using-p4runtime">
+<h2>4. Program leaf1 using P4Runtime<a class="headerlink" href="#program-leaf1-using-p4runtime" title="Permalink to this headline">¶</a></h2>
+<p>For this part we will use the <a class="reference external" href="p4runtime-sh">P4Runtime Shell</a>, an interactive
+Python CLI that can be used to connect to a P4Runtime server and can run
+P4Runtime commands. For example, it can be used to create, read, update, and
+delete flow table entries.</p>
+<p>The shell can be started in two modes, with or without a P4 pipeline config. In
+the first case, the shell will take care of pushing the given pipeline config to
+the switch using the P4Runtime <code class="docutils literal notranslate"><span class="pre">SetPipelineConfig</span></code> RPC. In the second case, the
+shell will try to retrieve the P4Info that is currently configured in the switch.</p>
+<p>In both cases, the shell makes use of the P4Info file to:</p>
+<ul class="simple">
+<li>allow specifying runtime entities such as table entries using P4Info names
+rather then numeric IDs (much easier to remember and read);</li>
+<li>provide autocompletion;</li>
+<li>validate the CLI commands.</li>
+</ul>
+<p>Finally, when connecting to a P4Runtime server, the specification mandates that
+we provide a mastership election ID to be able to write state, such as the
+pipeline config and table entries.</p>
+<p>To connect the P4Runtime Shell to <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> and push the pipeline configuration
+obtained before, use the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">util</span><span class="o">/</span><span class="n">p4rt</span><span class="o">-</span><span class="n">sh</span> <span class="o">--</span><span class="n">grpc</span><span class="o">-</span><span class="n">addr</span> <span class="n">localhost</span><span class="p">:</span><span class="mi">50001</span> <span class="o">--</span><span class="n">config</span> <span class="n">p4src</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">p4info</span><span class="o">.</span><span class="n">txt</span><span class="p">,</span><span class="n">p4src</span><span class="o">/</span><span class="n">build</span><span class="o">/</span><span class="n">bmv2</span><span class="o">.</span><span class="n">json</span> <span class="o">--</span><span class="n">election</span><span class="o">-</span><span class="nb">id</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">util/p4rt-sh</span></code> is a simple Python script that invokes the P4Runtime Shell
+Docker container with the given arguments. For a list of arguments you can type
+<code class="docutils literal notranslate"><span class="pre">util/p4rt-sh</span> <span class="pre">--help</span></code>.</p>
+<p><strong>Note:</strong> we use <code class="docutils literal notranslate"><span class="pre">--grpc-addr</span> <span class="pre">localhost:50001</span></code> as the Mininet container is
+executed locally, and <code class="docutils literal notranslate"><span class="pre">50001</span></code> is the TCP port associated to the gRPC server
+exposed by <code class="docutils literal notranslate"><span class="pre">leaf1</span></code>.</p>
+<p>If the shell started successfully, you should see the following output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">***</span> <span class="n">Connecting</span> <span class="n">to</span> <span class="n">P4Runtime</span> <span class="n">server</span> <span class="n">at</span> <span class="n">host</span><span class="o">.</span><span class="n">docker</span><span class="o">.</span><span class="n">internal</span><span class="p">:</span><span class="mi">50001</span> <span class="o">...</span>
+<span class="o">***</span> <span class="n">Welcome</span> <span class="n">to</span> <span class="n">the</span> <span class="n">IPython</span> <span class="n">shell</span> <span class="k">for</span> <span class="n">P4Runtime</span> <span class="o">***</span>
+<span class="n">P4Runtime</span> <span class="n">sh</span> <span class="o">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<div class="section" id="available-commands">
+<h3>Available commands<a class="headerlink" href="#available-commands" title="Permalink to this headline">¶</a></h3>
+<p>Use commands like <code class="docutils literal notranslate"><span class="pre">tables</span></code>, <code class="docutils literal notranslate"><span class="pre">actions</span></code>, <code class="docutils literal notranslate"><span class="pre">action_profiles</span></code>, <code class="docutils literal notranslate"><span class="pre">counters</span></code>,
+<code class="docutils literal notranslate"><span class="pre">direct_counters</span></code>, and other named after the P4Info message fields, to query
+information about P4Info objects.</p>
+<p>Commands such as <code class="docutils literal notranslate"><span class="pre">table_entry</span></code>, <code class="docutils literal notranslate"><span class="pre">action_profile_member</span></code>, <code class="docutils literal notranslate"><span class="pre">action_profile_group</span></code>,
+<code class="docutils literal notranslate"><span class="pre">counter_entry</span></code>, <code class="docutils literal notranslate"><span class="pre">direct_counter_entry</span></code>, <code class="docutils literal notranslate"><span class="pre">meter_entry</span></code>, <code class="docutils literal notranslate"><span class="pre">direct_meter_entry</span></code>,
+<code class="docutils literal notranslate"><span class="pre">multicast_group_entry</span></code>, and <code class="docutils literal notranslate"><span class="pre">clone_session_entry</span></code>, can be used to read/write
+the corresponding P4Runtime entities.</p>
+<p>Type the command name followed by <code class="docutils literal notranslate"><span class="pre">?</span></code> for information on each command,
+e.g. <code class="docutils literal notranslate"><span class="pre">table_entry?</span></code>.</p>
+<p>For more information on P4Runtime Shell, check the official documentation at:
+<a class="reference external" href="https://github.com/p4lang/p4runtime-shell">https://github.com/p4lang/p4runtime-shell</a></p>
+<p>The shell supports autocompletion when pressing <code class="docutils literal notranslate"><span class="pre">tab</span></code>. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tables</span><span class="p">[</span><span class="s2">&quot;IngressPipeImpl.&lt;tab&gt;</span>
+</pre></div>
+</div>
+<p>will show all tables defined inside the <code class="docutils literal notranslate"><span class="pre">IngressPipeImpl</span></code> block.</p>
+</div>
+<div class="section" id="bridging-connectivity-test">
+<h3>Bridging connectivity test<a class="headerlink" href="#bridging-connectivity-test" title="Permalink to this headline">¶</a></h3>
+<p>Use the following steps to verify connectivity on leaf1 after inserting the
+required P4Runtime table entries. For this part, you will need to use the
+Mininet CLI.</p>
+<p>On a new terminal window, attach to the Mininet CLI using <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">mn-cli</span></code>.</p>
+<p>You should see the following output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">***</span> <span class="n">Attaching</span> <span class="n">to</span> <span class="n">Mininet</span> <span class="n">CLI</span><span class="o">...</span>
+<span class="o">***</span> <span class="n">To</span> <span class="n">detach</span> <span class="n">press</span> <span class="n">Ctrl</span><span class="o">-</span><span class="n">D</span> <span class="p">(</span><span class="n">Mininet</span> <span class="n">will</span> <span class="n">keep</span> <span class="n">running</span><span class="p">)</span>
+<span class="n">mininet</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="insert-static-ndp-entries">
+<h3>Insert static NDP entries<a class="headerlink" href="#insert-static-ndp-entries" title="Permalink to this headline">¶</a></h3>
+<p>To be able to ping two IPv6 hosts in the same subnet, first, the hosts need to
+resolve their respective MAC address using the Neighbor Discovery Protocol
+(NDP). This is equivalent to ARP in IPv4 networks. For example, when trying to
+ping <code class="docutils literal notranslate"><span class="pre">h1b</span></code> from <code class="docutils literal notranslate"><span class="pre">h1a</span></code>, <code class="docutils literal notranslate"><span class="pre">h1a</span></code> will first generate an NDP Neighbor Solicitation
+(NS) message to resolve the MAC address of <code class="docutils literal notranslate"><span class="pre">h1b</span></code>. Once <code class="docutils literal notranslate"><span class="pre">h1b</span></code> receives the NDP NS
+message, it should reply with an NDP Neighbor Advertisement (NA) with its own
+MAC address. Now both host are aware of each other MAC address and the ping
+packets can be exchanged.</p>
+<p>As you might have noted by looking at the P4 program before, the switch should
+be able to handle NDP packets if correctly programmed using P4Runtime (see
+<code class="docutils literal notranslate"><span class="pre">l2_ternary_table</span></code>), however, <strong>to keep things simple for now, let’s insert two
+static NDP entries in our hosts.</strong></p>
+<p>Add an NDP entry to <code class="docutils literal notranslate"><span class="pre">h1a</span></code>, mapping <code class="docutils literal notranslate"><span class="pre">h1b</span></code>’s IPv6 address (<code class="docutils literal notranslate"><span class="pre">2001:1:1::b</span></code>) to its
+MAC address (<code class="docutils literal notranslate"><span class="pre">00:00:00:00:00:1B</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h1a</span> <span class="n">ip</span> <span class="o">-</span><span class="mi">6</span> <span class="n">neigh</span> <span class="n">replace</span> <span class="mi">2001</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">::</span><span class="n">B</span> <span class="n">lladdr</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">1</span><span class="n">B</span> <span class="n">dev</span> <span class="n">h1a</span><span class="o">-</span><span class="n">eth0</span>
+</pre></div>
+</div>
+<p>And vice versa, add an NDP entry to <code class="docutils literal notranslate"><span class="pre">h1b</span></code> to resolve <code class="docutils literal notranslate"><span class="pre">h1a</span></code>’s address:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h1b</span> <span class="n">ip</span> <span class="o">-</span><span class="mi">6</span> <span class="n">neigh</span> <span class="n">replace</span> <span class="mi">2001</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">::</span><span class="n">A</span> <span class="n">lladdr</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">1</span><span class="n">A</span> <span class="n">dev</span> <span class="n">h1b</span><span class="o">-</span><span class="n">eth0</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="start-ping">
+<h3>Start ping<a class="headerlink" href="#start-ping" title="Permalink to this headline">¶</a></h3>
+<p>Start a ping between <code class="docutils literal notranslate"><span class="pre">h1a</span></code> and <code class="docutils literal notranslate"><span class="pre">h1b</span></code>. It should not work as we have not inserted
+any P4Runtime table entry for forward these packets.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h1a</span> <span class="n">ping</span> <span class="n">h1b</span>
+</pre></div>
+</div>
+<p>You should see no output form the ping command. You can leave that command
+running for now.</p>
+</div>
+<div class="section" id="insert-p4runtime-table-entries">
+<h3>Insert P4Runtime table entries<a class="headerlink" href="#insert-p4runtime-table-entries" title="Permalink to this headline">¶</a></h3>
+<p>To be able to forward ping packets, we need to add two table entries on
+<code class="docutils literal notranslate"><span class="pre">l2_exact_table</span></code> in <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> – one that matches on destination MAC address
+of <code class="docutils literal notranslate"><span class="pre">h1b</span></code> and forwards traffic to port 4 (where <code class="docutils literal notranslate"><span class="pre">h1b</span></code> is attached), and
+vice versa (<code class="docutils literal notranslate"><span class="pre">h1a</span></code> is attached to port 3).</p>
+<p>Let’s use the P4Runtime shell to create and insert such entries. Looking at the
+P4Info file, use the commands below to insert the following two entries in the
+<code class="docutils literal notranslate"><span class="pre">l2_exact_table</span></code>:</p>
+<p>| Match (Ethernet dest) | Egress port number  |
+|———————–|——————– |
+| <code class="docutils literal notranslate"><span class="pre">00:00:00:00:00:1B</span></code>   | 4                   |
+| <code class="docutils literal notranslate"><span class="pre">00:00:00:00:00:1A</span></code>   | 3                   |</p>
+<p>To create a table entry object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">P4Runtime</span> <span class="n">sh</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">te</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s2">&quot;P4INFO-TABLE-NAME&quot;</span><span class="p">](</span><span class="n">action</span> <span class="o">=</span> <span class="s2">&quot;&lt;P4INFO-ACTION-NAME&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Make sure to use the fully qualified name for each entity, e.g.
+<code class="docutils literal notranslate"><span class="pre">IngressPipeImpl.l2_exact_table</span></code>, <code class="docutils literal notranslate"><span class="pre">IngressPipeImpl.set_egress_port</span></code>, etc.</p>
+<p>To specify a match field:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">P4Runtime</span> <span class="n">sh</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">te</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s2">&quot;P4INFO-MATCH-FIELD-NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;VALUE&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">VALUE</span></code> can be a MAC address expressed in Colon-Hexadecimal notation
+(e.g., <code class="docutils literal notranslate"><span class="pre">00:11:22:AA:BB:CC</span></code>), or IP address in dot notation, or an arbitrary
+string. Based on the information contained in the P4Info, P4Runtime shell will
+internally convert that value to a Protobuf byte string.</p>
+<p>The specify the values for the table entry action parameters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">P4Runtime</span> <span class="n">sh</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">te</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s2">&quot;P4INFO-ACTION-PARAM-NAME&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;VALUE&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can show the table entry object in Protobuf Text format, using the <code class="docutils literal notranslate"><span class="pre">print</span></code>
+command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">P4Runtime</span> <span class="n">sh</span> <span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">te</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The shell internally takes care of populating the fields of the corresponding
+Protobuf message by using the content of the P4Info file.</p>
+<p>To insert the entry (this will issue a P4Runtime Write RPC to the switch):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">P4Runtime</span> <span class="n">sh</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">te</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To read table entries from the switch (this will issue a P4Runtime Read RPC):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">P4Runtime</span> <span class="n">sh</span> <span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">te</span> <span class="ow">in</span> <span class="n">table_entry</span><span class="p">[</span><span class="s2">&quot;P4INFO-TABLE-NAME&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">():</span>
+            <span class="o">...</span><span class="p">:</span>     <span class="nb">print</span><span class="p">(</span><span class="n">te</span><span class="p">)</span>
+            <span class="o">...</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>After inserting the two entries, ping should work. Go pack to the Mininet CLI
+terminal with the ping command running and verify that you see an output similar
+to this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h1a</span> <span class="n">ping</span> <span class="n">h1b</span>
+<span class="n">PING</span> <span class="mi">2001</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">::</span><span class="n">b</span><span class="p">(</span><span class="mi">2001</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">::</span><span class="n">b</span><span class="p">)</span> <span class="mi">56</span> <span class="n">data</span> <span class="nb">bytes</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mi">2001</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">::</span><span class="n">b</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">956</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.65</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mi">2001</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">::</span><span class="n">b</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">957</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.28</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mi">2001</span><span class="p">:</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">::</span><span class="n">b</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">958</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">1.69</span> <span class="n">ms</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="congratulations">
+<h2>Congratulations!<a class="headerlink" href="#congratulations" title="Permalink to this headline">¶</a></h2>
+<p>You have completed the first exercise! Leave mininet running, as we will need it
+for following exercises.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Scripts to build the tutorial VM &mdash; Software-Defined Networks: A Systems Approach Version 0.3-dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../../_static/bridge.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/rtd_theme_mods.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Software-Defined Networks: A Systems Approach
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0.3-dev
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Chapter 1:  Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../uses.html">Chapter 2:  Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../arch.html">Chapter 3:  Basic Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../switch.html">Chapter 4:  White-Box Switches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../stratum.html">Chapter 5:  Switch OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../onos.html">Chapter 6:  Network OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../future.html">Chapter 8:  Future of SDN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../exercises.html">Programming Exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">About This Book</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Software-Defined Networks: A Systems Approach</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Scripts to build the tutorial VM</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/exercises/util/vm/README.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="scripts-to-build-the-tutorial-vm">
+<h1>Scripts to build the tutorial VM<a class="headerlink" href="#scripts-to-build-the-tutorial-vm" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://www.vagrantup.com/">Vagrant</a> (tested v2.2.5)</li>
+<li><a class="reference external" href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> (tested with v5.2.32)</li>
+</ul>
+</div>
+<div class="section" id="steps-to-build">
+<h2>Steps to build<a class="headerlink" href="#steps-to-build" title="Permalink to this headline">¶</a></h2>
+<p>If you want to provision and use the VM locally on your machine:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">util</span><span class="o">/</span><span class="n">vm</span>
+<span class="n">vagrant</span> <span class="n">up</span>
+</pre></div>
+</div>
+<p>Otherwise, if you want to export the VM in <code class="docutils literal notranslate"><span class="pre">.ova</span></code> format for distribution to
+tutorial attendees:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">util</span><span class="o">/</span><span class="n">vm</span>
+<span class="o">./</span><span class="n">build</span><span class="o">-</span><span class="n">vm</span><span class="o">.</span><span class="n">sh</span>
+</pre></div>
+</div>
+<p>This script will:</p>
+<ol class="simple">
+<li>provision the VM using Vagrant;</li>
+<li>reduce VM disk size;</li>
+<li>generate a file named <code class="docutils literal notranslate"><span class="pre">ngsdn-tutorial.ova</span></code>.</li>
+</ol>
+<p>Use credentials <code class="docutils literal notranslate"><span class="pre">sdn</span></code>/<code class="docutils literal notranslate"><span class="pre">rocks</span></code> to log in the Ubuntu system.</p>
+<p><strong>Note on IntelliJ IDEA plugins:</strong> plugins need to be installed manually. We
+recommend installing the following ones:</p>
+<ul class="simple">
+<li>https://plugins.jetbrains.com/plugin/10620-p4-plugin</li>
+<li>https://plugins.jetbrains.com/plugin/7322-python-community-edition</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

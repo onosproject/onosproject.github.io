@@ -1,0 +1,384 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Next-Gen SDN Tutorial (Advanced) &mdash; Software-Defined Networks: A Systems Approach Version 0.3-dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/bridge.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/rtd_theme_mods.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Software-Defined Networks: A Systems Approach
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0.3-dev
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Chapter 1:  Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uses.html">Chapter 2:  Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arch.html">Chapter 3:  Basic Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../switch.html">Chapter 4:  White-Box Switches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stratum.html">Chapter 5:  Switch OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../onos.html">Chapter 6:  Network OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../future.html">Chapter 8:  Future of SDN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exercises.html">Programming Exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">About This Book</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Software-Defined Networks: A Systems Approach</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Next-Gen SDN Tutorial (Advanced)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ex/README.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="next-gen-sdn-tutorial-advanced">
+<h1>Next-Gen SDN Tutorial (Advanced)<a class="headerlink" href="#next-gen-sdn-tutorial-advanced" title="Permalink to this headline">¶</a></h1>
+<p>Welcome to the Next-Gen SDN tutorial!</p>
+<p>This tutorial is targeted at students and practitioners who want to learn about
+the building blocks of the next-generation SDN (NG-SDN) architecture, such as:</p>
+<ul class="simple">
+<li>Data plane programming and control via P4 and P4Runtime</li>
+<li>Configuration via YANG, OpenConfig, and gNMI</li>
+<li>Stratum switch OS</li>
+<li>ONOS SDN controller</li>
+</ul>
+<p>Tutorial sessions are organized around a sequence of hands-on exercises that
+show how to build a leaf-spine data center fabric based on IPv6, using P4,
+Stratum, and ONOS. Exercises assume an intermediate knowledge of the P4
+language, and a basic knowledge of Java and Python. Participants will be
+provided with a starter P4 program and ONOS app implementation. Exercises will
+focus on concepts such as:</p>
+<ul class="simple">
+<li>Using Stratum APIs (P4Runtime, gNMI, OpenConfig, gNOI)</li>
+<li>Using ONOS with devices programmed with arbitrary P4 programs</li>
+<li>Writing ONOS applications to provide the control plane logic
+(bridging, routing, ECMP, etc.)</li>
+<li>Testing using bmv2 in Mininet</li>
+<li>PTF-based P4 unit tests</li>
+</ul>
+<div class="section" id="slides">
+<h2>Slides<a class="headerlink" href="#slides" title="Permalink to this headline">¶</a></h2>
+<p>Tutorial slides are available online:
+<a class="reference external" href="http://bit.ly/adv-ngsdn-tutorial-slides">http://bit.ly/adv-ngsdn-tutorial-slides</a></p>
+<p>These slides provide an introduction to the topics covered in the tutorial. We
+suggest you look at it before starting to work on the exercises.</p>
+</div>
+<div class="section" id="system-requirements">
+<h2>System requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h2>
+<p>If you are taking this tutorial at an event organized by ONF, you should have
+received credentials to access the <strong>ONF Cloud Tutorial Platform</strong>, in which
+case you can skip this section. Keep reading if you are interested in working on
+the exercises on your laptop.</p>
+<p>To facilitate access to the tools required to complete this tutorial, we provide
+two options for you to choose from:</p>
+<ol class="simple">
+<li>Download a pre-packaged VM with all included; <strong>OR</strong></li>
+<li>Manually install Docker and other dependencies.</li>
+</ol>
+<div class="section" id="option-1-download-tutorial-vm">
+<h3>Option 1 - Download tutorial VM<a class="headerlink" href="#option-1-download-tutorial-vm" title="Permalink to this headline">¶</a></h3>
+<p>Use the following link to download the VM (4 GB):</p>
+<ul class="simple">
+<li><a class="reference external" href="http://bit.ly/ngsdn-tutorial-ova">http://bit.ly/ngsdn-tutorial-ova</a></li>
+</ul>
+<p>The VM is in .ova format and has been created using VirtualBox v5.2.32. To run
+the VM you can use any modern virtualization system, although we recommend using
+VirtualBox. For instructions on how to get VirtualBox and import the VM, use the
+following links:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></li>
+<li><a class="reference external" href="https://docs.oracle.com/cd/E26217_01/E26796/html/qs-import-vm.html">https://docs.oracle.com/cd/E26217_01/E26796/html/qs-import-vm.html</a></li>
+</ul>
+<p>Alternatively, you can use the scripts in <a class="reference external" href="util/vm">util/vm</a> to build a VM on
+your machine using Vagrant.</p>
+<p><strong>Recommended VM configuration:</strong>
+The current configuration of the VM is 4 GB of RAM and 4 core CPU. These are the
+recommended minimum system requirements to complete the exercises. When
+imported, the VM takes approx. 8 GB of HDD space. For a smooth experience, we
+recommend running the VM on a host system that has at least the double of
+resources.</p>
+<p><strong>VM user credentials:</strong>
+Use credentials <code class="docutils literal notranslate"><span class="pre">sdn</span></code>/<code class="docutils literal notranslate"><span class="pre">rocks</span></code> to log in the Ubuntu system.</p>
+</div>
+<div class="section" id="option-2-manually-install-docker-and-other-dependencies">
+<h3>Option 2 - Manually install Docker and other dependencies<a class="headerlink" href="#option-2-manually-install-docker-and-other-dependencies" title="Permalink to this headline">¶</a></h3>
+<p>All exercises can be executed by installing the following dependencies:</p>
+<ul class="simple">
+<li>Docker v1.13.0+ (with docker-compose)</li>
+<li>make</li>
+<li>Python 3</li>
+<li>Bash-like Unix shell</li>
+<li>Wireshark (optional)</li>
+</ul>
+<p><strong>Note for Windows users</strong>: all scripts have been tested on macOS and Ubuntu.
+Although we think they should work on Windows, we have not tested it. For this
+reason, we advise Windows users to prefer Option 1.</p>
+</div>
+</div>
+<div class="section" id="get-this-repo-or-pull-latest-changes">
+<h2>Get this repo or pull latest changes<a class="headerlink" href="#get-this-repo-or-pull-latest-changes" title="Permalink to this headline">¶</a></h2>
+<p>To work on the exercises you will need to clone this repo:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="o">-</span><span class="n">b</span> <span class="n">advanced</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">opennetworkinglab</span><span class="o">/</span><span class="n">ngsdn</span><span class="o">-</span><span class="n">tutorial</span>
+</pre></div>
+</div>
+<p>If the <code class="docutils literal notranslate"><span class="pre">ngsdn-tutorial</span></code> directory is already present, make sure to update its
+content:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">ngsdn</span><span class="o">-</span><span class="n">tutorial</span>
+<span class="n">git</span> <span class="n">pull</span> <span class="n">origin</span> <span class="n">advanced</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="download-upgrade-dependencies">
+<h2>Download / upgrade dependencies<a class="headerlink" href="#download-upgrade-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>The VM may have shipped with an older version of the dependencies than we would
+like to use for the exercises. You can upgrade to the latest version using the
+following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="o">~/</span><span class="n">ngsdn</span><span class="o">-</span><span class="n">tutorial</span>
+<span class="n">make</span> <span class="n">deps</span>
+</pre></div>
+</div>
+<p>This command will download all necessary Docker images (~1.5 GB) allowing you to
+work off-line. For this reason, we recommend running this step ahead of the
+tutorial, with a reliable Internet connection.</p>
+</div>
+<div class="section" id="using-an-ide-to-work-on-the-exercises">
+<h2>Using an IDE to work on the exercises<a class="headerlink" href="#using-an-ide-to-work-on-the-exercises" title="Permalink to this headline">¶</a></h2>
+<p>During the exercises you will need to write code in multiple languages such as
+P4, Java, and Python. While the exercises do not prescribe the use of any
+specific IDE or code editor, the <strong>ONF Cloud Tutorial Platform</strong> provides access
+to a web-based version of Visual Studio Code (VS Code).</p>
+<p>If you are using the tutorial VM, you will find the Java IDE <a class="reference external" href="https://www.jetbrains.com/idea/">IntelliJ IDEA
+Community Edition</a>, already pre-loaded with
+plugins for P4 syntax highlighting and Python development. We suggest using
+IntelliJ IDEA especially when working on the ONOS app, as it provides code
+completion for all ONOS APIs.</p>
+</div>
+<div class="section" id="repo-structure">
+<h2>Repo structure<a class="headerlink" href="#repo-structure" title="Permalink to this headline">¶</a></h2>
+<p>This repo is structured as follows:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">p4src/</span></code> P4 implementation</li>
+<li><code class="docutils literal notranslate"><span class="pre">yang/</span></code> Yang model used in exercise 2</li>
+<li><code class="docutils literal notranslate"><span class="pre">app/</span></code> custom ONOS app Java implementation</li>
+<li><code class="docutils literal notranslate"><span class="pre">mininet/</span></code> Mininet script to emulate a 2x2 leaf-spine fabric topology of
+<code class="docutils literal notranslate"><span class="pre">stratum_bmv2</span></code> devices</li>
+<li><code class="docutils literal notranslate"><span class="pre">util/</span></code> Utility scripts</li>
+<li><code class="docutils literal notranslate"><span class="pre">ptf/</span></code> P4 data plane unit tests based on Packet Test Framework (PTF)</li>
+</ul>
+</div>
+<div class="section" id="tutorial-commands">
+<h2>Tutorial commands<a class="headerlink" href="#tutorial-commands" title="Permalink to this headline">¶</a></h2>
+<p>To facilitate working on the exercises, we provide a set of make-based commands
+to control the different aspects of the tutorial. Commands will be introduced in
+the exercises, here’s a quick reference:</p>
+<p>| Make command        | Description                                            |
+|———————|——————————————————- |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">deps</span></code>         | Pull and build all required dependencies               |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">p4-build</span></code>     | Build P4 program                                       |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">p4-test</span></code>      | Run PTF tests                                          |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">start</span></code>        | Start Mininet and ONOS containers                      |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">stop</span></code>         | Stop all containers                                    |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">restart</span></code>      | Restart containers clearing any previous state         |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">onos-cli</span></code>     | Access the ONOS CLI (password: <code class="docutils literal notranslate"><span class="pre">rocks</span></code>, Ctrl-D to exit)|
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">onos-log</span></code>     | Show the ONOS log                                      |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">mn-cli</span></code>       | Access the Mininet CLI (Ctrl-D to exit)                |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">mn-log</span></code>       | Show the Mininet log (i.e., the CLI output)            |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">app-build</span></code>    | Build custom ONOS app                                  |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">app-reload</span></code>   | Install and activate the ONOS app                      |
+| <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">netcfg</span></code>       | Push netcfg.json file (network config) to ONOS         |</p>
+</div>
+<div class="section" id="exercises">
+<h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this headline">¶</a></h2>
+<p>Click on the exercise name to see the instructions:</p>
+<ol class="simple">
+<li><a class="reference internal" href="EXERCISE-1.html"><span class="doc">P4Runtime basics</span></a></li>
+<li><a class="reference internal" href="EXERCISE-2.html"><span class="doc">Yang, OpenConfig, and gNMI basics</span></a></li>
+<li><a class="reference internal" href="EXERCISE-3.html"><span class="doc">Using ONOS as the control plane</span></a></li>
+<li><a class="reference internal" href="EXERCISE-4.html"><span class="doc">Enabling ONOS built-in services</span></a></li>
+<li><a class="reference internal" href="EXERCISE-5.html"><span class="doc">Implementing IPv6 routing with ECMP</span></a></li>
+<li><a class="reference internal" href="EXERCISE-6.html"><span class="doc">Implementing SRv6</span></a></li>
+<li><a class="reference internal" href="EXERCISE-7.html"><span class="doc">Trellis Basics</span></a></li>
+<li><a class="reference internal" href="EXERCISE-8.html"><span class="doc">GTP termination with fabric.p4</span></a></li>
+</ol>
+</div>
+<div class="section" id="solutions">
+<h2>Solutions<a class="headerlink" href="#solutions" title="Permalink to this headline">¶</a></h2>
+<p>You can find solutions for each exercise in the <a class="reference external" href="solution">solution</a> directory.
+Feel free to compare your solution to the reference one whenever you feel stuck.</p>
+<p><a class="reference external" href="https://travis-ci.org/opennetworkinglab/ngsdn-tutorial"><img alt="Build Status" src="https://travis-ci.org/opennetworkinglab/ngsdn-tutorial.svg?branch=advanced" /></a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

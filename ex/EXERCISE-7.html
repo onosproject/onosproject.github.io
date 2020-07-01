@@ -1,0 +1,761 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Exercise 7: Trellis Basics &mdash; Software-Defined Networks: A Systems Approach Version 0.3-dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/bridge.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/rtd_theme_mods.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Software-Defined Networks: A Systems Approach
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0.3-dev
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Chapter 1:  Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uses.html">Chapter 2:  Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arch.html">Chapter 3:  Basic Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../switch.html">Chapter 4:  White-Box Switches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stratum.html">Chapter 5:  Switch OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../onos.html">Chapter 6:  Network OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../future.html">Chapter 8:  Future of SDN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">About This Book</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Software-Defined Networks: A Systems Approach</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Exercise 7: Trellis Basics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ex/EXERCISE-7.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="exercise-7-trellis-basics">
+<h1>Exercise 7: Trellis Basics<a class="headerlink" href="#exercise-7-trellis-basics" title="Permalink to this headline">¶</a></h1>
+<p>The goal of this exercise is to learn how to set up and configure an emulated
+Trellis environment with a simple 2x2 topology.</p>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Trellis is a set of built-in ONOS applications that provide the control plane
+for an IP fabric based on MPLS segment-routing. That is, similar in purpose to
+the app we have been developing in the previous exercise, but instead of using
+IPv6-based routing or SRv6, Trellis uses MPLS labels to forward packets between
+leaf switches and across the spines.</p>
+<p>Trellis apps are deployed in Tier-1 carrier networks, and for this reason they
+are deemed production-grade. These apps provide an extensive feature set such
+as:</p>
+<ul class="simple">
+<li>Carrier-oriented networking capabilities: from basic L2 and L3 forwarding, to
+multicast, QinQ, pseudo-wires, integration with external control planes such
+as BGP, OSPF, DHCP relay, etc.</li>
+<li>Fault-tolerance and high-availability: as Trellis is designed to take full
+advantage of the ONOS distributed core, e.g., to withstand controller
+failures. It also provides dataplane-level resiliency against link failures
+and switch failures (with paired leaves and dual-homed hosts). See figure
+below.</li>
+<li>Single-pane-of-glass monitoring and troubleshooting, with dedicated tools such
+as T3.</li>
+</ul>
+<p><img alt="trellis-features" src="ex/img/trellis-features.png" /></p>
+<p>Trellis is made of several apps running on top of ONOS, the main one is
+<code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code>, and its implementation can be found in the ONOS source tree:
+<a class="reference external" href="https://github.com/opennetworkinglab/onos/tree/2.2.2/apps/segmentrouting">onos/apps/segmentrouting</a> (open on GitHub)</p>
+<p><code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> abstracts the leaf and spine switches to make the fabric appear
+as “one big IP router”, such that operators can program them using APIs similar
+to that of a traditional router (e.g. to configure VLANs, subnets, routes, etc.)
+The app listens to operator-provided configuration, as well as topology events,
+to program the switches with the necessary forwarding rules. Because of this
+“one big IP router” abstraction, operators can independently scale the topology
+to add more capacity or ports by adding more leaves and spines.</p>
+<p><code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> and other Trellis apps use the ONOS FlowObjective API, which
+allow them to be pipeline-agnostic. As a matter of fact, Trellis was initially
+designed to work with fixed-function switches exposing an OpenFlow agent (such
+as Broadcom Tomahawk, Trident2, and Qumran via the OF-DPA pipeline). However, in
+recent years, support for P4 programmable switches was enabled without changing
+the Trellis apps, but instead providing a special ONOS pipeconf that brings in a
+P4 program complemented by a set of drivers that among other things are
+responsible for translating flow objectives to the P4 program-specific tables.</p>
+<p>This P4 program is named <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>. It’s implementation along with the
+corresponding pipeconf drivers can be found in the ONOS source tree:
+<a class="reference external" href="https://github.com/opennetworkinglab/onos/tree/2.2.2/pipelines/fabric">onos/pipelines/fabric</a> (open on GitHub)</p>
+<p>This pipeconf currently works on the <code class="docutils literal notranslate"><span class="pre">stratum_bmv2</span></code> software switch as well as
+on Intel Barefoot Tofino-based switches (the <a class="reference external" href="https://github.com/opencord/fabric-tofino">fabric-tofino</a> project provides
+instructions and scripts to create a Tofino-enabled pipeconf).</p>
+<p>We will come back to the details of <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> in the next lab, for now, let’s
+keep in mind that instead of building our own custom pipeconf, we will use one
+provided with ONOS.</p>
+<p>The goal of the exercise is to learn the Trellis basics by writing a
+configuration in the form of a netcfg JSON file to set up bridging and
+IPv4 routing of traffic between hosts.</p>
+<p>For a gentle overview of Trellis, please check the online book
+“Software-Defined Networks: A Systems Approach”:
+<a class="reference external" href="https://sdn.systemsapproach.org/trellis.html">https://sdn.systemsapproach.org/trellis.html</a></p>
+<p>Finally, the official Trellis documentation is also available online:
+<a class="reference external" href="https://docs.trellisfabric.org/">https://docs.trellisfabric.org/</a></p>
+<div class="section" id="topology">
+<h3>Topology<a class="headerlink" href="#topology" title="Permalink to this headline">¶</a></h3>
+<p>We will use a topology similar to previous exercises, however, instead of IPv6
+we will use IPv4 hosts. The topology file is located under
+<a class="reference external" href="mininet/topo-v4.py">mininet/topo-v4.py</a>. While the Trellis apps support IPv6, the P4
+program does not, yet. Development of IPv6 support in <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> is work in
+progress.</p>
+<p><img alt="topo-v4" src="ex/img/topo-v4.png" /></p>
+<p>Exactly like in previous exercises, the Mininet script <a class="reference external" href="mininet/topo-v4.py">topo-v4.py</a> used here
+defines 4 IPv4 subnets:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">172.16.1.0/24</span></code> with 3 hosts connected to <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> (<code class="docutils literal notranslate"><span class="pre">h1a</span></code>, <code class="docutils literal notranslate"><span class="pre">h1b</span></code>, and <code class="docutils literal notranslate"><span class="pre">h1c</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">172.16.2.0/24</span></code> with 1 hosts connected to <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> (<code class="docutils literal notranslate"><span class="pre">h2</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">172.16.3.0/24</span></code> with 1 hosts connected to <code class="docutils literal notranslate"><span class="pre">leaf2</span></code> (<code class="docutils literal notranslate"><span class="pre">h3</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">172.16.4.0/24</span></code> with 1 hosts connected to <code class="docutils literal notranslate"><span class="pre">leaf2</span></code> (<code class="docutils literal notranslate"><span class="pre">h4</span></code>)</li>
+</ul>
+<div class="section" id="vlan-tagged-vs-untagged-ports">
+<h4>VLAN tagged vs. untagged ports<a class="headerlink" href="#vlan-tagged-vs-untagged-ports" title="Permalink to this headline">¶</a></h4>
+<p>As usually done in a traditional router, different subnets are associated to
+different VLANs. For this reason, Trellis allows configuring ports with
+different VLANs, either untagged or tagged.</p>
+<p>An <strong>untagged</strong> port expects packets to be received and sent <strong>without</strong> a VLAN
+tag, but internally, the switch processes all packets as belonging to a given
+pre-configured VLAN ID. Similarly, when transmitting packets, the VLAN tag is
+removed.</p>
+<p>For <strong>tagged</strong> ports, packets are expected to be received <strong>with</strong> a VLAN tag
+that has ID that belongs to a pre-configured set of known ones. Packets received
+untagged or with an unknown VLAN ID, are dropped.</p>
+<p>In our topology, we want the following VLAN configuration:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">leaf1</span></code> port <code class="docutils literal notranslate"><span class="pre">3</span></code> and <code class="docutils literal notranslate"><span class="pre">4</span></code>: VLAN <code class="docutils literal notranslate"><span class="pre">100</span></code> untagged (host <code class="docutils literal notranslate"><span class="pre">h1a</span></code> and <code class="docutils literal notranslate"><span class="pre">h1b</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">leaf1</span></code> port <code class="docutils literal notranslate"><span class="pre">5</span></code>: VLAN <code class="docutils literal notranslate"><span class="pre">100</span></code> tagged (<code class="docutils literal notranslate"><span class="pre">h1c</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">leaf1</span></code> port <code class="docutils literal notranslate"><span class="pre">6</span></code>: VLAN <code class="docutils literal notranslate"><span class="pre">200</span></code> tagged (<code class="docutils literal notranslate"><span class="pre">h2</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">leaf2</span></code> port <code class="docutils literal notranslate"><span class="pre">3</span></code>: VLAN <code class="docutils literal notranslate"><span class="pre">300</span></code> tagged (<code class="docutils literal notranslate"><span class="pre">h3</span></code>)</li>
+<li><code class="docutils literal notranslate"><span class="pre">leaf2</span></code> port <code class="docutils literal notranslate"><span class="pre">4</span></code>: VLAN <code class="docutils literal notranslate"><span class="pre">400</span></code> untagged (<code class="docutils literal notranslate"><span class="pre">h4</span></code>)</li>
+</ul>
+<p>In the Mininet script <a class="reference external" href="mininet/topo-v4.py">topo-v4.py</a>, we use different host Python classes to
+create untagged and tagged hosts.</p>
+<p>For example, for <code class="docutils literal notranslate"><span class="pre">h1a</span></code> attached to untagged port <code class="docutils literal notranslate"><span class="pre">leaf1-3</span></code>, we use the
+<code class="docutils literal notranslate"><span class="pre">IPv4Host</span></code> class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Excerpt from mininet/topo-v4.py</span>
+<span class="n">h1a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="s1">&#39;h1a&#39;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">IPv4Host</span><span class="p">,</span> <span class="n">mac</span><span class="o">=</span><span class="s2">&quot;00:00:00:00:00:1A&quot;</span><span class="p">,</span>
+                   <span class="n">ip</span><span class="o">=</span><span class="s1">&#39;172.16.1.1/24&#39;</span><span class="p">,</span> <span class="n">gw</span><span class="o">=</span><span class="s1">&#39;172.16.1.254&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For <code class="docutils literal notranslate"><span class="pre">h2</span></code>, which instead is attached to tagged port <code class="docutils literal notranslate"><span class="pre">leaf1-6</span></code>, we use the
+<code class="docutils literal notranslate"><span class="pre">TaggedIPv4Host</span></code> class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">h2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">addHost</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">TaggedIPv4Host</span><span class="p">,</span> <span class="n">mac</span><span class="o">=</span><span class="s2">&quot;00:00:00:00:00:20&quot;</span><span class="p">,</span>
+                  <span class="n">ip</span><span class="o">=</span><span class="s1">&#39;172.16.2.1/24&#39;</span><span class="p">,</span> <span class="n">gw</span><span class="o">=</span><span class="s1">&#39;172.16.2.254&#39;</span><span class="p">,</span> <span class="n">vlan</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the same Python file, you can find the implementation for both classes. For
+<code class="docutils literal notranslate"><span class="pre">TaggedIPv4Host</span></code> we use standard Linux commands to create a VLAN tagged
+interface.</p>
+</div>
+</div>
+<div class="section" id="configuration-via-netcfg">
+<h3>Configuration via netcfg<a class="headerlink" href="#configuration-via-netcfg" title="Permalink to this headline">¶</a></h3>
+<p>The JSON file in <a class="reference external" href="mininet/netcfg-sr.json">mininet/netcfg-sr.json</a> includes the necessary
+configuration for ONOS and the Trellis apps to program switches to forward
+traffic between hosts of the topology described above.</p>
+<p><strong>NOTE</strong>: this is a similar but different file then the one used in previous
+exercises. Notice the <code class="docutils literal notranslate"><span class="pre">-sr</span></code> suffix, where <code class="docutils literal notranslate"><span class="pre">sr</span></code> stands for <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code>, as
+this file contains the necessary configuration for such app to work.</p>
+<p>Take a look at both the old file (<a class="reference external" href="mininet/netcfg.json">netcfg.json</a>) and the new one
+(<a class="reference external" href="mininet/netcfg-sr.json">netcfg-sr.json</a>), can you spot the differences? To help, try answering the
+following questions:</p>
+<ul class="simple">
+<li>What is the pipeconf ID used for all 4 switches? Which
+pipeconf ID did we use before? Why is it different?</li>
+<li>In the new file, each device has a <code class="docutils literal notranslate"><span class="pre">&quot;segmentrouting&quot;</span></code> config block (JSON
+subtree). Do you see any similarities with the previous file and the
+<code class="docutils literal notranslate"><span class="pre">&quot;fabricDeviceConfig&quot;</span></code> block?</li>
+<li>How come all <code class="docutils literal notranslate"><span class="pre">&quot;fabricDeviceConfig&quot;</span></code> blocks are gone in the new file?</li>
+<li>Look at the <code class="docutils literal notranslate"><span class="pre">&quot;interfaces&quot;</span></code> config blocks, what has changed w.r.t. the old
+file?</li>
+<li>In the new file, why do the untagged interfaces have only one VLAN ID value,
+while the tagged ones can take many (JSON array)?</li>
+<li>Is the <code class="docutils literal notranslate"><span class="pre">interfaces</span></code> block provided for all host-facing ports? Which ports are
+missing and which hosts are attached to those ports?</li>
+</ul>
+</div>
+</div>
+<div class="section" id="exercise-steps">
+<h2>Exercise steps<a class="headerlink" href="#exercise-steps" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="restart-onos-and-mininet-with-the-ipv4-topology">
+<h3>1. Restart ONOS and Mininet with the IPv4 topology<a class="headerlink" href="#restart-onos-and-mininet-with-the-ipv4-topology" title="Permalink to this headline">¶</a></h3>
+<p>Since we want to use a new topology with IPv4 hosts, we need to reset the
+current environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make reset
+</pre></div>
+</div>
+<p>This command will stop ONOS and Mininet and remove any state associated with
+them.</p>
+<p>Re-start ONOS and Mininet, this time with the new IPv4 topology:</p>
+<p><strong>IMPORTANT:</strong> please notice the <code class="docutils literal notranslate"><span class="pre">-v4</span></code> suffix!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make start-v4
+</pre></div>
+</div>
+<p>Wait about 1 minute before proceeding with the next steps, this will give time
+to ONOS to start all of its subsystems.</p>
+</div>
+<div class="section" id="load-fabric-pipeconf-and-segmentrouting">
+<h3>2. Load fabric pipeconf and segmentrouting<a class="headerlink" href="#load-fabric-pipeconf-and-segmentrouting" title="Permalink to this headline">¶</a></h3>
+<p>Differently from previous exercises, instead of building and installing our own
+pipeconf and app, here we use built-in ones.</p>
+<p>Open up the ONOS CLI (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">onos-cli</span></code>) and activate the following apps:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">app</span> <span class="n">activate</span> <span class="n">fabric</span> 
+<span class="n">onos</span><span class="o">&gt;</span> <span class="n">app</span> <span class="n">activate</span> <span class="n">segmentrouting</span>
+</pre></div>
+</div>
+<p><strong>NOTE:</strong> The full ID for both apps is <code class="docutils literal notranslate"><span class="pre">org.onosproject.pipelines.fabric</span></code> and
+<code class="docutils literal notranslate"><span class="pre">org.onosproject.segmentrouting</span></code>, respectively. For convenience, when activating
+built-in apps using the ONOS CLI, you can specify just the last piece of the
+full ID (after the last dot.)</p>
+<p><strong>NOTE 2:</strong> The <code class="docutils literal notranslate"><span class="pre">fabric</span></code> app has the only purpose of registering pipeconfs in
+the system. I.e., differently from <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code>, even if we call them both
+apps, <code class="docutils literal notranslate"><span class="pre">fabric</span></code> does not interact with the network in any way.</p>
+<div class="section" id="verify-apps">
+<h4>Verify apps<a class="headerlink" href="#verify-apps" title="Permalink to this headline">¶</a></h4>
+<p>Verify that all apps have been activated successfully:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">apps</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">a</span>
+<span class="o">*</span>  <span class="mi">18</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span>               <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Default</span> <span class="n">Drivers</span>
+<span class="o">*</span>  <span class="mi">37</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">grpc</span>        <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">gRPC</span> <span class="n">Protocol</span> <span class="n">Subsystem</span>
+<span class="o">*</span>  <span class="mi">38</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">gnmi</span>        <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">gNMI</span> <span class="n">Protocol</span> <span class="n">Subsystem</span>
+<span class="o">*</span>  <span class="mi">39</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">generaldeviceprovider</span> <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">General</span> <span class="n">Device</span> <span class="n">Provider</span>
+<span class="o">*</span>  <span class="mi">40</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">gnoi</span>        <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">gNOI</span> <span class="n">Protocol</span> <span class="n">Subsystem</span>
+<span class="o">*</span>  <span class="mi">41</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">gnoi</span>          <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">gNOI</span> <span class="n">Drivers</span>
+<span class="o">*</span>  <span class="mi">42</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">route</span><span class="o">-</span><span class="n">service</span>         <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Route</span> <span class="n">Service</span> <span class="n">Server</span>
+<span class="o">*</span>  <span class="mi">43</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">mcast</span>                 <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Multicast</span> <span class="n">traffic</span> <span class="n">control</span>
+<span class="o">*</span>  <span class="mi">44</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">portloadbalancer</span>      <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Port</span> <span class="n">Load</span> <span class="n">Balance</span> <span class="n">Service</span>
+<span class="o">*</span>  <span class="mi">45</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">segmentrouting</span>        <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Segment</span> <span class="n">Routing</span>
+<span class="o">*</span>  <span class="mi">53</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">hostprovider</span>          <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Host</span> <span class="n">Location</span> <span class="n">Provider</span>
+<span class="o">*</span>  <span class="mi">54</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">lldpprovider</span>          <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">LLDP</span> <span class="n">Link</span> <span class="n">Provider</span>
+<span class="o">*</span>  <span class="mi">64</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">p4runtime</span>   <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">P4Runtime</span> <span class="n">Protocol</span> <span class="n">Subsystem</span>
+<span class="o">*</span>  <span class="mi">65</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">p4runtime</span>             <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">P4Runtime</span> <span class="n">Provider</span>
+<span class="o">*</span>  <span class="mi">99</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">gnmi</span>          <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">gNMI</span> <span class="n">Drivers</span>
+<span class="o">*</span> <span class="mi">100</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">p4runtime</span>     <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">P4Runtime</span> <span class="n">Drivers</span>
+<span class="o">*</span> <span class="mi">101</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">basic</span>       <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Basic</span> <span class="n">Pipelines</span>
+<span class="o">*</span> <span class="mi">102</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">stratum</span>       <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Stratum</span> <span class="n">Drivers</span>
+<span class="o">*</span> <span class="mi">103</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">bmv2</span>          <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">BMv2</span> <span class="n">Drivers</span>
+<span class="o">*</span> <span class="mi">111</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span>      <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Fabric</span> <span class="n">Pipeline</span>
+<span class="o">*</span> <span class="mi">164</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">gui2</span>                  <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">ONOS</span> <span class="n">GUI2</span>
+</pre></div>
+</div>
+<p>Verify that you have the above 20 apps active in your ONOS instance. If you are
+wondering why so many apps, remember from EXERCISE 3 that the ONOS container in
+<a class="reference external" href="docker-compose.yml">docker-compose.yml</a> is configured to pass the environment variable <code class="docutils literal notranslate"><span class="pre">ONOS_APPS</span></code>
+which defines built-in apps to load during startup.</p>
+<p>In our case this variable has value:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ONOS_APPS</span><span class="o">=</span><span class="n">gui2</span><span class="p">,</span><span class="n">drivers</span><span class="o">.</span><span class="n">bmv2</span><span class="p">,</span><span class="n">lldpprovider</span><span class="p">,</span><span class="n">hostprovider</span>
+</pre></div>
+</div>
+<p>Moreover, <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> requires other apps as dependencies, such as
+<code class="docutils literal notranslate"><span class="pre">route-service</span></code>, <code class="docutils literal notranslate"><span class="pre">mcast</span></code>, and <code class="docutils literal notranslate"><span class="pre">portloadbalancer</span></code>. The combination of all these
+apps (and others that we do not need in this exercise) is what makes Trellis.</p>
+</div>
+<div class="section" id="verify-pipeconfs">
+<h4>Verify pipeconfs<a class="headerlink" href="#verify-pipeconfs" title="Permalink to this headline">¶</a></h4>
+<p>Verify that the <code class="docutils literal notranslate"><span class="pre">fabric</span></code> pipeconfs have been registered successfully:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">pipeconfs</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="n">full</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">IntProgrammable</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">int</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">IntProgrammable</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="n">spgw</span><span class="o">-</span><span class="nb">int</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">IntProgrammable</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="n">bng</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">BngProgrammable</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="n">spgw</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="nb">int</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">IntProgrammable</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">basic</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">PortStatisticsDiscovery</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Wondering why so many pipeconfs? <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> comes in different “profiles”, used
+to enable different dataplane features in the pipeline. We’ll come back
+to the differences between different profiles in the next exercise, for now
+let’s make sure the basic one <code class="docutils literal notranslate"><span class="pre">org.onosproject.pipelines.fabric</span></code> is loaded.
+This is the one we need to program all 4 switches, as specified in
+<a class="reference external" href="mininet/netcfg-sr.json">netcfg-sr.json</a>.</p>
+</div>
+<div class="section" id="increase-reconciliation-frequency-optional-but-recommended">
+<h4>Increase reconciliation frequency (optional, but recommended)<a class="headerlink" href="#increase-reconciliation-frequency-optional-but-recommended" title="Permalink to this headline">¶</a></h4>
+<p>Run the following commands in the ONOS CLI:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">cfg</span> <span class="nb">set</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">impl</span><span class="o">.</span><span class="n">FlowRuleManager</span> <span class="n">fallbackFlowPollFrequency</span> <span class="mi">4</span>
+<span class="n">onos</span><span class="o">&gt;</span> <span class="n">cfg</span> <span class="nb">set</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">net</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">impl</span><span class="o">.</span><span class="n">GroupManager</span> <span class="n">fallbackGroupPollFrequency</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>This command tells the ONOS core to modify the period (in seconds) between
+reconciliation checks. Reconciliation is used to verify that switches have the
+expected forwarding state and to correct any inconsistencies, i.e., writing any
+pending flow rule and group. When running ONOS and the emulated switches in the
+same machine (especially those with low CPU/memory), it might happen that
+P4Runtime write requests time out because the system is overloaded.</p>
+<p>The default reconciliation period is 30 seconds, the above commands set it to 4
+seconds for flow rules, and 3 seconds for groups.</p>
+</div>
+</div>
+<div class="section" id="push-netcfg-sr-json-to-onos">
+<h3>3. Push netcfg-sr.json to ONOS<a class="headerlink" href="#push-netcfg-sr-json-to-onos" title="Permalink to this headline">¶</a></h3>
+<p>On a terminal window, type:</p>
+<p><strong>IMPORTANT</strong>: please notice the <code class="docutils literal notranslate"><span class="pre">-sr</span></code> suffix!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make netcfg-sr
+</pre></div>
+</div>
+<p>As we learned in EXERCISE 3, this command will push <a class="reference external" href="mininet/netcfg-sr.json">netcfg-sr.json</a> to ONOS,
+triggering discovery and configuration of the 4 switches. Moreover, since the
+file specifies a <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> config block for each switch, this will
+instruct the <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> app in ONOS to take control of all of them, i.e.,
+the app will start generating flow objectives that will be translated into flow
+rules for the <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> pipeline.</p>
+<p>Check the ONOS log (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">onos-log</span></code>). You should see numerous messages from
+components such as <code class="docutils literal notranslate"><span class="pre">TopologyHandler</span></code>, <code class="docutils literal notranslate"><span class="pre">LinkHandler</span></code>, <code class="docutils literal notranslate"><span class="pre">SegmentRoutingManager</span></code>,
+etc., signaling that switches have been discovered and programmed.</p>
+<p>You should also see warning messages such as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ForwardingObjectiveTranslator</span><span class="p">]</span> <span class="n">Cannot</span> <span class="n">translate</span> <span class="n">DefaultForwardingObjective</span><span class="p">:</span> <span class="n">unsupported</span> <span class="n">forwarding</span> <span class="n">function</span> <span class="nb">type</span> <span class="s1">&#39;PSEUDO_WIRE&#39;</span><span class="o">...</span>
+</pre></div>
+</div>
+<p>This is normal, as not all Trellis features are supported in <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>. One of
+such feature is <a class="reference external" href="https://en.wikipedia.org/wiki/Pseudo-wire">pseudo-wire</a> (L2 tunneling across the L3 fabric). You can
+ignore that.</p>
+<p>This error is generated by the Pipeliner driver behavior of the <code class="docutils literal notranslate"><span class="pre">fabric</span></code>
+pipeconf, which recognizes that the given flow objective cannot be translated.</p>
+<div class="section" id="check-configuration-in-onos">
+<h4>Check configuration in ONOS<a class="headerlink" href="#check-configuration-in-onos" title="Permalink to this headline">¶</a></h4>
+<p>Verify that all interfaces have been configured successfully:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">interfaces</span>
+<span class="n">leaf1</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span> <span class="n">port</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">3</span> <span class="n">ips</span><span class="o">=</span><span class="p">[</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">1.254</span><span class="o">/</span><span class="mi">24</span><span class="p">]</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="n">AA</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="n">vlanUntagged</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">leaf1</span><span class="o">-</span><span class="mi">4</span><span class="p">:</span> <span class="n">port</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">4</span> <span class="n">ips</span><span class="o">=</span><span class="p">[</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">1.254</span><span class="o">/</span><span class="mi">24</span><span class="p">]</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="n">AA</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="n">vlanUntagged</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">leaf1</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span> <span class="n">port</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">5</span> <span class="n">ips</span><span class="o">=</span><span class="p">[</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">1.254</span><span class="o">/</span><span class="mi">24</span><span class="p">]</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="n">AA</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="n">vlanTagged</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+<span class="n">leaf1</span><span class="o">-</span><span class="mi">6</span><span class="p">:</span> <span class="n">port</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">6</span> <span class="n">ips</span><span class="o">=</span><span class="p">[</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">2.254</span><span class="o">/</span><span class="mi">24</span><span class="p">]</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="n">AA</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="n">vlanTagged</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>You should see 4 interfaces in total (for all host-facing ports of <code class="docutils literal notranslate"><span class="pre">leaf1</span></code>),
+configured as in the <a class="reference external" href="mininet/netcfg-sr.json">netcfg-sr.json</a> file. You will have to add the
+configuration for <code class="docutils literal notranslate"><span class="pre">leaf2</span></code>’s ports later in this exercise.</p>
+<p>A similar output can be obtained by using a <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code>-specific command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">sr</span><span class="o">-</span><span class="n">device</span><span class="o">-</span><span class="n">subnets</span>
+<span class="n">device</span><span class="p">:</span><span class="n">leaf1</span>
+    <span class="mf">172.16</span><span class="o">.</span><span class="mf">1.0</span><span class="o">/</span><span class="mi">24</span>
+    <span class="mf">172.16</span><span class="o">.</span><span class="mf">2.0</span><span class="o">/</span><span class="mi">24</span>
+<span class="n">device</span><span class="p">:</span><span class="n">spine1</span>
+<span class="n">device</span><span class="p">:</span><span class="n">spine2</span>
+<span class="n">device</span><span class="p">:</span><span class="n">leaf2</span>
+</pre></div>
+</div>
+<p>This command lists all device-subnet mapping known to <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code>. For a
+list of other available sr-specific commands, type <code class="docutils literal notranslate"><span class="pre">sr-</span></code> and press
+<kbd>tab</kbd> (as for command auto-completion).</p>
+<p>Another interesting command is <code class="docutils literal notranslate"><span class="pre">sr-ecmp-spg</span></code>, to list all computed ECMP
+shortest-path graphs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">sr</span><span class="o">-</span><span class="n">ecmp</span><span class="o">-</span><span class="n">spg</span> 
+<span class="n">Root</span> <span class="n">Device</span><span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span> <span class="n">ECMP</span> <span class="n">Paths</span><span class="p">:</span> 
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">leaf1</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">1</span>
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">leaf1</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">1</span>
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">leaf1</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">1</span> <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">2</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">1</span> <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">1</span>
+
+<span class="n">Root</span> <span class="n">Device</span><span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span> <span class="n">ECMP</span> <span class="n">Paths</span><span class="p">:</span> 
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">spine1</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">1</span>
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">spine1</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">1</span> <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">2</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">1</span> <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">1</span>
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">spine1</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">1</span>
+
+<span class="n">Root</span> <span class="n">Device</span><span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span> <span class="n">ECMP</span> <span class="n">Paths</span><span class="p">:</span> 
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">spine2</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">2</span>
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">spine2</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">2</span> <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">1</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">2</span> <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">2</span>
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">spine2</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">2</span>
+
+<span class="n">Root</span> <span class="n">Device</span><span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span> <span class="n">ECMP</span> <span class="n">Paths</span><span class="p">:</span> 
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">leaf2</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">2</span> <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">1</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">2</span> <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">2</span>
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">leaf2</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">1</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="o">/</span><span class="mi">2</span>
+  <span class="n">Paths</span> <span class="kn">from</span> <span class="nn">device</span><span class="p">:</span><span class="n">leaf2</span> <span class="n">to</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span>
+       <span class="o">==</span>  <span class="p">:</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">2</span> <span class="o">-&gt;</span> <span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>These graphs are used by <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> to program flow rules and groups
+(action selectors) in <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>, needed to load balance traffic across
+multiple spines/paths.</p>
+<p>Verify that no hosts have been discovered so far:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">hosts</span>
+</pre></div>
+</div>
+<p>You should get an empty output.</p>
+<p>Verify that all initial flows and groups have be programmed successfully:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">flows</span> <span class="o">-</span><span class="n">c</span> <span class="n">added</span>
+<span class="n">deviceId</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="p">,</span> <span class="n">flowRuleCount</span><span class="o">=</span><span class="mi">52</span>
+<span class="n">deviceId</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="p">,</span> <span class="n">flowRuleCount</span><span class="o">=</span><span class="mi">28</span>
+<span class="n">deviceId</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="p">,</span> <span class="n">flowRuleCount</span><span class="o">=</span><span class="mi">28</span>
+<span class="n">deviceId</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="p">,</span> <span class="n">flowRuleCount</span><span class="o">=</span><span class="mi">36</span>
+<span class="n">onos</span><span class="o">&gt;</span> <span class="n">groups</span> <span class="o">-</span><span class="n">c</span> <span class="n">added</span>
+<span class="n">deviceId</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="p">,</span> <span class="n">groupCount</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">deviceId</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="p">,</span> <span class="n">groupCount</span><span class="o">=</span><span class="mi">3</span>
+<span class="n">deviceId</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="p">,</span> <span class="n">groupCount</span><span class="o">=</span><span class="mi">5</span>
+<span class="n">deviceId</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="p">,</span> <span class="n">groupCount</span><span class="o">=</span><span class="mi">5</span>
+</pre></div>
+</div>
+<p>You should see the same <code class="docutils literal notranslate"><span class="pre">flowRuleCount</span></code> and <code class="docutils literal notranslate"><span class="pre">groupCount</span></code> in your output. To dump
+the whole flow rules and groups, remove the <code class="docutils literal notranslate"><span class="pre">-c</span></code> argument from the command.
+<code class="docutils literal notranslate"><span class="pre">added</span></code> is used to filter only entities that are known to have been written
+to the switch (i.e., the P4Runtime Write RPC was successful.)</p>
+</div>
+</div>
+<div class="section" id="connectivity-test">
+<h3>4. Connectivity test<a class="headerlink" href="#connectivity-test" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="same-subnet-hosts-bridging">
+<h4>Same-subnet hosts (bridging)<a class="headerlink" href="#same-subnet-hosts-bridging" title="Permalink to this headline">¶</a></h4>
+<p>Open up the Mininet CLI (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">mn-cli</span></code>), let’s start by pinging <code class="docutils literal notranslate"><span class="pre">h1a</span></code> and <code class="docutils literal notranslate"><span class="pre">h1c</span></code>,
+which are both on the same subnet (VLAN <code class="docutils literal notranslate"><span class="pre">100</span></code> 172.16.1.0/24):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h1a</span> <span class="n">ping</span> <span class="n">h1c</span>
+<span class="n">PING</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">1.3</span> <span class="p">(</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">1.3</span><span class="p">)</span> <span class="mi">56</span><span class="p">(</span><span class="mi">84</span><span class="p">)</span> <span class="nb">bytes</span> <span class="n">of</span> <span class="n">data</span><span class="o">.</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">1.3</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">1</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">63</span> <span class="n">time</span><span class="o">=</span><span class="mf">13.7</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">1.3</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">2</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">63</span> <span class="n">time</span><span class="o">=</span><span class="mf">3.63</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">1.3</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">3</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">63</span> <span class="n">time</span><span class="o">=</span><span class="mf">3.52</span> <span class="n">ms</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Ping should work. Check the ONOS log, you should see an output similar to that
+of exercises 4-5.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">HostHandler</span><span class="p">]</span> <span class="n">Host</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">1</span><span class="n">A</span><span class="o">/</span><span class="kc">None</span> <span class="ow">is</span> <span class="n">added</span> <span class="n">at</span> <span class="p">[</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">3</span><span class="p">]</span>
+<span class="p">[</span><span class="n">HostHandler</span><span class="p">]</span> <span class="n">Populating</span> <span class="n">bridging</span> <span class="n">entry</span> <span class="k">for</span> <span class="n">host</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">1</span><span class="n">A</span><span class="o">/</span><span class="kc">None</span> <span class="n">at</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="p">:</span><span class="mi">3</span>
+<span class="p">[</span><span class="n">HostHandler</span><span class="p">]</span> <span class="n">Populating</span> <span class="n">routing</span> <span class="n">rule</span> <span class="k">for</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">1.1</span> <span class="n">at</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">3</span>
+<span class="p">[</span><span class="n">HostHandler</span><span class="p">]</span> <span class="n">Host</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">1</span><span class="n">C</span><span class="o">/</span><span class="mi">100</span> <span class="ow">is</span> <span class="n">added</span> <span class="n">at</span> <span class="p">[</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">5</span><span class="p">]</span>
+<span class="p">[</span><span class="n">HostHandler</span><span class="p">]</span> <span class="n">Populating</span> <span class="n">bridging</span> <span class="n">entry</span> <span class="k">for</span> <span class="n">host</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">1</span><span class="n">C</span><span class="o">/</span><span class="mi">100</span> <span class="n">at</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="p">:</span><span class="mi">5</span>
+<span class="p">[</span><span class="n">HostHandler</span><span class="p">]</span> <span class="n">Populating</span> <span class="n">routing</span> <span class="n">rule</span> <span class="k">for</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">1.3</span> <span class="n">at</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">5</span>
+</pre></div>
+</div>
+<p>That’s because <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> operates in a way that is similar to the custom
+app of previous exercises. Hosts are discovered by the built-in service
+<code class="docutils literal notranslate"><span class="pre">hostprovider</span></code> intercepting packets such as ARP or NDP. For hosts in the same
+subnet, to support ARP resolution, multicast (ALL) groups are used to replicate
+ARP requests to all ports belonging to the same VLAN. <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> listens
+for host events, when a new one is discovered, it installs the necessary
+bridging and routing rules.</p>
+</div>
+<div class="section" id="hosts-on-different-subnets-routing">
+<h4>Hosts on different subnets (routing)<a class="headerlink" href="#hosts-on-different-subnets-routing" title="Permalink to this headline">¶</a></h4>
+<p>On the Mininet prompt, start a ping to <code class="docutils literal notranslate"><span class="pre">h2</span></code> from any host in the subnet with
+VLAN <code class="docutils literal notranslate"><span class="pre">100</span></code>, for example, from <code class="docutils literal notranslate"><span class="pre">h1a</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h1a</span> <span class="n">ping</span> <span class="n">h2</span>
+</pre></div>
+</div>
+<p>The <strong>ping should NOT work</strong>, and the reason is that the location of <code class="docutils literal notranslate"><span class="pre">h2</span></code> is not
+known to ONOS, yet. Usually, Trellis is used in networks where hosts use DHCP
+for addressing. In such setup, we could use the DHCP relay app in ONOS to learn
+host locations and addresses when the hosts request an IP address via DHCP.
+However, in this simpler topology, we need to manually trigger <code class="docutils literal notranslate"><span class="pre">h2</span></code> to generate
+some packets to be discovered by ONOS.</p>
+<p>When using <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code>, the easiest way to have ONOS discover an host, is
+to ping the gateway address that we configured in <a class="reference external" href="mininet/netcfg-sr.json">netcfg-sr.json</a>, or that you
+can derive from the ONOS CLI (<code class="docutils literal notranslate"><span class="pre">onos&gt;</span> <span class="pre">interfaces</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h2</span> <span class="n">ping</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">2.254</span>
+<span class="n">PING</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">2.254</span> <span class="p">(</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">2.254</span><span class="p">)</span> <span class="mi">56</span><span class="p">(</span><span class="mi">84</span><span class="p">)</span> <span class="nb">bytes</span> <span class="n">of</span> <span class="n">data</span><span class="o">.</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">2.254</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">1</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">28.9</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">2.254</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">2</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">12.6</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">2.254</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">3</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">15.2</span> <span class="n">ms</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Ping is working, and ONOS should have discovered <code class="docutils literal notranslate"><span class="pre">h2</span></code> by now. But, who is
+replying to our pings?</p>
+<p>If you check the ARP table for h2:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h2</span> <span class="n">arp</span>
+<span class="n">Address</span>                  <span class="n">HWtype</span>  <span class="n">HWaddress</span>           <span class="n">Flags</span> <span class="n">Mask</span>            <span class="n">Iface</span>
+<span class="mf">172.16</span><span class="o">.</span><span class="mf">2.254</span>             <span class="n">ether</span>   <span class="mi">00</span><span class="p">:</span><span class="n">aa</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span>   <span class="n">C</span>                     <span class="n">h2</span><span class="o">-</span><span class="n">eth0</span><span class="o">.</span><span class="mi">200</span>
+</pre></div>
+</div>
+<p>You should recognize MAC address <code class="docutils literal notranslate"><span class="pre">00:aa:00:00:00:01</span></code> as the one associated with
+<code class="docutils literal notranslate"><span class="pre">leaf1</span></code> in <a class="reference external" href="mininet/netcfg-sr.json">netcfg-sr.json</a>. That’s it, the <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> app in ONOS is
+replying to our ICMP echo request (ping) packets! Ping requests are intercepted
+by means of P4Runtime packet-in, while replies are generated and injected via
+P4Runtime packet-out. This is equivalent to pinging the interface of a
+traditional router.</p>
+<p>At this point, ping from <code class="docutils literal notranslate"><span class="pre">h1a</span></code> to <code class="docutils literal notranslate"><span class="pre">h2</span></code> should work:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h1a</span> <span class="n">ping</span> <span class="n">h2</span>
+<span class="n">PING</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">2.1</span> <span class="p">(</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">2.1</span><span class="p">)</span> <span class="mi">56</span><span class="p">(</span><span class="mi">84</span><span class="p">)</span> <span class="nb">bytes</span> <span class="n">of</span> <span class="n">data</span><span class="o">.</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">2.1</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">1</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">63</span> <span class="n">time</span><span class="o">=</span><span class="mf">6.23</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">2.1</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">2</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">63</span> <span class="n">time</span><span class="o">=</span><span class="mf">3.81</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">2.1</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">3</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">63</span> <span class="n">time</span><span class="o">=</span><span class="mf">3.84</span> <span class="n">ms</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Moreover, you can check that all hosts pinged so far have been discovered by
+ONOS:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">hosts</span> <span class="o">-</span><span class="n">s</span>
+<span class="nb">id</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">1</span><span class="n">A</span><span class="o">/</span><span class="kc">None</span><span class="p">,</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">1</span><span class="n">A</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">3</span><span class="p">],</span> <span class="n">vlan</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ip</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">=</span><span class="p">[</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">1.1</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">1</span><span class="n">C</span><span class="o">/</span><span class="mi">100</span><span class="p">,</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">1</span><span class="n">C</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">5</span><span class="p">],</span> <span class="n">vlan</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ip</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">=</span><span class="p">[</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">1.3</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">20</span><span class="o">/</span><span class="mi">200</span><span class="p">,</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">6</span><span class="p">],</span> <span class="n">vlan</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">ip</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">=</span><span class="p">[</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">2.1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="dump-packets-to-see-vlan-tags-optional">
+<h3>5. Dump packets to see VLAN tags (optional)<a class="headerlink" href="#dump-packets-to-see-vlan-tags-optional" title="Permalink to this headline">¶</a></h3>
+<p>TODO: detailed instructions for this step are still work in progress.</p>
+<p>If you feel adventurous, start a ping between any two hosts, and use the tool
+<a class="reference external" href="util/mn-pcap">util/mn-pcap</a> to dump packets to a PCAP file. After dumping
+packets, the tool tries to open the pcap file on wireshark (if installed).</p>
+<p>For example, to dump packets out of the <code class="docutils literal notranslate"><span class="pre">h2</span></code> main interface:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ util/mn-pcap h2
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-missing-interface-config">
+<h3>6. Add missing interface config<a class="headerlink" href="#add-missing-interface-config" title="Permalink to this headline">¶</a></h3>
+<p>Let’s start a ping from <code class="docutils literal notranslate"><span class="pre">h3</span></code> to any other host, for example <code class="docutils literal notranslate"><span class="pre">h2</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h3</span> <span class="n">ping</span> <span class="n">h2</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>It should NOT work. Can you tell why?</p>
+<p>Let’s check the ONOS log (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">onos-log</span></code>), you should see the following
+messages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">HostHandler</span><span class="p">]</span> <span class="n">Host</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="o">/</span><span class="kc">None</span> <span class="ow">is</span> <span class="n">added</span> <span class="n">at</span> <span class="p">[</span><span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">HostHandler</span><span class="p">]</span> <span class="n">Populating</span> <span class="n">bridging</span> <span class="n">entry</span> <span class="k">for</span> <span class="n">host</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="o">/</span><span class="kc">None</span> <span class="n">at</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="p">:</span><span class="mi">3</span>
+<span class="n">WARN</span>  <span class="p">[</span><span class="n">RoutingRulePopulator</span><span class="p">]</span> <span class="n">Untagged</span> <span class="n">host</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="o">/</span><span class="kc">None</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">allowed</span> <span class="n">on</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">3</span> <span class="n">without</span> <span class="n">untagged</span> <span class="ow">or</span> <span class="n">nativevlan</span> <span class="n">config</span>
+<span class="n">WARN</span>  <span class="p">[</span><span class="n">RoutingRulePopulator</span><span class="p">]</span> <span class="n">Fail</span> <span class="n">to</span> <span class="n">build</span> <span class="n">fwd</span> <span class="n">obj</span> <span class="k">for</span> <span class="n">host</span> <span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">30</span><span class="o">/</span><span class="kc">None</span><span class="o">.</span> <span class="n">Abort</span><span class="o">.</span>
+<span class="n">INFO</span>  <span class="p">[</span><span class="n">HostHandler</span><span class="p">]</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">3.1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">included</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">subnet</span> <span class="n">config</span> <span class="n">of</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mf">3.</span> <span class="n">Ignored</span><span class="o">.</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">h3</span></code> is discovered because ONOS intercepted the ARP request to resolve <code class="docutils literal notranslate"><span class="pre">h3</span></code>’s
+gateway IP address (<code class="docutils literal notranslate"><span class="pre">172.16.3.254</span></code>), but the rest of the programming fails
+because we have not provided a valid Trellis configuration for the switch port
+facing <code class="docutils literal notranslate"><span class="pre">h3</span></code> (<code class="docutils literal notranslate"><span class="pre">leaf2/3</span></code>). Indeed, if you look at <a class="reference external" href="mininet/netcfg-sr.json">netcfg-sr.json</a> you will notice
+that the <code class="docutils literal notranslate"><span class="pre">&quot;ports&quot;</span></code> section includes a config block for all <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> host-facing
+ports, but it does NOT provide any for <code class="docutils literal notranslate"><span class="pre">leaf2</span></code>.</p>
+<p>As a matter of fact, if you try to start a ping from <code class="docutils literal notranslate"><span class="pre">h4</span></code> (attached to <code class="docutils literal notranslate"><span class="pre">leaf2</span></code>),
+that should NOT work as well.</p>
+<p>It is your task to modify the <a class="reference external" href="mininet/netcfg-sr.json">netcfg-sr.json</a> to add the necessary config
+blocks to enable connectivity for <code class="docutils literal notranslate"><span class="pre">h3</span></code> and <code class="docutils literal notranslate"><span class="pre">h4</span></code>:</p>
+<ol class="simple">
+<li>Open up <a class="reference external" href="mininet/netcfg-sr.json">netcfg-sr.json</a>.</li>
+<li>Look for the <code class="docutils literal notranslate"><span class="pre">&quot;ports&quot;</span></code> section.</li>
+<li>Provide a config for ports <code class="docutils literal notranslate"><span class="pre">device:leaf2/3</span></code> and <code class="docutils literal notranslate"><span class="pre">device:leaf2/4</span></code>. When doing
+so, look at the config for other ports as a reference, but make sure to
+provide the right IPv4 gateway address, subnet, and VLAN configuration
+described at the beginning of this document.</li>
+<li>When done, push the updated file to ONOS using <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">netcfg-sr</span></code>.</li>
+<li>Verify that the two new interface configs show up when using the ONOS
+CLI (<code class="docutils literal notranslate"><span class="pre">onos&gt;</span> <span class="pre">interfaces</span></code>).</li>
+<li>If you don’t see the new interfaces in the ONOS CLI, verify the ONOS log
+(<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">onos-log</span></code>) for any possible error, and eventually go back to step 3.</li>
+<li>If you struggle to make it work, a solution is available in the
+<code class="docutils literal notranslate"><span class="pre">solution/mininet</span></code> directory.</li>
+</ol>
+<p>Let’s try to ping the corresponding gateway address from <code class="docutils literal notranslate"><span class="pre">h3</span></code> and <code class="docutils literal notranslate"><span class="pre">h4</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h3</span> <span class="n">ping</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">3.254</span>
+<span class="n">PING</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">3.254</span> <span class="p">(</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">3.254</span><span class="p">)</span> <span class="mi">56</span><span class="p">(</span><span class="mi">84</span><span class="p">)</span> <span class="nb">bytes</span> <span class="n">of</span> <span class="n">data</span><span class="o">.</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">3.254</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">1</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">66.5</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">3.254</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">2</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">19.1</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">3.254</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">3</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">27.5</span> <span class="n">ms</span>
+<span class="o">...</span>
+
+<span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h4</span> <span class="n">ping</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">4.254</span>
+<span class="n">PING</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">4.254</span> <span class="p">(</span><span class="mf">172.16</span><span class="o">.</span><span class="mf">4.254</span><span class="p">)</span> <span class="mi">56</span><span class="p">(</span><span class="mi">84</span><span class="p">)</span> <span class="nb">bytes</span> <span class="n">of</span> <span class="n">data</span><span class="o">.</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">4.254</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">1</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">45.2</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">4.254</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">2</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">12.7</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">172.16</span><span class="o">.</span><span class="mf">4.254</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">3</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">64</span> <span class="n">time</span><span class="o">=</span><span class="mf">22.0</span> <span class="n">ms</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>At this point, ping between all hosts should work. You can try that using the
+special <code class="docutils literal notranslate"><span class="pre">pingall</span></code> command in the Mininet CLI:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">pingall</span>
+<span class="o">***</span> <span class="n">Ping</span><span class="p">:</span> <span class="n">testing</span> <span class="n">ping</span> <span class="n">reachability</span>
+<span class="n">h1a</span> <span class="o">-&gt;</span> <span class="n">h1b</span> <span class="n">h1c</span> <span class="n">h2</span> <span class="n">h3</span> <span class="n">h4</span> 
+<span class="n">h1b</span> <span class="o">-&gt;</span> <span class="n">h1a</span> <span class="n">h1c</span> <span class="n">h2</span> <span class="n">h3</span> <span class="n">h4</span> 
+<span class="n">h1c</span> <span class="o">-&gt;</span> <span class="n">h1a</span> <span class="n">h1b</span> <span class="n">h2</span> <span class="n">h3</span> <span class="n">h4</span> 
+<span class="n">h2</span> <span class="o">-&gt;</span> <span class="n">h1a</span> <span class="n">h1b</span> <span class="n">h1c</span> <span class="n">h3</span> <span class="n">h4</span> 
+<span class="n">h3</span> <span class="o">-&gt;</span> <span class="n">h1a</span> <span class="n">h1b</span> <span class="n">h1c</span> <span class="n">h2</span> <span class="n">h4</span> 
+<span class="n">h4</span> <span class="o">-&gt;</span> <span class="n">h1a</span> <span class="n">h1b</span> <span class="n">h1c</span> <span class="n">h2</span> <span class="n">h3</span> 
+<span class="o">***</span> <span class="n">Results</span><span class="p">:</span> <span class="mi">0</span><span class="o">%</span> <span class="n">dropped</span> <span class="p">(</span><span class="mi">30</span><span class="o">/</span><span class="mi">30</span> <span class="n">received</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="congratulations">
+<h2>Congratulations!<a class="headerlink" href="#congratulations" title="Permalink to this headline">¶</a></h2>
+<p>You have completed the seventh exercise! You were able to use ONOS built-in
+Trellis apps such as <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> and the <code class="docutils literal notranslate"><span class="pre">fabric</span></code> pipeconf to configure
+forwarding in a 2x2 leaf-spine fabric of IPv4 hosts.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,620 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Exercise 8: GTP termination with fabric.p4 &mdash; Software-Defined Networks: A Systems Approach Version 0.3-dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/bridge.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/rtd_theme_mods.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Software-Defined Networks: A Systems Approach
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0.3-dev
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Chapter 1:  Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uses.html">Chapter 2:  Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../arch.html">Chapter 3:  Basic Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../switch.html">Chapter 4:  White-Box Switches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stratum.html">Chapter 5:  Switch OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../onos.html">Chapter 6:  Network OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../future.html">Chapter 8:  Future of SDN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">About This Book</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Software-Defined Networks: A Systems Approach</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Exercise 8: GTP termination with fabric.p4</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/ex/EXERCISE-8.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="exercise-8-gtp-termination-with-fabric-p4">
+<h1>Exercise 8: GTP termination with fabric.p4<a class="headerlink" href="#exercise-8-gtp-termination-with-fabric-p4" title="Permalink to this headline">¶</a></h1>
+<p>The goal of this exercise is to learn how to use Trellis and fabric.p4 to
+encapsulate and route packets using the GPRS Tunnelling Protocol (GTP) header as
+in 4G mobile core networks.</p>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p><img alt="Topology GTP" src="ex/img/topo-gtp.png" /></p>
+<p>The topology we will use in this exercise (<a class="reference external" href="mininet/topo-gtp.py">topo-gtp.py</a>) is a very simple one,
+with the usual 2x2 fabric, but only two hosts. We assume our fabric is used as
+part of a 4G (i.e, LTE) network, connecting base stations to a Packet Data
+Network (PDN), such as the Internet. The two hosts in our topology represent:</p>
+<ul class="simple">
+<li>An eNodeB, i.e., a base station providing radio connectivity to User
+Equipments (UEs) such as smartphones;</li>
+<li>A host on the Packet Data Network (PDN), i.e., any host on the Internet.</li>
+</ul>
+<p>To provide connectivity between the UEs and the Internet, we need to program our
+fabric to act as a Serving and Packet Gateway (SPGW). The SPGW is a complex and
+feature-rich component of the 4G mobile core architecture that is used by the
+base stations as a gateway to the PDN. Base stations aggregate UE traffic in GTP
+tunnels (one or more per UE). The SPGW has many functions, among which that of
+terminating such tunnels. In other words, it encapsulates downlink traffic
+(Internet→UE) in an additional IPv4+UDP+GTP-U header, and it removes it for the
+uplink direction (UE→Internet).</p>
+<p>In this exercise you will learn how to:</p>
+<ul class="simple">
+<li>Program a switch with the <code class="docutils literal notranslate"><span class="pre">fabric-spgw</span></code> profile;</li>
+<li>Use Trellis to route traffic from the PDN to the eNodeB;</li>
+<li>Use the ONOS REST APIs to enable GTP encapsulation of downlink traffic on
+<code class="docutils literal notranslate"><span class="pre">leaf1</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="exercise-steps">
+<h2>Exercise steps<a class="headerlink" href="#exercise-steps" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="start-onos-and-mininet-with-gtp-topology">
+<h3>1. Start ONOS and Mininet with GTP topology<a class="headerlink" href="#start-onos-and-mininet-with-gtp-topology" title="Permalink to this headline">¶</a></h3>
+<p>Since we want to use a different topology, we need to reset the current
+environment (if currently active):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make reset
+</pre></div>
+</div>
+<p>This command will stop ONOS and Mininet and remove any state associated with
+them.</p>
+<p>Re-start ONOS and Mininet, this time with the new topology:</p>
+<p><strong>IMPORTANT:</strong> please notice the <code class="docutils literal notranslate"><span class="pre">-gtp</span></code> suffix!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make start-gtp
+</pre></div>
+</div>
+<p>Wait about 1 minute before proceeding with the next steps, this will give time
+to ONOS to start all of its subsystems.</p>
+</div>
+<div class="section" id="load-additional-apps">
+<h3>2. Load additional apps<a class="headerlink" href="#load-additional-apps" title="Permalink to this headline">¶</a></h3>
+<p>As in the previous exercises, let’s activate the <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> and <code class="docutils literal notranslate"><span class="pre">fabric</span></code>
+pipeconf app using the ONOS CLI (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">onos-cli</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">app</span> <span class="n">activate</span> <span class="n">fabric</span> 
+<span class="n">onos</span><span class="o">&gt;</span> <span class="n">app</span> <span class="n">activate</span> <span class="n">segmentrouting</span>
+</pre></div>
+</div>
+<p>Let’s also activate a third app named <code class="docutils literal notranslate"><span class="pre">netcfghostprovider</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">app</span> <span class="n">activate</span> <span class="n">netcfghostprovider</span> 
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">netcfghostprovider</span></code> (Network Config Host Provider ) is a built-in service
+similar to the <code class="docutils literal notranslate"><span class="pre">hostprovider</span></code> (Host Location Provider) seen in the previous
+exercises. It is responsible for registering hosts in the system, however,
+differently from <code class="docutils literal notranslate"><span class="pre">hostprovider</span></code>, it does not listen for ARP or DHCP packet-ins
+to automatically discover hosts. Instead, it uses information in the netcfg JSON
+file, allowing operators to pre-populate the ONOS host store.</p>
+<p>This is useful for static topologies and to avoid relying on ARP, DHCP, and
+other host-generated traffic. In this exercise, we use the netcfg JSON to
+configure the location of the <code class="docutils literal notranslate"><span class="pre">enodeb</span></code> and <code class="docutils literal notranslate"><span class="pre">pdn</span></code> hosts.</p>
+<div class="section" id="verify-apps">
+<h4>Verify apps<a class="headerlink" href="#verify-apps" title="Permalink to this headline">¶</a></h4>
+<p>The complete list of apps should look like the following (21 in total)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">apps</span> <span class="o">-</span><span class="n">s</span> <span class="o">-</span><span class="n">a</span>
+<span class="o">*</span>  <span class="mi">18</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span>              <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Default</span> <span class="n">Drivers</span>
+<span class="o">*</span>  <span class="mi">37</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">grpc</span>       <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">gRPC</span> <span class="n">Protocol</span> <span class="n">Subsystem</span>
+<span class="o">*</span>  <span class="mi">38</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">gnmi</span>       <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">gNMI</span> <span class="n">Protocol</span> <span class="n">Subsystem</span>
+<span class="o">*</span>  <span class="mi">39</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">generaldeviceprovider</span> <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">General</span> <span class="n">Device</span> <span class="n">Provider</span>
+<span class="o">*</span>  <span class="mi">40</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">gnoi</span>       <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">gNOI</span> <span class="n">Protocol</span> <span class="n">Subsystem</span>
+<span class="o">*</span>  <span class="mi">41</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">gnoi</span>         <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">gNOI</span> <span class="n">Drivers</span>
+<span class="o">*</span>  <span class="mi">42</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">route</span><span class="o">-</span><span class="n">service</span>        <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Route</span> <span class="n">Service</span> <span class="n">Server</span>
+<span class="o">*</span>  <span class="mi">43</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">mcast</span>                <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Multicast</span> <span class="n">traffic</span> <span class="n">control</span>
+<span class="o">*</span>  <span class="mi">44</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">portloadbalancer</span>     <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Port</span> <span class="n">Load</span> <span class="n">Balance</span> <span class="n">Service</span>
+<span class="o">*</span>  <span class="mi">45</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">segmentrouting</span>       <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Segment</span> <span class="n">Routing</span>
+<span class="o">*</span>  <span class="mi">53</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">hostprovider</span>         <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Host</span> <span class="n">Location</span> <span class="n">Provider</span>
+<span class="o">*</span>  <span class="mi">54</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">lldpprovider</span>         <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">LLDP</span> <span class="n">Link</span> <span class="n">Provider</span>
+<span class="o">*</span>  <span class="mi">64</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">protocols</span><span class="o">.</span><span class="n">p4runtime</span>  <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">P4Runtime</span> <span class="n">Protocol</span> <span class="n">Subsystem</span>
+<span class="o">*</span>  <span class="mi">65</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">p4runtime</span>            <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">P4Runtime</span> <span class="n">Provider</span>
+<span class="o">*</span>  <span class="mi">96</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">netcfghostprovider</span>   <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Network</span> <span class="n">Config</span> <span class="n">Host</span> <span class="n">Provider</span>
+<span class="o">*</span>  <span class="mi">99</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">gnmi</span>         <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">gNMI</span> <span class="n">Drivers</span>
+<span class="o">*</span> <span class="mi">100</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">p4runtime</span>    <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">P4Runtime</span> <span class="n">Drivers</span>
+<span class="o">*</span> <span class="mi">101</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">basic</span>      <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Basic</span> <span class="n">Pipelines</span>
+<span class="o">*</span> <span class="mi">102</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">stratum</span>      <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Stratum</span> <span class="n">Drivers</span>
+<span class="o">*</span> <span class="mi">103</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">bmv2</span>         <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">BMv2</span> <span class="n">Drivers</span>
+<span class="o">*</span> <span class="mi">111</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span>     <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">Fabric</span> <span class="n">Pipeline</span>
+<span class="o">*</span> <span class="mi">164</span> <span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">gui2</span>                 <span class="mf">2.2</span><span class="o">.</span><span class="mi">2</span>    <span class="n">ONOS</span> <span class="n">GUI2</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="verify-pipeconfs">
+<h4>Verify pipeconfs<a class="headerlink" href="#verify-pipeconfs" title="Permalink to this headline">¶</a></h4>
+<p>All <code class="docutils literal notranslate"><span class="pre">fabric</span></code> pipeconf profiles should have been registered by now. Take a note
+on the full ID of the one with SPGW capabilities (<code class="docutils literal notranslate"><span class="pre">fabric-spgw</span></code>), you will need
+this ID in the next step.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">pipeconfs</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="n">full</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">IntProgrammable</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">int</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">IntProgrammable</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="n">spgw</span><span class="o">-</span><span class="nb">int</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">IntProgrammable</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="n">bng</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">BngProgrammable</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="n">spgw</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="nb">int</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PortStatisticsDiscovery</span><span class="p">,</span> <span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">IntProgrammable</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">,</span> <span class="n">CPU_PORT_TXT</span><span class="p">]</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">basic</span><span class="p">,</span> <span class="n">behaviors</span><span class="o">=</span><span class="p">[</span><span class="n">PiPipelineInterpreter</span><span class="p">,</span> <span class="n">Pipeliner</span><span class="p">,</span> <span class="n">PortStatisticsDiscovery</span><span class="p">],</span> <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="n">P4_INFO_TEXT</span><span class="p">,</span> <span class="n">BMV2_JSON</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="modify-and-push-netcfg-to-use-fabric-spgw-profile">
+<h3>3. Modify and push netcfg to use fabric-spgw profile<a class="headerlink" href="#modify-and-push-netcfg-to-use-fabric-spgw-profile" title="Permalink to this headline">¶</a></h3>
+<p>Up until now, we have used topologies where all switches were configured with
+the same pipeconf, and so the same P4 program.</p>
+<p>In this exercise, we want all switches to run with the basic <code class="docutils literal notranslate"><span class="pre">fabric</span></code> profile,
+while <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> should act as the SPGW, and so we want it programmed with the
+<code class="docutils literal notranslate"><span class="pre">fabric-spgw</span></code> profile.</p>
+<div class="section" id="modify-netcfg-json">
+<h4>Modify netcfg JSON<a class="headerlink" href="#modify-netcfg-json" title="Permalink to this headline">¶</a></h4>
+<p>Let’s modify the netcfg JSON to use the <code class="docutils literal notranslate"><span class="pre">fabric-spgw</span></code> profile on switch
+<code class="docutils literal notranslate"><span class="pre">leaf1</span></code>.</p>
+<ol>
+<li><p class="first">Open up file <a class="reference external" href="mininet/netcfg-gtp.json">netcfg-gtp.json</a> and look for the configuration of <code class="docutils literal notranslate"><span class="pre">leaf1</span></code>
+in thw <code class="docutils literal notranslate"><span class="pre">&quot;devices&quot;</span></code> block. It should look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="s2">&quot;devices&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;device:leaf1&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;basic&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;managementAddress&quot;</span><span class="p">:</span> <span class="s2">&quot;grpc://mininet:50001?device_id=1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;driver&quot;</span><span class="p">:</span> <span class="s2">&quot;stratum-bmv2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pipeconf&quot;</span><span class="p">:</span> <span class="s2">&quot;org.onosproject.pipelines.fabric&quot;</span><span class="p">,</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Modify the <code class="docutils literal notranslate"><span class="pre">pipeconf</span></code> property to use the full ID of the <code class="docutils literal notranslate"><span class="pre">fabric-spgw</span></code>
+profile obtained in the previous step.</p>
+</li>
+<li><p class="first">Save the file.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="push-netcfg-to-onos">
+<h4>Push netcfg to ONOS<a class="headerlink" href="#push-netcfg-to-onos" title="Permalink to this headline">¶</a></h4>
+<p>On a terminal window, type:</p>
+<p><strong>IMPORTANT</strong>: please notice the <code class="docutils literal notranslate"><span class="pre">-gtp</span></code> suffix!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make netcfg-gtp
+</pre></div>
+</div>
+<p>Use the ONOS CLI (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">onos-cli</span></code>) to verify that all 4 switches are connected
+to ONOS and provisioned with the right pipeconf/profile.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">devices</span> <span class="o">-</span><span class="n">s</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="p">,</span> <span class="n">available</span><span class="o">=</span><span class="n">true</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">MASTER</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">SWITCH</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">stratum</span><span class="o">-</span><span class="n">bmv2</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span><span class="o">-</span><span class="n">spgw</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="p">,</span> <span class="n">available</span><span class="o">=</span><span class="n">true</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">MASTER</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">SWITCH</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">stratum</span><span class="o">-</span><span class="n">bmv2</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">spine1</span><span class="p">,</span> <span class="n">available</span><span class="o">=</span><span class="n">true</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">MASTER</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">SWITCH</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">stratum</span><span class="o">-</span><span class="n">bmv2</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span>
+<span class="nb">id</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">spine2</span><span class="p">,</span> <span class="n">available</span><span class="o">=</span><span class="n">true</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">MASTER</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">SWITCH</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">stratum</span><span class="o">-</span><span class="n">bmv2</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">pipelines</span><span class="o">.</span><span class="n">fabric</span>
+</pre></div>
+</div>
+<p>Make sure <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> has driver with the <code class="docutils literal notranslate"><span class="pre">fabric-sgw</span></code> pipeconf, while all other
+switches should have the basic <code class="docutils literal notranslate"><span class="pre">fabric</span></code> pipeconf.</p>
+<div class="section" id="troubleshooting">
+<h5>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h5>
+<p>If <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> does NOT have <code class="docutils literal notranslate"><span class="pre">available=true</span></code>, it probably means that you have
+inserted the wrong pipeconf ID in <a class="reference external" href="mininet/netcfg-gtp.json">netcfg-gtp.json</a> and ONOS is not able to
+perform the initial provisioning.</p>
+<p>Check the ONOS log (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">onos-log</span></code>) for possible errors. Remember from the
+previous exercise that some errors are expected (e.g., for unsupported
+<code class="docutils literal notranslate"><span class="pre">PSEUDO_WIRE</span></code> flow objectives). If you see an error like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ERROR</span> <span class="p">[</span><span class="n">DeviceTaskExecutor</span><span class="p">]</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">complete</span> <span class="n">task</span> <span class="n">CONNECTION_SETUP</span> <span class="k">for</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="p">:</span> <span class="n">pipeconf</span> <span class="o">...</span> <span class="ow">not</span> <span class="n">registered</span>
+</pre></div>
+</div>
+<p>It means you have to go to the previous step to correct your pipeconf ID. Modify
+the <a class="reference external" href="mininet/netcfg-gtp.json">netcfg-gtp.json</a> file and push it again using <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">netcfg-gtp</span></code>. Use the
+ONOS CLI and log to make sure the issue is fixed before proceeding.</p>
+</div>
+</div>
+<div class="section" id="check-configuration-in-onos">
+<h4>Check configuration in ONOS<a class="headerlink" href="#check-configuration-in-onos" title="Permalink to this headline">¶</a></h4>
+<p>Check the interface configuration. In this topology we want <code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> to
+forward traffic based on two IP subnets:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">interfaces</span>
+<span class="n">leaf1</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span> <span class="n">port</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">3</span> <span class="n">ips</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0</span><span class="o">.</span><span class="mf">100.254</span><span class="o">/</span><span class="mi">24</span><span class="p">]</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="n">AA</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">01</span> <span class="n">vlanUntagged</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">leaf2</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span> <span class="n">port</span><span class="o">=</span><span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">3</span> <span class="n">ips</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0</span><span class="o">.</span><span class="mf">200.254</span><span class="o">/</span><span class="mi">24</span><span class="p">]</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="n">AA</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">02</span> <span class="n">vlanUntagged</span><span class="o">=</span><span class="mi">200</span>
+</pre></div>
+</div>
+<p>Check that the <code class="docutils literal notranslate"><span class="pre">enodeb</span></code> and <code class="docutils literal notranslate"><span class="pre">pdn</span></code> hosts have been discovered:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">hosts</span>
+<span class="nb">id</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">10</span><span class="o">/</span><span class="kc">None</span><span class="p">,</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">:</span><span class="n">leaf1</span><span class="o">/</span><span class="mi">3</span><span class="p">],</span> <span class="n">auxLocations</span><span class="o">=</span><span class="n">null</span><span class="p">,</span> <span class="n">vlan</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ip</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0</span><span class="o">.</span><span class="mf">100.1</span><span class="p">],</span> <span class="o">...</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">enodeb</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="n">host</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">netcfghost</span><span class="p">,</span> <span class="n">configured</span><span class="o">=</span><span class="n">true</span>
+<span class="nb">id</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">20</span><span class="o">/</span><span class="kc">None</span><span class="p">,</span> <span class="n">mac</span><span class="o">=</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span> <span class="n">locations</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">:</span><span class="n">leaf2</span><span class="o">/</span><span class="mi">3</span><span class="p">],</span> <span class="n">auxLocations</span><span class="o">=</span><span class="n">null</span><span class="p">,</span> <span class="n">vlan</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ip</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">=</span><span class="p">[</span><span class="mf">10.0</span><span class="o">.</span><span class="mf">200.1</span><span class="p">],</span> <span class="o">...</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">pdn</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">provider</span><span class="o">=</span><span class="n">host</span><span class="p">:</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">netcfghost</span><span class="p">,</span> <span class="n">configured</span><span class="o">=</span><span class="n">true</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">provider=host:org.onosproject.netcfghost</span></code> and <code class="docutils literal notranslate"><span class="pre">configured=true</span></code> are indications
+that the host entry was created by <code class="docutils literal notranslate"><span class="pre">netcfghostprovider</span></code>.</p>
+</div>
+</div>
+<div class="section" id="verify-ip-connectivity-between-pdn-and-enodeb">
+<h3>4. Verify IP connectivity between PDN and eNodeB<a class="headerlink" href="#verify-ip-connectivity-between-pdn-and-enodeb" title="Permalink to this headline">¶</a></h3>
+<p>Since the two hosts have been already discovered, they should be pingable.</p>
+<p>Using the Mininet CLI (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">mn-cli</span></code>) start a ping between <code class="docutils literal notranslate"><span class="pre">enodeb</span></code> and <code class="docutils literal notranslate"><span class="pre">pdn</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">enodeb</span> <span class="n">ping</span> <span class="n">pdn</span>
+<span class="n">PING</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">200.1</span> <span class="p">(</span><span class="mf">10.0</span><span class="o">.</span><span class="mf">200.1</span><span class="p">)</span> <span class="mi">56</span><span class="p">(</span><span class="mi">84</span><span class="p">)</span> <span class="nb">bytes</span> <span class="n">of</span> <span class="n">data</span><span class="o">.</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">200.1</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">1</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">62</span> <span class="n">time</span><span class="o">=</span><span class="mi">1053</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">200.1</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">2</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">62</span> <span class="n">time</span><span class="o">=</span><span class="mf">49.0</span> <span class="n">ms</span>
+<span class="mi">64</span> <span class="nb">bytes</span> <span class="kn">from</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">200.1</span><span class="p">:</span> <span class="n">icmp_seq</span><span class="o">=</span><span class="mi">3</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">62</span> <span class="n">time</span><span class="o">=</span><span class="mf">9.63</span> <span class="n">ms</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="start-pdn-and-enodeb-processes">
+<h3>5. Start PDN and eNodeB processes<a class="headerlink" href="#start-pdn-and-enodeb-processes" title="Permalink to this headline">¶</a></h3>
+<p>We have created two Python scripts to emulate the PDN sending downlink
+traffic to the UEs, and the eNodeB, expecting to receive the
+same traffic but GTP-encapsulated.</p>
+<p>On a new terminal window, start the <a class="reference external" href="mininet/send-udp.py">send-udp.py</a> script on the <code class="docutils literal notranslate"><span class="pre">pdn</span></code> host:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ util/mn-cmd pdn /mininet/send-udp.py
+Sending 5 UDP packets per second to 17.0.0.1...
+</pre></div>
+</div>
+<p><a class="reference external" href="util/mn-cmd">util/mn-cmd</a> is a convenience script to run commands on mininet hosts when
+using multiple terminal windows.</p>
+<p><a class="reference external" href="mininet/send-udp.py">mininet/send-udp.py</a> generates packets with destination
+IPv4 address <code class="docutils literal notranslate"><span class="pre">17.0.0.1</span></code> (UE address). In the rest of the exercise we
+will configure Trellis to route these packets through switch <code class="docutils literal notranslate"><span class="pre">leaf1</span></code>, and
+we will insert a flow rule in this switch to perform the GTP
+encapsulation. For now, this traffic will be dropped at <code class="docutils literal notranslate"><span class="pre">leaf2</span></code>.</p>
+<p>On a second terminal window, start the <a class="reference external" href="mininet/recv-gtp.py">recv-gtp.py</a> script on the <code class="docutils literal notranslate"><span class="pre">enodeb</span></code>
+host:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ util/mn-cmd enodeb /mininet/recv-gtp.py   
+Will print a line for each UDP packet received...
+</pre></div>
+</div>
+<p><a class="reference external" href="mininet/recv-gtp.py">mininet/recv-gtp.py</a> simply sniffs packets received and prints
+them on screen, informing if the packet is GTP encapsulated or not. You should
+see no packets being printed for the moment.</p>
+<div class="section" id="use-onos-ui-to-visualize-traffic">
+<h4>Use ONOS UI to visualize traffic<a class="headerlink" href="#use-onos-ui-to-visualize-traffic" title="Permalink to this headline">¶</a></h4>
+<p>Using the ONF Cloud Tutorial Portal, access the ONOS UI.
+If you are using the tutorial VM, open up a browser (e.g. Firefox) to
+<a class="reference external" href="http://127.0.0.1:8181/onos/ui">http://127.0.0.1:8181/onos/ui</a>.</p>
+<p>When asked, use the username <code class="docutils literal notranslate"><span class="pre">onos</span></code> and password <code class="docutils literal notranslate"><span class="pre">rocks</span></code>.</p>
+<p>To show hosts, press <kbd>H</kbd>. To show real-time link utilization, press
+<kbd>A</kbd> multiple times until showing “Port stats (packets / second)”.</p>
+<p>You should see traffic (5 pps) on the link between the <code class="docutils literal notranslate"><span class="pre">pdn</span></code> host and <code class="docutils literal notranslate"><span class="pre">leaf2</span></code>,
+but not on other links. <strong>Packets are dropped at switch <code class="docutils literal notranslate"><span class="pre">leaf2</span></code> as this switch
+does not know how to route packets with IPv4 destination <code class="docutils literal notranslate"><span class="pre">17.0.0.1</span></code>.</strong></p>
+</div>
+</div>
+<div class="section" id="install-route-for-ue-subnet-and-debug-table-entries">
+<h3>6. Install route for UE subnet and debug table entries<a class="headerlink" href="#install-route-for-ue-subnet-and-debug-table-entries" title="Permalink to this headline">¶</a></h3>
+<p>Using the ONOS CLI (<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">onos-cli</span></code>), type the following command to add a route
+for the UE subnet (<code class="docutils literal notranslate"><span class="pre">17.0.0.0/24</span></code>) with next hop the <code class="docutils literal notranslate"><span class="pre">enodeb</span></code> (<code class="docutils literal notranslate"><span class="pre">10.0.100.1</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">route</span><span class="o">-</span><span class="n">add</span> <span class="mf">17.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">24</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">100.1</span>
+</pre></div>
+</div>
+<p>Check that the new route has been successfully added:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">routes</span>
+<span class="n">B</span><span class="p">:</span> <span class="n">Best</span> <span class="n">route</span><span class="p">,</span> <span class="n">R</span><span class="p">:</span> <span class="n">Resolved</span> <span class="n">route</span>
+
+<span class="n">Table</span><span class="p">:</span> <span class="n">ipv4</span>
+<span class="n">B</span> <span class="n">R</span>  <span class="n">Network</span>            <span class="n">Next</span> <span class="n">Hop</span>        <span class="n">Source</span> <span class="p">(</span><span class="n">Node</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="o">*</span>  <span class="mf">17.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">24</span>        <span class="mf">10.0</span><span class="o">.</span><span class="mf">100.1</span>      <span class="n">STATIC</span> <span class="p">(</span><span class="o">-</span><span class="p">)</span>
+   <span class="n">Total</span><span class="p">:</span> <span class="mi">1</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Since <code class="docutils literal notranslate"><span class="pre">10.0.100.1</span></code> is a known host to ONOS, i.e., we know its location in the
+topology (see <code class="docutils literal notranslate"><span class="pre">*</span></code> under <code class="docutils literal notranslate"><span class="pre">R</span></code> column, which stands for “Resolved route”,)
+<code class="docutils literal notranslate"><span class="pre">segmentrouting</span></code> uses this information to compute paths and install the
+necessary table entries to forward packets with IPv4 destination address
+matching <code class="docutils literal notranslate"><span class="pre">17.0.0.0/24</span></code>.</p>
+<p>Open up the terminal window with the <a class="reference external" href="mininet/recv-gtp.py">recv-gtp.py</a> script on the <code class="docutils literal notranslate"><span class="pre">enodeb</span></code> host,
+you should see the following output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="mi">691</span> <span class="nb">bytes</span><span class="p">:</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">200.1</span> <span class="o">-&gt;</span> <span class="mf">17.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">is_gtp_encap</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">Ether</span> <span class="o">/</span> <span class="n">IP</span> <span class="o">/</span> <span class="n">UDP</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">200.1</span><span class="p">:</span><span class="mi">80</span> <span class="o">&gt;</span> <span class="mf">17.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">400</span> <span class="o">/</span> <span class="n">Raw</span>
+<span class="o">....</span>
+</pre></div>
+</div>
+<p>These lines indicate that a packet has been received at the eNodeB. The static
+route is working! However, there’s no trace of GTP headers, yet. We’ll get back
+to this soon, but for now, let’s take a look at table entries in <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>.</p>
+<p>Feel free to also check on the ONOS UI to see packets forwarded across the
+spines, and delivered to the eNodeB (the next hop of our static route).</p>
+<div class="section" id="debug-fabric-p4-table-entries">
+<h4>Debug fabric.p4 table entries<a class="headerlink" href="#debug-fabric-p4-table-entries" title="Permalink to this headline">¶</a></h4>
+<p>You can verify that the table entries for the static route have been added to
+the switches by “grepping” the output of the ONOS CLI <code class="docutils literal notranslate"><span class="pre">flows</span></code> command, for
+example for <code class="docutils literal notranslate"><span class="pre">leaf2</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">flows</span> <span class="o">-</span><span class="n">s</span> <span class="nb">any</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span> <span class="o">|</span> <span class="n">grep</span> <span class="s2">&quot;17.0.0.0&quot;</span>
+    <span class="n">ADDED</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">forwarding</span><span class="o">.</span><span class="n">routing_v4</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">48010</span><span class="p">,</span> <span class="n">selector</span><span class="o">=</span><span class="p">[</span><span class="n">IPV4_DST</span><span class="p">:</span><span class="mf">17.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">24</span><span class="p">],</span> <span class="n">treatment</span><span class="o">=</span><span class="p">[</span><span class="n">immediate</span><span class="o">=</span><span class="p">[</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">forwarding</span><span class="o">.</span><span class="n">set_next_id_routing_v4</span><span class="p">(</span><span class="n">next_id</span><span class="o">=</span><span class="mh">0xd</span><span class="p">)]]</span>
+</pre></div>
+</div>
+<p>One entry has been <code class="docutils literal notranslate"><span class="pre">ADDED</span></code> to table <code class="docutils literal notranslate"><span class="pre">FabricIngress.forwarding.routing_v4</span></code> with
+<code class="docutils literal notranslate"><span class="pre">next_id=0xd</span></code>.</p>
+<p>Let’s grep flow rules for <code class="docutils literal notranslate"><span class="pre">next_id=0xd</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">flows</span> <span class="o">-</span><span class="n">s</span> <span class="nb">any</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span> <span class="o">|</span> <span class="n">grep</span> <span class="s2">&quot;next_id=0xd&quot;</span>
+    <span class="n">ADDED</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">forwarding</span><span class="o">.</span><span class="n">routing_v4</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">48010</span><span class="p">,</span> <span class="n">selector</span><span class="o">=</span><span class="p">[</span><span class="n">IPV4_DST</span><span class="p">:</span><span class="mf">17.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">24</span><span class="p">],</span> <span class="n">treatment</span><span class="o">=</span><span class="p">[</span><span class="n">immediate</span><span class="o">=</span><span class="p">[</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">forwarding</span><span class="o">.</span><span class="n">set_next_id_routing_v4</span><span class="p">(</span><span class="n">next_id</span><span class="o">=</span><span class="mh">0xd</span><span class="p">)]]</span>
+    <span class="n">ADDED</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">forwarding</span><span class="o">.</span><span class="n">routing_v4</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">48010</span><span class="p">,</span> <span class="n">selector</span><span class="o">=</span><span class="p">[</span><span class="n">IPV4_DST</span><span class="p">:</span><span class="mf">10.0</span><span class="o">.</span><span class="mf">100.0</span><span class="o">/</span><span class="mi">24</span><span class="p">],</span> <span class="n">treatment</span><span class="o">=</span><span class="p">[</span><span class="n">immediate</span><span class="o">=</span><span class="p">[</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">forwarding</span><span class="o">.</span><span class="n">set_next_id_routing_v4</span><span class="p">(</span><span class="n">next_id</span><span class="o">=</span><span class="mh">0xd</span><span class="p">)]]</span>
+    <span class="n">ADDED</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">=</span><span class="mi">1674881</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="mi">2429</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">hashed</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">selector</span><span class="o">=</span><span class="p">[</span><span class="n">next_id</span><span class="o">=</span><span class="mh">0xd</span><span class="p">],</span> <span class="n">treatment</span><span class="o">=</span><span class="p">[</span><span class="n">immediate</span><span class="o">=</span><span class="p">[</span><span class="n">GROUP</span><span class="p">:</span><span class="mh">0xd</span><span class="p">]]</span>
+    <span class="n">ADDED</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">=</span><span class="mi">1674881</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="mi">2429</span><span class="p">,</span> <span class="n">table</span><span class="o">=</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">next_vlan</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">selector</span><span class="o">=</span><span class="p">[</span><span class="n">next_id</span><span class="o">=</span><span class="mh">0xd</span><span class="p">],</span> <span class="n">treatment</span><span class="o">=</span><span class="p">[</span><span class="n">immediate</span><span class="o">=</span><span class="p">[</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">set_vlan</span><span class="p">(</span><span class="n">vlan_id</span><span class="o">=</span><span class="mh">0xffe</span><span class="p">)]]</span>
+</pre></div>
+</div>
+<p>We can notice that another route shares the same next ID (<code class="docutils literal notranslate"><span class="pre">10.0.100.0/24</span></code> from
+the to interface config for <code class="docutils literal notranslate"><span class="pre">leaf1</span></code>), and that the next ID points to a group
+with the same value (<code class="docutils literal notranslate"><span class="pre">GROUP:0xd</span></code>).</p>
+<p>Let’s take a look at this specific group:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">onos</span><span class="o">&gt;</span> <span class="n">groups</span> <span class="nb">any</span> <span class="n">device</span><span class="p">:</span><span class="n">leaf2</span> <span class="o">|</span> <span class="n">grep</span> <span class="s2">&quot;0xd&quot;</span>
+   <span class="nb">id</span><span class="o">=</span><span class="mh">0xd</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">ADDED</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">SELECT</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">appId</span><span class="o">=</span><span class="n">org</span><span class="o">.</span><span class="n">onosproject</span><span class="o">.</span><span class="n">segmentrouting</span><span class="p">,</span> <span class="n">referenceCount</span><span class="o">=</span><span class="mi">0</span>
+       <span class="nb">id</span><span class="o">=</span><span class="mh">0xd</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">mpls_routing_hashed</span><span class="p">(</span><span class="n">dmac</span><span class="o">=</span><span class="mh">0xbb00000001</span><span class="p">,</span> <span class="n">port_num</span><span class="o">=</span><span class="mh">0x1</span><span class="p">,</span> <span class="n">smac</span><span class="o">=</span><span class="mh">0xaa00000002</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="mh">0x65</span><span class="p">)]</span>
+       <span class="nb">id</span><span class="o">=</span><span class="mh">0xd</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">actions</span><span class="o">=</span><span class="p">[</span><span class="n">FabricIngress</span><span class="o">.</span><span class="n">next</span><span class="o">.</span><span class="n">mpls_routing_hashed</span><span class="p">(</span><span class="n">dmac</span><span class="o">=</span><span class="mh">0xbb00000002</span><span class="p">,</span> <span class="n">port_num</span><span class="o">=</span><span class="mh">0x2</span><span class="p">,</span> <span class="n">smac</span><span class="o">=</span><span class="mh">0xaa00000002</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="mh">0x65</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>This <code class="docutils literal notranslate"><span class="pre">SELECT</span></code>  group is used to hash traffic to the spines (i.e., ECMP) and to
+push an MPLS label with hex value<code class="docutils literal notranslate"><span class="pre">0x65</span></code>, or 101 in base 10.</p>
+<p>Spine switches will use this label to forward packets. Can you tell what 101
+identifies here? Hint: take a look at <a class="reference external" href="mininet/netcfg-gtp.json">netcfg-gtp.json</a></p>
+</div>
+</div>
+<div class="section" id="use-onos-rest-apis-to-create-gtp-flow-rule">
+<h3>7. Use ONOS REST APIs to create GTP flow rule<a class="headerlink" href="#use-onos-rest-apis-to-create-gtp-flow-rule" title="Permalink to this headline">¶</a></h3>
+<p>Finally, it is time to instruct <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> to encapsulate traffic with a GTP tunnel
+header. To do this, we will insert a special table entry in the “SPGW portion”
+of the <a class="reference external" href="https://github.com/opennetworkinglab/onos/blob/2.2.2/pipelines/fabric/impl/src/main/resources/fabric.p4">fabric.p4</a> pipeline, implemented in file <a class="reference external" href="https://github.com/opennetworkinglab/onos/blob/2.2.2/pipelines/fabric/impl/src/main/resources/include/spgw.p4">spgw.p4</a>. Specifically, we
+will insert one entry in the <a class="reference external" href="https://github.com/opennetworkinglab/onos/blob/2.2.2/pipelines/fabric/impl/src/main/resources/include/spgw.p4#L70">dl_sess_lookup</a> table, responsible for handling
+downlink traffic (i.e., with match on the UE IPv4 address) by setting the GTP
+tunnel info which will be used to perform the encapsulation (action
+<code class="docutils literal notranslate"><span class="pre">set_dl_sess_info</span></code>).</p>
+<p><strong>NOTE:</strong> this version of spgw.p4 is from ONOS v2.2.2 (the same used in this
+tutorial). The P4 code might have changed recently, and you might see different
+tables if you open up the same file in a different branch.</p>
+<p>To insert the flow rule, we will not use an app (which we would have to
+implement from scratch!), but instead, we will use the ONOS REST APIs. To learn
+more about the available APIs, use the following URL to open up the
+automatically generated API docs from your running ONOS instance:
+<a class="reference external" href="http://127.0.0.1:8181/onos/v1/docs/">http://127.0.0.1:8181/onos/v1/docs/</a></p>
+<p>The specific API we will use to create new flow rules is <code class="docutils literal notranslate"><span class="pre">POST</span> <span class="pre">/flows</span></code>,
+described here:
+<a class="reference external" href="http://127.0.0.1:8181/onos/v1/docs/#%21/flows/post_flows">http://127.0.0.1:8181/onos/v1/docs/#!/flows/post_flows</a></p>
+<p>This API takes a JSON request. The file
+<a class="reference external" href="mininet/flowrule-gtp.json">mininet/flowrule-gtp.json</a> specifies the flow rule we
+want to create. This file is incomplete, and you need to modify it before we can
+send it via the REST APIs.</p>
+<ol>
+<li><p class="first">Open up file <a class="reference external" href="mininet/flowrule-gtp.json">mininet/flowrule-gtp.json</a>.</p>
+<p>Look for the <code class="docutils literal notranslate"><span class="pre">&quot;selector&quot;</span></code> section that specifies the match fields:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;selector&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;criteria&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;IPV4_DST&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;ip&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;INSERT HERE UE IP ADDR&gt;/32&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">},</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Modify the <code class="docutils literal notranslate"><span class="pre">ip</span></code> field to match on the IP address of the UE (17.0.0.1).</p>
+<p>Since the <code class="docutils literal notranslate"><span class="pre">dl_sess_lookup</span></code> table performs exact match on the IPv4
+address, make sure to specify the match field with <code class="docutils literal notranslate"><span class="pre">/32</span></code> prefix length.</p>
+<p>Also, note that the <code class="docutils literal notranslate"><span class="pre">set_dl_sess_info</span></code> action, is specified as
+<code class="docutils literal notranslate"><span class="pre">PROTOCOL_INDEPENDENT</span></code>. This is the ONOS terminology to describe custom
+flow rule actions. For this reason, the action parameters are specified
+as byte strings in hexadecimal format:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">&quot;teid&quot;:</span> <span class="pre">&quot;BEEF&quot;</span></code>: GTP tunnel identifier (48879 in decimal base)</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;s1u_enb_addr&quot;:</span> <span class="pre">&quot;0a006401&quot;</span></code>: destination IPv4 address of the
+GTP tunnel, i.e., outer IPv4 header (10.0.100.1). This is the address of
+the eNodeB.</li>
+<li><code class="docutils literal notranslate"><span class="pre">&quot;s1u_sgw_addr&quot;:</span> <span class="pre">&quot;0a0064fe&quot;</span></code>: source address of the GTP outer IPv4
+header (10.0.100.254). This is the address of the switch interface
+configured in Trellis.</li>
+</ul>
+</li>
+<li><p class="first">Save the <a class="reference external" href="mininet/flowrule-gtp.json">flowrule-gtp.json</a> file.</p>
+</li>
+<li><p class="first">Push the flow rule to ONOS using the REST APIs.</p>
+<p>On a terminal window, type the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make flowrule-gtp
+</pre></div>
+</div>
+<p>This command uses <code class="docutils literal notranslate"><span class="pre">cURL</span></code> to push the flow rule JSON file to the ONOS REST API
+endpoint. If the flow rule has been created correctly, you should see an
+output similar to the following one:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>*** Pushing flowrule-gtp.json to ONOS...
+curl --fail -sSL --user onos:rocks --noproxy localhost -X POST -H &#39;Content-Type:application/json&#39; \
+                http://localhost:8181/onos/v1/flows?appId=rest-api -d@./mininet/flowrule-gtp.json
+{&quot;flows&quot;:[{&quot;deviceId&quot;:&quot;device:leaf1&quot;,&quot;flowId&quot;:&quot;54606147878186474&quot;}]}
+</pre></div>
+</div>
+</li>
+<li><p class="first">Check the eNodeB process. You should see that the received packets
+are now GTP encapsulated!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="mi">727</span> <span class="nb">bytes</span><span class="p">:</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">100.254</span> <span class="o">-&gt;</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">100.1</span><span class="p">,</span> <span class="n">is_gtp_encap</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">Ether</span> <span class="o">/</span> <span class="n">IP</span> <span class="o">/</span> <span class="n">UDP</span> <span class="o">/</span> <span class="n">GTP_U_Header</span> <span class="o">/</span> <span class="n">IP</span> <span class="o">/</span> <span class="n">UDP</span> <span class="mf">10.0</span><span class="o">.</span><span class="mf">200.1</span><span class="p">:</span><span class="mi">80</span> <span class="o">&gt;</span> <span class="mf">17.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">400</span> <span class="o">/</span> <span class="n">Raw</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="congratulations">
+<h2>Congratulations!<a class="headerlink" href="#congratulations" title="Permalink to this headline">¶</a></h2>
+<p>You have completed the eighth exercise! You were able to use fabric.p4 and
+Trellis to encapsulate traffic in GTP tunnels and to route it across the fabric.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

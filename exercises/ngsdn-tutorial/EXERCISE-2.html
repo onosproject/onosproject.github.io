@@ -1,0 +1,769 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Exercise 2: Yang, OpenConfig, and gNMI basics &mdash; Software-Defined Networks: A Systems Approach Version 0.3-dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/bridge.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/rtd_theme_mods.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Software-Defined Networks: A Systems Approach
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                Version 0.3-dev
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Table of Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../preface.html">Preface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Chapter 1:  Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../uses.html">Chapter 2:  Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../arch.html">Chapter 3:  Basic Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../switch.html">Chapter 4:  White-Box Switches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../stratum.html">Chapter 5:  Switch OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../onos.html">Chapter 6:  Network OS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../future.html">Chapter 8:  Future of SDN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../exercises.html">Programming Exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">About This Book</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Software-Defined Networks: A Systems Approach</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Exercise 2: Yang, OpenConfig, and gNMI basics</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/exercises/ngsdn-tutorial/EXERCISE-2.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="exercise-2-yang-openconfig-and-gnmi-basics">
+<h1>Exercise 2: Yang, OpenConfig, and gNMI basics<a class="headerlink" href="#exercise-2-yang-openconfig-and-gnmi-basics" title="Permalink to this headline">¶</a></h1>
+<p>This set of exercises is designed to give you more exposure to YANG, OpenConfig,
+and gNMI.</p>
+<p>This exercise is divided in three parts:</p>
+<ol class="simple">
+<li>Understanding the YANG language</li>
+<li>Understand YANG encoding</li>
+<li>Understanding YANG-enabled transport protocols (using gNMI)</li>
+</ol>
+<div class="section" id="part-1-understanding-the-yang-language">
+<h2>Part 1: Understanding the YANG language<a class="headerlink" href="#part-1-understanding-the-yang-language" title="Permalink to this headline">¶</a></h2>
+<p>We will start with a simple YANG module called <code class="docutils literal notranslate"><span class="pre">demo-port</span></code> in
+<a class="reference external" href="./yang/demo-port.yang"><code class="docutils literal notranslate"><span class="pre">yang/demo-port.yang</span></code></a></p>
+<p>Take a look at the model and try to derive the structure. What are valid values
+for each of the leaf nodes?</p>
+<p>This model is self contained, so it isn’t too difficult to work it out. However,
+most YANG models are defined over many files that makes it very complicated to
+work out the overall structure.</p>
+<p>To make this easier, we can use a tool called <code class="docutils literal notranslate"><span class="pre">pyang</span></code> to try to visualize the
+structure of the model.</p>
+<p>Start by entering the yang-tools Docker container:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make yang-tools
+bash-4.4#
+</pre></div>
+</div>
+<p>Next, run <code class="docutils literal notranslate"><span class="pre">pyang</span></code> on the <code class="docutils literal notranslate"><span class="pre">demo-port.yang</span></code> model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># pyang -f tree demo-port.yang</span>
+</pre></div>
+</div>
+<p>You should see a tree representation of the <code class="docutils literal notranslate"><span class="pre">demo-port</span></code> module. Does this match
+your expectations?</p>
+<p><em>Extra Credit:</em> If you finish this quickly, you can try to add a new leaf node
+to <code class="docutils literal notranslate"><span class="pre">port-config</span></code> or <code class="docutils literal notranslate"><span class="pre">port-state</span></code> grouping, then rerun <code class="docutils literal notranslate"><span class="pre">pyang</span></code> and see where your
+new leaf was added.</p>
+<hr class="docutils" />
+<p>We can also use <code class="docutils literal notranslate"><span class="pre">pyang</span></code> to visualize a more complicated set of models, like the
+set of OpenConfig models that Stratum uses.</p>
+<p>These models have already been loaded into the <code class="docutils literal notranslate"><span class="pre">yang-tools</span></code> container in the
+<code class="docutils literal notranslate"><span class="pre">/models</span></code> directory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># pyang -f tree \</span>
+    <span class="o">-</span><span class="n">p</span> <span class="n">ietf</span> \
+    <span class="o">-</span><span class="n">p</span> <span class="n">openconfig</span> \
+    <span class="o">-</span><span class="n">p</span> <span class="n">hercules</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">interfaces</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">interfaces</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">interfaces</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="k">if</span><span class="o">-</span><span class="n">ethernet</span><span class="o">.</span><span class="n">yang</span>  \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">platform</span><span class="o">/*</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">qos</span><span class="o">/*</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">system</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">hercules</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">hercules</span><span class="o">-*.</span><span class="n">yang</span>  <span class="o">|</span> <span class="n">less</span>
+</pre></div>
+</div>
+<p>You should see a tree structure of the models displayed in <code class="docutils literal notranslate"><span class="pre">less</span></code>. You can use
+the Arrow keys or <code class="docutils literal notranslate"><span class="pre">j</span></code>/<code class="docutils literal notranslate"><span class="pre">k</span></code> to scroll up and down. Type <code class="docutils literal notranslate"><span class="pre">q</span></code> to quit.</p>
+<p>In the interface model, we can see the path to enable or disable an interface:
+<code class="docutils literal notranslate"><span class="pre">interfaces/interface[name]/config/enabled</span></code></p>
+<p>What is the path to read the number of incoming packets (<code class="docutils literal notranslate"><span class="pre">in-pkts</span></code>) on an interface?</p>
+<p><em>Extra Credit:</em> If you have some time, take a look at the models in the
+<code class="docutils literal notranslate"><span class="pre">/models</span></code> directory or browse them on Github:
+<a class="reference external" href="https://github.com/openconfig/public/tree/master/release/models">https://github.com/openconfig/public/tree/master/release/models</a></p>
+<p>Try to find the description of the <code class="docutils literal notranslate"><span class="pre">enabled</span></code> or <code class="docutils literal notranslate"><span class="pre">in-pkts</span></code> leaf nodes.</p>
+<p><em>Hint:</em> Take a look at the <code class="docutils literal notranslate"><span class="pre">openconfig-interfaces.yang</span></code> file.</p>
+</div>
+<div class="section" id="part-2-understand-yang-encoding">
+<h2>Part 2: Understand YANG encoding<a class="headerlink" href="#part-2-understand-yang-encoding" title="Permalink to this headline">¶</a></h2>
+<p>There is no specific YANG data encoding, but data adhering to YANG models can be
+encoded into XML, JSON, or Protobuf (among other formats). Each of these formats
+has it’s own schema format.</p>
+<p>First, we can look at YANG’s first and canonical representation format XML. To
+see a empty skeleton of data encoded in XML, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># pyang -f sample-xml-skeleton demo-port.yang</span>
+</pre></div>
+</div>
+<p>This skeleton should match the tree representation we saw in part 1.</p>
+<p>We can also use <code class="docutils literal notranslate"><span class="pre">pyang</span></code> to generate a DSDL schema based on the YANG model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># pyang -f dsdl demo-port.yang | xmllint --format -</span>
+</pre></div>
+</div>
+<p>The first part of the schema describes the tree structure, and the second part
+describes the value constraints for the leaf nodes.</p>
+<p><em>Extra credit:</em> Try adding new speed identity (e.g. <code class="docutils literal notranslate"><span class="pre">SPEED_100G</span></code>) or changing
+the range for <code class="docutils literal notranslate"><span class="pre">port-number</span></code> values in <code class="docutils literal notranslate"><span class="pre">demo-port.yang</span></code>, then rerun <code class="docutils literal notranslate"><span class="pre">pyang</span> <span class="pre">-f</span> <span class="pre">dsdl</span></code>. Do you see your changes reflected in the DSDL schema?</p>
+<hr class="docutils" />
+<p>Next, we will look at encoding data using Protocol Buffers (protobuf). The
+protobuf encoding is a more compact binary encoding than XML, and libraries can
+be automatically generated for dozens of languages. We can use
+<a class="reference external" href="https://github.com/openconfig/ygot"><code class="docutils literal notranslate"><span class="pre">ygot</span></code></a>’s <code class="docutils literal notranslate"><span class="pre">proto_generator</span></code> to generate
+protobuf messages from our YANG model.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># proto_generator -output_dir=/proto -package_name=tutorial demo-port.yang</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">proto_generator</span></code> will generate two files:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">/proto/tutorial/demo_port/demo_port.proto</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">/proto/tutorial/enums/enums.proto</span></code></li>
+</ul>
+<p>Open <code class="docutils literal notranslate"><span class="pre">demo_port.proto</span></code> using <code class="docutils literal notranslate"><span class="pre">less</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># less /proto/tutorial/demo_port/demo_port.proto</span>
+</pre></div>
+</div>
+<p>This file contains a top-level Ports message that matches the structure defined
+in the YANG model. You can see that <code class="docutils literal notranslate"><span class="pre">proto_generator</span></code> also adds a
+<code class="docutils literal notranslate"><span class="pre">yext.schemapath</span></code> custom option to each protobuf message field that explicitly
+maps to the YANG leaf path. Enums (like <code class="docutils literal notranslate"><span class="pre">tutorial.enums.DemoPortSPEED</span></code>) aren’t
+included in this file, but <code class="docutils literal notranslate"><span class="pre">proto_generator</span></code> puts them in a separate file:
+<code class="docutils literal notranslate"><span class="pre">enums.proto</span></code></p>
+<p>Open <code class="docutils literal notranslate"><span class="pre">enums.proto</span></code> using <code class="docutils literal notranslate"><span class="pre">less</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># less /proto/tutorial/enums/enums.proto</span>
+</pre></div>
+</div>
+<p>You should see an enum for the 10GB speed, along with any other speeds that you
+added if you completed the extra credit above.</p>
+<hr class="docutils" />
+<p>We can also use <code class="docutils literal notranslate"><span class="pre">proto_generator</span></code> to build the protobuf messages for the
+OpenConfig models that Stratum uses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># proto_generator \</span>
+    <span class="o">-</span><span class="n">generate_fakeroot</span> \
+    <span class="o">-</span><span class="n">output_dir</span><span class="o">=/</span><span class="n">proto</span> \
+    <span class="o">-</span><span class="n">package_name</span><span class="o">=</span><span class="n">openconfig</span> \
+    <span class="o">-</span><span class="n">exclude_modules</span><span class="o">=</span><span class="n">ietf</span><span class="o">-</span><span class="n">interfaces</span> \
+    <span class="o">-</span><span class="n">compress_paths</span> \
+    <span class="o">-</span><span class="n">base_import_path</span><span class="o">=</span> \
+    <span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">ietf</span><span class="p">,</span><span class="n">openconfig</span><span class="p">,</span><span class="n">hercules</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">interfaces</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">interfaces</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">interfaces</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="k">if</span><span class="o">-</span><span class="n">ip</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">lacp</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">lacp</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">linecard</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">port</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">transceiver</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">platform</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">platform</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">system</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">system</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">openconfig</span><span class="o">/</span><span class="n">vlan</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">vlan</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">hercules</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">hercules</span><span class="o">-</span><span class="n">interfaces</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">hercules</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">hercules</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">chassis</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">hercules</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">hercules</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">linecard</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">hercules</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">hercules</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">node</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">hercules</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">hercules</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">port</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">hercules</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">hercules</span><span class="o">-</span><span class="n">platform</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">hercules</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">hercules</span><span class="o">-</span><span class="n">qos</span><span class="o">.</span><span class="n">yang</span> \
+    <span class="n">hercules</span><span class="o">/</span><span class="n">openconfig</span><span class="o">-</span><span class="n">hercules</span><span class="o">.</span><span class="n">yang</span>
+</pre></div>
+</div>
+<p>You will find <code class="docutils literal notranslate"><span class="pre">openconfig.proto</span></code> and <code class="docutils literal notranslate"><span class="pre">enums.proto</span></code> in the <code class="docutils literal notranslate"><span class="pre">/proto/openconfig</span></code> directory.</p>
+<p><em>Extra Credit:</em> Try to find the Protobuf message fields used to enable a port or
+get the ingress packets counter in the protobuf messages.</p>
+<p><em>Hint:</em> Searching by schemapath might help.</p>
+<hr class="docutils" />
+<p><code class="docutils literal notranslate"><span class="pre">ygot</span></code> can also be used to generate Go structs that adhere to the YANG model
+and that are capable of validating the structure, type, and values of data.</p>
+<p><em>Extra Credit:</em> If you have extra time or are interested in using YANG and Go
+together, try generating Go code for the <code class="docutils literal notranslate"><span class="pre">demo-port</span></code> module.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># mkdir -p /goSrc</span>
+<span class="n">bash</span><span class="o">-</span><span class="mf">4.4</span><span class="c1"># generator -output_dir=/goSrc -package_name=tutorial demo-port.yang</span>
+</pre></div>
+</div>
+<p>Take a look at the Go files in <code class="docutils literal notranslate"><span class="pre">/goSrc</span></code>.</p>
+<p>You can now quit out of the container (using <code class="docutils literal notranslate"><span class="pre">Ctrl-D</span></code> or <code class="docutils literal notranslate"><span class="pre">exit</span></code>).</p>
+</div>
+<div class="section" id="part-3-understanding-yang-enabled-transport-protocols">
+<h2>Part 3: Understanding YANG-enabled transport protocols<a class="headerlink" href="#part-3-understanding-yang-enabled-transport-protocols" title="Permalink to this headline">¶</a></h2>
+<p>There are several YANG-model agnostic protocols that can be used to get or set
+data that adheres to a model, like NETCONF, RESTCONF, and gNMI.</p>
+<p>This part focuses on using the protobuf encoding over gNMI.</p>
+<p>First, make sure that your Mininet container is still running.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make start
+docker-compose up -d
+mininet is up-to-date
+onos is up-to-date
+</pre></div>
+</div>
+<p>If you see the following output, then Mininet was not running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Starting</span> <span class="n">mininet</span> <span class="o">...</span> <span class="n">done</span>
+<span class="n">Starting</span> <span class="n">onos</span>    <span class="o">...</span> <span class="n">done</span>
+</pre></div>
+</div>
+<p>You will need to go back to Exercise 1 and install forwarding rules to
+re-establish pings between <code class="docutils literal notranslate"><span class="pre">h1a</span></code> and <code class="docutils literal notranslate"><span class="pre">h1b</span></code> for later parts of this exercise.</p>
+<p>If you could not complete Exercise 1, you can use the following P4Runtime-sh
+commands to enable connectivity:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">te</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;IngressPipeImpl.l2_exact_table&#39;</span><span class="p">](</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;IngressPipeImpl.set_egress_port&#39;</span><span class="p">)</span>
+<span class="n">te</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;hdr.ethernet.dst_addr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;00:00:00:00:00:1A&#39;</span>
+<span class="n">te</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;port_num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;3&#39;</span>
+<span class="n">te</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span>
+
+<span class="n">te</span> <span class="o">=</span> <span class="n">table_entry</span><span class="p">[</span><span class="s1">&#39;IngressPipeImpl.l2_exact_table&#39;</span><span class="p">](</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;IngressPipeImpl.set_egress_port&#39;</span><span class="p">)</span>
+<span class="n">te</span><span class="o">.</span><span class="n">match</span><span class="p">[</span><span class="s1">&#39;hdr.ethernet.dst_addr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;00:00:00:00:00:1B&#39;</span>
+<span class="n">te</span><span class="o">.</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;port_num&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4&#39;</span>
+<span class="n">te</span><span class="o">.</span><span class="n">insert</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Next, we will use a <a class="reference external" href="https://github.com/Yi-Tseng/Yi-s-gNMI-tool">gNMI client CLI</a>
+to read the all of the configuration from the Stratum switche <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> in our
+Mininet network:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ util/gnmi-cli --grpc-addr localhost:50001 get /
+</pre></div>
+</div>
+<p>The first part of the output shows the request that was made by the CLI:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REQUEST</span>
+<span class="n">path</span> <span class="p">{</span>
+<span class="p">}</span>
+<span class="nb">type</span><span class="p">:</span> <span class="n">CONFIG</span>
+<span class="n">encoding</span><span class="p">:</span> <span class="n">PROTO</span>
+</pre></div>
+</div>
+<p>The path being requested is the empty path (which means the root of the config
+tree), the type of data is just the config tree, and the requested encoding for
+the response is protobuf.</p>
+<p>The second part of the output shows the response from Stratum:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RESPONSE</span>
+<span class="n">notification</span> <span class="p">{</span>
+  <span class="n">update</span> <span class="p">{</span>
+    <span class="n">path</span> <span class="p">{</span>
+    <span class="p">}</span>
+    <span class="n">val</span> <span class="p">{</span>
+      <span class="n">any_val</span> <span class="p">{</span>
+        <span class="n">type_url</span><span class="p">:</span> <span class="s2">&quot;type.googleapis.com/openconfig.Device&quot;</span>
+        <span class="n">value</span><span class="p">:</span> \<span class="mi">252</span>\<span class="mi">221</span>\<span class="mi">231</span>\<span class="mi">304</span>\<span class="mi">001</span>\<span class="o">...</span> <span class="n">TRUNCATED</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You can see that Stratum provides a response of type <code class="docutils literal notranslate"><span class="pre">openconfig.Device</span></code>, which
+is the top-level message defined in <code class="docutils literal notranslate"><span class="pre">openconfig.proto</span></code>. The response is the
+binary encoding of the data based on the protobuf message.</p>
+<p>The value is not very human readable, but we can translate the reply using a
+utility that converts between the binary and textual representations of the
+protobuf message.</p>
+<p>We can rerun the command, but this time pipe the output through the converter
+utility (then pipe that output to <code class="docutils literal notranslate"><span class="pre">less</span></code> to make scrolling easier):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ util/gnmi-cli --grpc-addr localhost:50001 get / | util/oc-pb-decoder | less
+</pre></div>
+</div>
+<p>The contents of the response should be easier to read. Scroll down to the first
+<code class="docutils literal notranslate"><span class="pre">interface</span></code>. Is the interface enabled? What is the speed of the port?</p>
+<p><em>Extra credit:</em> Can you find <code class="docutils literal notranslate"><span class="pre">in-pkts</span></code>? If not, why do you think they are
+missing?</p>
+<hr class="docutils" />
+<p>One of the benefits to gNMI is it’s “schema-less” encoding that allows clients
+or devices to update only the paths that need to be updated. This is
+particularly useful for subscriptions.</p>
+<p>First, let’s try out the schema-less representation by requesting the
+configuration port between <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> and <code class="docutils literal notranslate"><span class="pre">h1a</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ util/gnmi-cli --grpc-addr localhost:50001 get \
+    /interfaces/interface[name=leaf1-eth3]/config
+</pre></div>
+</div>
+<p>You should see this response containing 2 leafs under config - <strong>enabled</strong> and
+<strong>health-indicator</strong>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RESPONSE</span>
+<span class="n">notification</span> <span class="p">{</span>
+  <span class="n">update</span> <span class="p">{</span>
+    <span class="n">path</span> <span class="p">{</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interfaces&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interface&quot;</span>
+        <span class="n">key</span> <span class="p">{</span>
+          <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span>
+          <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;leaf1-eth3&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;config&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;enabled&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">val</span> <span class="p">{</span>
+      <span class="n">bool_val</span><span class="p">:</span> <span class="n">true</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">notification</span> <span class="p">{</span>
+  <span class="n">update</span> <span class="p">{</span>
+    <span class="n">path</span> <span class="p">{</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interfaces&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interface&quot;</span>
+        <span class="n">key</span> <span class="p">{</span>
+          <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span>
+          <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;leaf1-eth3&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;config&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;health-indicator&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">val</span> <span class="p">{</span>
+      <span class="n">string_val</span><span class="p">:</span> <span class="s2">&quot;GOOD&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The schema-less representation provides and <code class="docutils literal notranslate"><span class="pre">update</span></code> for each leaf containing
+both the path the value of the leaf. You can confirm that the interface
+is enabled (set to <code class="docutils literal notranslate"><span class="pre">true</span></code>).</p>
+<p>Next, we will subscribe to the ingress unicast packet counters for the interface
+on <code class="docutils literal notranslate"><span class="pre">leaf1</span></code> attached to <code class="docutils literal notranslate"><span class="pre">h1a</span></code> (port 3):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ util/gnmi-cli --grpc-addr localhost:50001 \
+    --interval 1000 sub-sample \
+    /interfaces/interface[name=leaf1-eth3]/state/counters/in-unicast-pkts
+</pre></div>
+</div>
+<p>The first part of the output shows the request being made by the CLI:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REQUEST</span>
+<span class="n">subscribe</span> <span class="p">{</span>
+  <span class="n">subscription</span> <span class="p">{</span>
+    <span class="n">path</span> <span class="p">{</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interfaces&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interface&quot;</span>
+        <span class="n">key</span> <span class="p">{</span>
+          <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span>
+          <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;leaf1-eth3&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;state&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;counters&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;in-unicast-pkts&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">SAMPLE</span>
+    <span class="n">sample_interval</span><span class="p">:</span> <span class="mi">1000</span>
+  <span class="p">}</span>
+  <span class="n">updates_only</span><span class="p">:</span> <span class="n">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We have the subscription path, the type of subscription (sampling) and the
+sampling rate (every 1000ms, or 1s).</p>
+<p>The second part of the output is a stream of responses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RESPONSE</span>
+<span class="n">update</span> <span class="p">{</span>
+  <span class="n">timestamp</span><span class="p">:</span> <span class="mi">1567895852136043891</span>
+  <span class="n">update</span> <span class="p">{</span>
+    <span class="n">path</span> <span class="p">{</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interfaces&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interface&quot;</span>
+        <span class="n">key</span> <span class="p">{</span>
+          <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span>
+          <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;leaf1-eth3&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;state&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;counters&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;in-unicast-pkts&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">val</span> <span class="p">{</span>
+      <span class="n">uint_val</span><span class="p">:</span> <span class="mi">1592</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Each response has a timestamp, path, and new value. Because we are sampling, you
+should see a new update printed every second. Leave this running, while we
+generate some traffic.</p>
+<p>In another window, open the Mininet CLI and start a ping:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make mn-cli
+*** Attaching to Mininet CLI...
+*** To detach press Ctrl-D (Mininet will keep running)
+mininet&gt; h1a ping h1b
+</pre></div>
+</div>
+<p>In the first window, you should see the <code class="docutils literal notranslate"><span class="pre">uint_val</span></code> increase by 1 every second
+while your ping is still running. (If it’s not exactly 1, then there could be
+other traffic like NDP messages contributing to the increase.)</p>
+<p>You can stop the gNMI subscription using <code class="docutils literal notranslate"><span class="pre">Ctrl-C</span></code>.</p>
+<hr class="docutils" />
+<p>Finally, we will monitor link events using gNMI’s on-change subscriptions.</p>
+<p>Start a subscription for the operational status of the first switch’s first port:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ util/gnmi-cli --grpc-addr localhost:50001 sub-onchange \
+    /interfaces/interface[name=leaf1-eth3]/state/oper-status
+</pre></div>
+</div>
+<p>You should immediately see a response which indicates that port 1 is <code class="docutils literal notranslate"><span class="pre">UP</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RESPONSE</span>
+<span class="n">update</span> <span class="p">{</span>
+  <span class="n">timestamp</span><span class="p">:</span> <span class="mi">1567896668419430407</span>
+  <span class="n">update</span> <span class="p">{</span>
+    <span class="n">path</span> <span class="p">{</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interfaces&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interface&quot;</span>
+        <span class="n">key</span> <span class="p">{</span>
+          <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span>
+          <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;leaf1-eth3&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;state&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;oper-status&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">val</span> <span class="p">{</span>
+      <span class="n">string_val</span><span class="p">:</span> <span class="s2">&quot;UP&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the shell running the Mininet CLI, let’s take down the interface on <code class="docutils literal notranslate"><span class="pre">leaf1</span></code>
+connected to <code class="docutils literal notranslate"><span class="pre">h1a</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">sh</span> <span class="n">ifconfig</span> <span class="n">leaf1</span><span class="o">-</span><span class="n">eth3</span> <span class="n">down</span>
+</pre></div>
+</div>
+<p>You should see a response in your gNMI CLI window showing that the interface on
+<code class="docutils literal notranslate"><span class="pre">leaf1</span></code> connected to <code class="docutils literal notranslate"><span class="pre">h1a</span></code> is <code class="docutils literal notranslate"><span class="pre">DOWN</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RESPONSE</span>
+<span class="n">update</span> <span class="p">{</span>
+  <span class="n">timestamp</span><span class="p">:</span> <span class="mi">1567896891549363399</span>
+  <span class="n">update</span> <span class="p">{</span>
+    <span class="n">path</span> <span class="p">{</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interfaces&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interface&quot;</span>
+        <span class="n">key</span> <span class="p">{</span>
+          <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span>
+          <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;leaf1-eth3&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;state&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;oper-status&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">val</span> <span class="p">{</span>
+      <span class="n">string_val</span><span class="p">:</span> <span class="s2">&quot;DOWN&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We can bring back the interface using the following Mininet command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">sh</span> <span class="n">ifconfig</span> <span class="n">leaf1</span><span class="o">-</span><span class="n">eth3</span> <span class="n">up</span>
+</pre></div>
+</div>
+<p>You should see another response in your gNMI CLI window that indicates the
+interface is <code class="docutils literal notranslate"><span class="pre">UP</span></code>.</p>
+<hr class="docutils" />
+<p><em>Extra credit:</em> We can also use gNMI to disable or enable an interface.</p>
+<p>Leave your gNMI subscription for operational status changes running.</p>
+<p>In the Mininet CLI, start a ping between two hosts.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mininet</span><span class="o">&gt;</span> <span class="n">h1a</span> <span class="n">ping</span> <span class="n">h1b</span>
+</pre></div>
+</div>
+<p>You should see replies being showed in the Mininet CLI.</p>
+<p>In a third window, we will use the gNMI CLI to change the configuration value of
+the <code class="docutils literal notranslate"><span class="pre">enabled</span></code> leaf from <code class="docutils literal notranslate"><span class="pre">true</span></code> to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ util/gnmi-cli --grpc-addr localhost:50001 set \
+    /interfaces/interface[name=leaf1-eth3]/config/enabled \
+    --bool-val false
+</pre></div>
+</div>
+<p>In the gNMI set window, you should see request indicating the new value for the
+<code class="docutils literal notranslate"><span class="pre">enabled</span></code> leaf:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">REQUEST</span>
+<span class="n">update</span> <span class="p">{</span>
+  <span class="n">path</span> <span class="p">{</span>
+    <span class="n">elem</span> <span class="p">{</span>
+      <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interfaces&quot;</span>
+    <span class="p">}</span>
+    <span class="n">elem</span> <span class="p">{</span>
+      <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interface&quot;</span>
+      <span class="n">key</span> <span class="p">{</span>
+        <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span>
+        <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;leaf1-eth3&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">elem</span> <span class="p">{</span>
+      <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;config&quot;</span>
+    <span class="p">}</span>
+    <span class="n">elem</span> <span class="p">{</span>
+      <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;enabled&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">val</span> <span class="p">{</span>
+    <span class="n">bool_val</span><span class="p">:</span> <span class="n">false</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the gNMI subscription window, you should see a new response indicating that
+the operational status of <code class="docutils literal notranslate"><span class="pre">leaf1-eth3</span></code> is <code class="docutils literal notranslate"><span class="pre">DOWN</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RESPONSE</span>
+<span class="n">update</span> <span class="p">{</span>
+  <span class="n">timestamp</span><span class="p">:</span> <span class="mi">1567896891549363399</span>
+  <span class="n">update</span> <span class="p">{</span>
+    <span class="n">path</span> <span class="p">{</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interfaces&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;interface&quot;</span>
+        <span class="n">key</span> <span class="p">{</span>
+          <span class="n">key</span><span class="p">:</span> <span class="s2">&quot;name&quot;</span>
+          <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;leaf1-eth3&quot;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;state&quot;</span>
+      <span class="p">}</span>
+      <span class="n">elem</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;oper-status&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">val</span> <span class="p">{</span>
+      <span class="n">string_val</span><span class="p">:</span> <span class="s2">&quot;DOWN&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>And in the Mininet CLI window, you should observe that the ping has stopped
+working.</p>
+<p>Next, we can re-nable the port:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ util/gnmi-cli --grpc-addr localhost:50001 set \
+    /interfaces/interface[name=leaf1-eth3]/config/enabled \
+    --bool-val true
+</pre></div>
+</div>
+<p>You should see another update in the gNMI subscription window indicating the
+interface is <code class="docutils literal notranslate"><span class="pre">UP</span></code>, and the ping should resume in the Mininet CLI wondow.</p>
+</div>
+<div class="section" id="congratulations">
+<h2>Congratulations!<a class="headerlink" href="#congratulations" title="Permalink to this headline">¶</a></h2>
+<p>You have completed the second exercise!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
