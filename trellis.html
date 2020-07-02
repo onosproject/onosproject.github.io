@@ -457,6 +457,14 @@ the header fields in the common case.</p>
 <p class="caption"><span class="caption-number">Figure 37. </span><span class="caption-text">Logical pipeline supported by <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>, designed to parallel
 the Filtering, Forwarding, and Next stages of the FlowObjective API.</span></p>
 </div>
+<p>Third, <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> is designed to be configurable, making it
+possible to selectively include additional functionality. This is not
+easy when writing code that is optimized for an ASIC-based forwarding
+pipeline, and in practice it makes heavy use of pre-processor
+conditionals (i.e., <code class="docutils literal notranslate"><span class="pre">#ifdefs</span></code>). The code fragment shown below is the
+main control block of <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>’s ingress function, annotated to
+highlight optional functionality. The details of the options are
+beyond to scope of this book, but at a high level:</p>
 <div class="sidebar">
 <p class="first sidebar-title">VNF Off-loading</p>
 <p>The SPGW and BNG extensions are examples of an optimization
@@ -468,25 +476,18 @@ forwarding pipeline, rather than on a general-purpose server. This
 generally leads to better performance because packets can be
 forwarded from source to destination without having to be diverted
 to a server.</p>
-<p class="last">Calling out functions like SPGW and BNG as being an “off-loaded”
-optimization is arguably an example of selective memory. It’s
+<p class="last">Calling out functions like SPGW and BNG as being an off-load
+“optimization” is arguably an example of selective memory. It’s
 just as accurate to say that we’ve off-loaded IP to the switch
-since IP forwarding also runs in software on general-purpose
-processors. To a first approximation, SPGW and BNG are just
-specialized IP routers, augmented with additional features unique
-to cellular and wireline access networks, respectively. In the
-grand scheme of things, networks are built from a combination of
-forwarding functions, and we now have more options as to what
-hardware chip is the best target for implementing each function.</p>
+since IP forwarding also sometimes runs in software on
+general-purpose processors. To a first approximation, SPGW and BNG
+are just specialized IP routers, augmented with additional
+features unique to cellular and wireline access networks,
+respectively. In the grand scheme of things, networks are built
+from a combination of forwarding functions, and we now have more
+options as to what hardware chip is the most appropriate target
+for implementing each such function.</p>
 </div>
-<p>Third, <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> is designed to be configurable, making it
-possible to selectively include additional functionality. This is not
-easy when writing code that is optimized for an ASIC-based forwarding
-pipeline, and in practice it makes heavy use of pre-processor
-conditionals (i.e., <code class="docutils literal notranslate"><span class="pre">#ifdefs</span></code>). <a class="reference internal" href="#fig-fabric-p4"><span class="std std-numref">Figure 38</span></a>
-shows <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>’s main control block, annotated to highlight
-optional functionality. The details of the options are beyond to scope
-of this book, but at a high level:</p>
 <ul class="simple">
 <li><strong>SPGW (Serving and Packet Gateway):</strong> Augments IP functionality in
 support of 4G Mobile Networks.</li>
@@ -495,6 +496,33 @@ support of Fiber-to-the-Home.</li>
 <li><strong>INT (Inband Network Telemetry):</strong> Adds metric collection and
 telemetry output directives.</li>
 </ul>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">apply</span> <span class="p">{</span>
+<span class="hll"><span class="cp">#ifdef WITH_SPGW</span>
+</span><span class="hll">     <span class="n">spgw_normalizer</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">hdr</span><span class="p">.</span><span class="n">gtpu</span><span class="p">.</span><span class="n">isValid</span><span class="p">(),</span> <span class="n">hdr</span><span class="p">.</span><span class="n">gtpu_ipv4</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">gtpu_udp</span><span class="p">,</span>
+</span><span class="hll">                           <span class="n">hdr</span><span class="p">.</span><span class="n">ipv4</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">udp</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">inner_ipv4</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">inner_udp</span><span class="p">);</span>
+</span><span class="hll"><span class="cp">#endif </span><span class="c1">// WITH_SPGW</span>
+</span>     <span class="n">pkt_io_ingress</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">fabric_metadata</span><span class="p">,</span> <span class="n">standard_metadata</span><span class="p">);</span>
+     <span class="n">filtering</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">fabric_metadata</span><span class="p">,</span> <span class="n">standard_metadata</span><span class="p">);</span>
+<span class="hll"><span class="cp">#ifdef WITH_SPGW</span>
+</span><span class="hll">     <span class="n">spgw_ingress</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">hdr</span><span class="p">.</span><span class="n">gtpu_ipv4</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">gtpu_udp</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">gtpu</span><span class="p">,</span>
+</span><span class="hll">                        <span class="n">hdr</span><span class="p">.</span><span class="n">ipv4</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">udp</span><span class="p">,</span> <span class="n">fabric_metadata</span><span class="p">,</span> <span class="n">standard_metadata</span><span class="p">);</span>
+</span><span class="hll"><span class="cp">#endif </span><span class="c1">// WITH_SPGW</span>
+</span>     <span class="k">if</span> <span class="p">(</span><span class="n">fabric_metadata</span><span class="p">.</span><span class="n">skip_forwarding</span> <span class="o">==</span> <span class="n">_FALSE</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">forwarding</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">fabric_metadata</span><span class="p">,</span> <span class="n">standard_metadata</span><span class="p">);</span>
+     <span class="p">}</span>
+     <span class="n">acl</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">fabric_metadata</span><span class="p">,</span> <span class="n">standard_metadata</span><span class="p">);</span>
+     <span class="k">if</span> <span class="p">(</span><span class="n">fabric_metadata</span><span class="p">.</span><span class="n">skip_next</span> <span class="o">==</span> <span class="n">_FALSE</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">next</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">fabric_metadata</span><span class="p">,</span> <span class="n">standard_metadata</span><span class="p">);</span>
+<span class="hll"><span class="cp">#if defined WITH_INT</span>
+</span><span class="hll">         <span class="n">process_set_source_sink</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">fabric_metadata</span><span class="p">,</span> <span class="n">standard_metadata</span><span class="p">);</span>
+</span><span class="hll"><span class="cp">#endif </span><span class="c1">// WITH_INT</span>
+</span>     <span class="p">}</span>
+<span class="hll"><span class="cp">#ifdef WITH_BNG</span>
+</span><span class="hll">     <span class="n">bng_ingress</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">hdr</span><span class="p">,</span> <span class="n">fabric_metadata</span><span class="p">,</span> <span class="n">standard_metadata</span><span class="p">);</span>
+</span><span class="hll"><span class="cp">#endif </span><span class="c1">// WITH_BNG</span>
+</span><span class="p">}</span>
+</pre></div>
+</div>
 <p>For example, a companion file, <code class="docutils literal notranslate"><span class="pre">spgw.p4</span></code> (not shown), implements the
 forwarding plane for the SPGW extension, which includes the GTP tunnel
 encapsulation/decapsulation required by the cellular network standard.
@@ -507,11 +535,6 @@ building configurable forwarding pipelines. Designing higher level
 language constructs for composition, including the ability to
 dynamically add functions to the pipeline at runtime, is a subject of
 on-going research.</p>
-<div class="figure align-center" id="id4">
-<span id="fig-fabric-p4"></span><a class="reference internal image-reference" href="_images/Slide41.png"><img alt="_images/Slide41.png" src="_images/Slide41.png" style="width: 800px;" /></a>
-<p class="caption"><span class="caption-number">Figure 38. </span><span class="caption-text">Main <code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code> ingress processing block, including optional
-extensions in support of SPGW, BNG, and INT.</span></p>
-</div>
 </div>
 </div>
 
