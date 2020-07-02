@@ -496,7 +496,31 @@ support of Fiber-to-the-Home.</li>
 <li><strong>INT (Inband Network Telemetry):</strong> Adds metric collection and
 telemetry output directives.</li>
 </ul>
-<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">apply</span> <span class="p">{</span>
+<div class="highlight-C notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">apply</span> <span class="p">{</span>
 <span class="hll"><span class="cp">#ifdef WITH_SPGW</span>
 </span><span class="hll">     <span class="n">spgw_normalizer</span><span class="p">.</span><span class="n">apply</span><span class="p">(</span><span class="n">hdr</span><span class="p">.</span><span class="n">gtpu</span><span class="p">.</span><span class="n">isValid</span><span class="p">(),</span> <span class="n">hdr</span><span class="p">.</span><span class="n">gtpu_ipv4</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">gtpu_udp</span><span class="p">,</span>
 </span><span class="hll">                           <span class="n">hdr</span><span class="p">.</span><span class="n">ipv4</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">udp</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">inner_ipv4</span><span class="p">,</span> <span class="n">hdr</span><span class="p">.</span><span class="n">inner_udp</span><span class="p">);</span>
@@ -522,12 +546,16 @@ telemetry output directives.</li>
 </span><span class="hll"><span class="cp">#endif </span><span class="c1">// WITH_BNG</span>
 </span><span class="p">}</span>
 </pre></div>
-</div>
+</td></tr></table></div>
 <p>For example, a companion file, <code class="docutils literal notranslate"><span class="pre">spgw.p4</span></code> (not shown), implements the
 forwarding plane for the SPGW extension, which includes the GTP tunnel
 encapsulation/decapsulation required by the cellular network standard.
 Similarly, <code class="docutils literal notranslate"><span class="pre">bng.p4</span></code> (not shown) implements PPPoE termination, which
-is used by some Passive Optical Networks deployments.</p>
+is used by some Passive Optical Networks deployments. (As an aside,
+the code fragment also illustrates the basic structure of
+<code class="docutils literal notranslate"><span class="pre">fabric.p4</span></code>’s core functionality: lines 6-7 invoke the <em>filtering
+objective</em>, lines 12-14 invoke the <em>forwarding objective</em>, and lines
+16-17 invoke the <em>next objective</em>.)</p>
 <p>In addition to selecting which extensions to include, the pre-processor
 also defines several constants, including the size of each logical
 table.  Clearly, this implementation is a low-level approach to
