@@ -193,8 +193,7 @@ the software described in this book. They include:</p>
 <ul class="simple">
 <li>Using Stratum’s P4Runtime, gNMI, OpenConfig, and gNOI interfaces</li>
 <li>Using ONOS to control P4-programmed switches</li>
-<li>Writing ONOS applications to implement control plane logic
-(e.g., bridging, routing, ECMP)</li>
+<li>Writing ONOS applications to implement control plane logic</li>
 <li>Testing a software stack using bmv2 in Mininet</li>
 <li>Using PTF to test P4-based forwarding planes</li>
 </ul>
@@ -252,8 +251,8 @@ recommend that Windows users download the provided VM.</p>
 </div>
 <p>At this point you can start the virtual machine (an Ubuntu system),
 and log in using the credentials <code class="docutils literal notranslate"><span class="pre">sdn</span></code> / <code class="docutils literal notranslate"><span class="pre">rocks</span></code>. The instructions
-given throughout the remainder of this section are to be executed in
-the context the VM.</p>
+given throughout the remainder of this section (as well as the
+exercises themselves) are to be executed within the running VM.</p>
 </div>
 <div class="section" id="clone-repository">
 <h3>Clone Repository<a class="headerlink" href="#clone-repository" title="Permalink to this headline">¶</a></h3>
@@ -309,10 +308,10 @@ APIs.</p>
 </div>
 <div class="section" id="commands">
 <h3>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h3>
-<p>To facilitate working on the exercises, we provide a set of <code class="docutils literal notranslate"><span class="pre">make</span></code>
-targets to control the different aspects of the process. The specific
-commands are introduced in the individual exercises, but the following
-is a quick reference:</p>
+<p>To facilitate working on the exercises, the repo provides a set of
+<code class="docutils literal notranslate"><span class="pre">make</span></code> targets to control the different aspects of the process. The
+specific commands are introduced in the individual exercises, but the
+following is a quick reference:</p>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">deps</span></code> → Pull and build all required dependencies</li>
 <li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">p4-build</span></code> → Build P4 program</li>
@@ -326,8 +325,16 @@ is a quick reference:</p>
 <li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">mn-log</span></code> →  Show the Mininet log (i.e., the CLI output)</li>
 <li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">app-build</span></code> → Build custom ONOS app</li>
 <li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">app-reload</span></code> →  Install and activate the ONOS app</li>
-<li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">netcfg</span></code> →  Push <code class="docutils literal notranslate"><span class="pre">netcfg.json</span></code> file (network config) to ONOS</li>
+<li><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">netcfg</span></code> →  Push <code class="docutils literal notranslate"><span class="pre">netcfg.json</span></code> file (network config) to
+ONOS</li>
 </ul>
+<div class="admonition-executing-commands admonition" id="warning-cmds">
+<p class="first admonition-title">Executing Commands</p>
+<p class="last">As a reminder, these commands will be executed in a terminal window
+you open within the VM you just created. Be sure you are in the
+root directory of the repo you cloned (where the main <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>
+lives).</p>
+</div>
 </div>
 </div>
 <div class="section" id="exercises">
@@ -335,9 +342,11 @@ is a quick reference:</p>
 <p>The following lists (and links) the individual exercises. That there
 are 8 exercises and 8 chapters is a coincidence. Exercises 1 and 2
 focus on Stratum, and are best attempted after reading through Chapter
-5; Exercises 3 through 6 focus on ONOS and are best attempted after
-reading through Chapter 6; and Exercises 7 and 8 focus on Trellis and
-are best attempted after reading through Chapter 7.</p>
+5. Exercises 3 through 6 focus on ONOS and are best attempted after
+reading through Chapter 6. Exercises 7 and 8 focus on Trellis and are
+best attempted after reading through Chapter 7. Note that the
+exercises build on each other, so it is best to work through them in
+order.</p>
 <ol class="arabic simple">
 <li><a class="reference external" href="https://github.com/opennetworkinglab/ngsdn-tutorial/blob/advanced/EXERCISE-1.md">P4Runtime Basics</a></li>
 <li><a class="reference external" href="https://github.com/opennetworkinglab/ngsdn-tutorial/blob/advanced/EXERCISE-2.md">YANG, OpenConfig, gNMI Basics</a></li>
