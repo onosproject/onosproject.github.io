@@ -1,7 +1,7 @@
 Hands-on Programming
 ======================
 
-A collection of programming exercises provides hand-on experience with
+A collection of programming exercises provides hands-on experience with
 the software described in this book. They include:
 
 * Using Stratum's P4Runtime, gNMI, OpenConfig, and gNOI interfaces
