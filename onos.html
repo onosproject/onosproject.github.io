@@ -113,6 +113,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="future.html">Chapter 8:  Future of SDN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exercises.html">Hands-on Programming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="README.html">About This Book</a></li>
 </ul>
 
@@ -312,7 +313,7 @@ are in turn implemented using a distributed key/value store. The store
 itself will be familiar to anyone that has looked at how modern cloud
 services are designed—it scales across a distributed set of servers,
 and implements the Raft consensus algorithm to achieve fault-tolerance
-in the face of failures. If you are unfamiliar with Raft, a good
+in the event of failures. If you are unfamiliar with Raft, a good
 introduction is available at:</p>
 <div class="admonition-further-reading admonition" id="reading-p4">
 <p class="first admonition-title">Further Reading</p>
@@ -775,6 +776,18 @@ providers, where ONOS uses Karaf as its internal modularity framework.
 The bundle also includes Atomix, although ONOS supports an optional
 configuration that scales the key/value store independently from the
 rest of ONOS.</p>
+<div class="figure align-center" id="id13">
+<span id="fig-ha"></span><a class="reference internal image-reference" href="_images/Slide42.png"><img alt="_images/Slide42.png" src="_images/Slide42.png" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-number">Figure 35. </span><span class="caption-text">Multiple ONOS instances, all sharing network state via Atomix,
+provides scalable performance and high availability.</span></p>
+</div>
+<p><a class="reference internal" href="#fig-ha"><span class="std std-numref">Figure 35</span></a> illustrates ONOS scaled across multiple
+instances, where the set of instances share network state via Atomix
+Maps. The figure also shows each instance being responsible for a
+subset of the underlying hardware switches. Should a given instance
+fail, the remaining instances use the Atomix leader-election primitive
+to select a new instance to take its place, thereby assuring high
+availability.</p>
 <p>A refactoring of ONOS to more closely adhere to a microservice
 architecture is also underway. The new version, called µONOS,
 leverages ONOS’s existing modularity, but packages and scales
