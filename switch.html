@@ -111,6 +111,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#fixed-function-pipelines">4.5  Fixed-Function Pipelines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#of-dpa">4.5.1 OF-DPA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sai">4.5.2 SAI</a></li>
 </ul>
 </li>
@@ -1040,7 +1041,8 @@ mean to understate their value or the role they will undoubtedly
 continue to play. But they do remove one degree-of-freedom—the ability
 to reprogram the data plane—which helps to highlight the the
 relationship between all the moving parts introduced in this chapter.</p>
-<p>4.5.1 OF-DPA</p>
+<div class="section" id="of-dpa">
+<h3>4.5.1 OF-DPA<a class="headerlink" href="#of-dpa" title="Permalink to this headline">¶</a></h3>
 <p>We start with a concrete example: The <em>OpenFlow—Data Plane Abstraction
 (OF-DPA)</em> hardware abstraction layer that Broadcom provides for their
 switching chips. OF-DPA defines an API that can be used to install
@@ -1081,6 +1083,7 @@ code understood by their respective SDKs. Obviously this scenario
 doesn’t work for an arbitrary P4 program that wants to do something
 that the Tomahawk chip doesn’t support, but it will work for standard
 L2/L3 switch behavior.</p>
+</div>
 <div class="section" id="sai">
 <h3>4.5.2 SAI<a class="headerlink" href="#sai" title="Permalink to this headline">¶</a></h3>
 <p>Just as we saw both vendor-defined and community-defined architecture
