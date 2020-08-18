@@ -121,6 +121,7 @@
 <li class="toctree-l1"><a class="reference internal" href="onos.html">Chapter 6:  Network OS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="future.html">Chapter 8:  Future of SDN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exercises.html">Hands-on Programming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="README.html">About This Book</a></li>
 </ul>
 
@@ -729,9 +730,9 @@ the ingress and egress pipelines.</td></tr>
 
 <span class="k">const</span> <span class="n">bit</span><span class="o">&lt;</span><span class="mi">16</span><span class="o">&gt;</span> <span class="n">TYPE_IPV4</span> <span class="o">=</span> <span class="mh">0x800</span><span class="p">;</span>
 
-<span class="cm">/************************************************************************</span>
-<span class="cm">*********************** H E A D E R S  **********************************</span>
-<span class="cm">************************************************************************/</span>
+<span class="cm">/****************************************************</span>
+<span class="cm">************* H E A D E R S  ************************</span>
+<span class="cm">****************************************************/</span>
 
 <span class="k">typedef</span> <span class="n">bit</span><span class="o">&lt;</span><span class="mi">9</span><span class="o">&gt;</span>  <span class="n">egressSpec_t</span><span class="p">;</span>
 <span class="k">typedef</span> <span class="n">bit</span><span class="o">&lt;</span><span class="mi">48</span><span class="o">&gt;</span> <span class="n">macAddr_t</span><span class="p">;</span>
@@ -783,9 +784,9 @@ header, next transitions to the <code class="docutils literal notranslate"><span
 of traversing each state, the corresponding header is extracted from
 the packet. The values in these in-memory structures are then
 available to the other routines, as we will see below.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/************************************************************************</span>
-<span class="cm">*********************** P A R S E R  ************************************</span>
-<span class="cm">************************************************************************/</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/****************************************************</span>
+<span class="cm">************* P A R S E R  **************************</span>
+<span class="cm">****************************************************/</span>
 
 <span class="n">parser</span> <span class="nf">MyParser</span><span class="p">(</span>
                 <span class="n">packet_in</span> <span class="n">packet</span><span class="p">,</span>
@@ -836,9 +837,9 @@ checksum verification or computation stage of ingress or egress
 respectively.</td></tr>
 </tbody>
 </table>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/************************************************************************</span>
-<span class="cm">************   C H E C K S U M    V E R I F I C A T I O N   *************</span>
-<span class="cm">************************************************************************/</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/****************************************************</span>
+<span class="cm">***  C H E C K S U M    V E R I F I C A T I O N   ***</span>
+<span class="cm">****************************************************/</span>
 
 <span class="n">control</span> <span class="nf">MyVerifyChecksum</span><span class="p">(</span><span class="n">inout</span> <span class="n">headers</span> <span class="n">hdr</span><span class="p">,</span> <span class="n">inout</span> <span class="n">metadata</span> <span class="n">meta</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">apply</span> <span class="p">{</span>  <span class="p">}</span>
@@ -872,9 +873,9 @@ example, PSA also defines <code class="docutils literal notranslate"><span class
 <p>The final step of the ingress routine is to “apply” the table we just
 defined. This is done only if the parser (or previous pipeline strage)
 marked the IP header as valid.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/************************************************************************</span>
-<span class="cm">**************  I N G R E S S   P R O C E S S I N G   *******************</span>
-<span class="cm">************************************************************************/</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/****************************************************</span>
+<span class="cm">******  I N G R E S S   P R O C E S S I N G   *******</span>
+<span class="cm">****************************************************/</span>
 
 <span class="n">control</span> <span class="nf">MyIngress</span><span class="p">(</span>
                 <span class="n">inout</span> <span class="n">headers</span> <span class="n">hdr</span><span class="p">,</span>
@@ -931,9 +932,9 @@ table that matches on the <code class="docutils literal notranslate"><span class
 metadata. Other examples include doing ingress port pruning for
 multicast/broadcast packets and adding a special “CPU header” for
 intercepted packets passed up to the control plane.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/************************************************************************</span>
-<span class="cm">****************  E G R E S S   P R O C E S S I N G   *******************</span>
-<span class="cm">************************************************************************/</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/****************************************************</span>
+<span class="cm">*******  E G R E S S   P R O C E S S I N G   ********</span>
+<span class="cm">****************************************************/</span>
 
 <span class="n">control</span> <span class="nf">MyEgress</span><span class="p">(</span>
                 <span class="n">inout</span> <span class="n">headers</span> <span class="n">hdr</span><span class="p">,</span>
@@ -943,9 +944,9 @@ intercepted packets passed up to the control plane.</p>
     <span class="n">apply</span> <span class="p">{</span>  <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="cm">/************************************************************************</span>
-<span class="cm">*************   C H E C K S U M    C O M P U T A T I O N   **************</span>
-<span class="cm">************************************************************************/</span>
+<span class="cm">/****************************************************</span>
+<span class="cm">***   C H E C K S U M    C O M P U T A T I O N   ****</span>
+<span class="cm">****************************************************/</span>
 
 <span class="n">control</span> <span class="nf">MyComputeChecksum</span><span class="p">(</span>
                 <span class="n">inout</span> <span class="n">headers</span>  <span class="n">hdr</span><span class="p">,</span>
@@ -985,9 +986,9 @@ where we stopped parsing are included in the outgoing message. The
 details of how packets are emitted are specified by the architecture.
 For example, TNA supports truncating the payload based on the setting
 of a special metadata value consumed by the deparser.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/************************************************************************</span>
-<span class="cm">***********************  D E P A R S E R  *******************************</span>
-<span class="cm">************************************************************************/</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/****************************************************</span>
+<span class="cm">*************  D E P A R S E R  *********************</span>
+<span class="cm">****************************************************/</span>
 
 <span class="n">control</span> <span class="nf">MyDeparser</span><span class="p">(</span>
                 <span class="n">packet_out</span> <span class="n">packet</span><span class="p">,</span>
@@ -1007,9 +1008,9 @@ of a special metadata value consumed by the deparser.</p>
 whole, which is given by the V1Switch package shown below. This set of
 elements in this package is defined by <code class="docutils literal notranslate"><span class="pre">v1model.p4</span></code>, and consists of
 references to all the other routines defined above.</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/************************************************************************</span>
-<span class="cm">***********************  S W I T C H  ***********************************</span>
-<span class="cm">************************************************************************/</span>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/****************************************************</span>
+<span class="cm">*************  S W I T C H  *************************</span>
+<span class="cm">****************************************************/</span>
 
 <span class="n">V1Switch</span><span class="p">(</span>
   <span class="n">MyParser</span><span class="p">(),</span>

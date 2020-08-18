@@ -257,14 +257,14 @@ exercises themselves) are to be executed within the running VM.</p>
 <div class="section" id="clone-repository">
 <h3>Clone Repository<a class="headerlink" href="#clone-repository" title="Permalink to this headline">¶</a></h3>
 <p>To work on the exercises you will need to clone the following repo:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~
-git clone -b advanced https://github.com/opennetworkinglab/ngsdn-tutorial
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~
+$ git clone -b advanced https://github.com/opennetworkinglab/ngsdn-tutorial
 </pre></div>
 </div>
 <p>If the <code class="docutils literal notranslate"><span class="pre">ngsdn-tutorial</span></code> directory is already present in the VM, make
 sure to update its content:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/ngsdn-tutorial
-git pull origin advanced
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~/ngsdn-tutorial
+$ git pull origin advanced
 </pre></div>
 </div>
 <p>Note that there are multiple branches of the repo, each with a
@@ -276,8 +276,8 @@ the <code class="docutils literal notranslate"><span class="pre">advanced</span>
 <p>The VM may have shipped with an older version of the dependencies than
 you need for the exercises. You can upgrade to the latest version
 using the following command:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/ngsdn-tutorial
-make deps
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~/ngsdn-tutorial
+$ make deps
 </pre></div>
 </div>
 <p>This command downloads all necessary Docker images (~1.5 GB), which
