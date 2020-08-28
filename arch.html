@@ -108,6 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="onos.html">Chapter 6:  Network OS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="future.html">Chapter 8:  Future of SDN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exercises.html">Hands-on Programming</a></li>
 <li class="toctree-l1"><a class="reference internal" href="README.html">About This Book</a></li>
 </ul>
 
@@ -208,8 +209,15 @@ system that is running today in production networks.</p>
 <em>Control Applications</em>. <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a> also calls out
 a corresponding set of exemplar open source components (<em>Trellis</em>,
 <em>ONOS</em>, and <em>Stratum</em>) on the right, as well as a related <em>P4
-Toolchain</em> on the left. This chapter introduces these components, with
+Toolchain</em> on the left.<a class="footnote-reference" href="#id2" id="id1">[1]</a> This chapter introduces these components, with
 later chapters giving more detail.</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>We sometimes call this the <strong>TOST</strong> stack: <strong>T</strong>rellis running
+on <strong>O</strong>NOS running on <strong>S</strong>tratum running on <strong>T</strong>ofino.</td></tr>
+</tbody>
+</table>
 <p>Note the similarity between this diagram and <a class="reference internal" href="intro.html#fig-market2"><span class="std std-numref">Figure 2</span></a> in Chapter 1, both of which include two open
 interfaces: one between the Control Apps and the Network OS, and a
 second between the Network OS and the underlying white-box
@@ -221,7 +229,7 @@ and either <em>P4Runtime</em> or <em>OpenFlow</em> in the second case. That gRPC
 shown as the transport protocol for these two APIs is an
 implementation choice, but one that we will take for granted from here
 on.</p>
-<div class="figure align-center" id="id3">
+<div class="figure align-center" id="id5">
 <span id="fig-stack"></span><a class="reference internal image-reference" href="_images/Slide8.png"><img alt="_images/Slide8.png" src="_images/Slide8.png" style="width: 550px;" /></a>
 <p class="caption"><span class="caption-number">Figure 12. </span><span class="caption-text">Overall architecture of the SDN software stack.</span></p>
 </div>
@@ -249,7 +257,7 @@ important to also keep the network perspective in
 mind. <a class="reference internal" href="#fig-e2e"><span class="std std-numref">Figure 13</span></a> gives such a perspective by
 focusing on an end-to-end path through the network, connecting a pair
 of VMs.</p>
-<div class="figure align-center" id="id4">
+<div class="figure align-center" id="id6">
 <span id="fig-e2e"></span><a class="reference internal image-reference" href="_images/Slide19.png"><img alt="_images/Slide19.png" src="_images/Slide19.png" style="width: 500px;" /></a>
 <p class="caption"><span class="caption-number">Figure 13. </span><span class="caption-text">End-to-End Perspective of a Software-Defined Network, including
 the end hosts and the Virtual Machines (VMs) they host.</span></p>
@@ -411,7 +419,7 @@ pipelines.</li>
 </ul>
 <p>With respect to this last role, ONOS exports a northbound
 <em>FlowObjectives</em> abstraction, which generalizes Flow Rules in a
-pipeline-independent way.<a class="footnote-reference" href="#id2" id="id1">[1]</a> This interface, which Chapter 6
+pipeline-independent way.<a class="footnote-reference" href="#id4" id="id3">[2]</a> This interface, which Chapter 6
 describes in more detail, is not standardized in the same way as the
 control interface exported by individual switches. As with a
 conventional OS running on a server, applications written to the ONOS
@@ -421,10 +429,10 @@ such interface. If over time there is consensus about the Network OS
 interface, then applications will be more easily portable. But just as
 with server operating systems, the higher one goes up the software
 stack, the more difficult it becomes to reach such a consensus.</p>
-<table class="docutils footnote" frame="void" id="id2" rules="none">
+<table class="docutils footnote" frame="void" id="id4" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>We make no claim that FlowObjectives are an ideal interface for
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td>We make no claim that FlowObjectives are an ideal interface for
 controlling a switch. They evolved out of necessity, allowing
 developers to deal with different pipelines. Defining a general
 interface is the subject of ongoing research.</td></tr>
@@ -483,7 +491,7 @@ legacy protocol is involved is when Trellis needs to communicate with
 the outside world (e.g., upstream metro/core routers), in which case
 it uses standard BGP (as implemented by the open source Quagga
 server).</p>
-<div class="figure align-center" id="id5">
+<div class="figure align-center" id="id7">
 <span id="fig-trellis"></span><a class="reference internal image-reference" href="_images/Slide9.png"><img alt="_images/Slide9.png" src="_images/Slide9.png" style="width: 600px;" /></a>
 <p class="caption"><span class="caption-number">Figure 14. </span><span class="caption-text">Trellis suite of control apps managing a (potentially distributed)
 leaf-spine fabric.</span></p>
