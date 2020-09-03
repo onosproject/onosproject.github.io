@@ -196,12 +196,12 @@ architecture of such an <em>SDN software stack</em>.</p>
 stack, and while there are multiple options for the specific
 components and tools that can be plugged into this architecture, it
 also introduces an example set. We do this to make the discussion more
-concrete, but the particular components we describe two important
-attributes. One, they are open source and freely available on
-GitHub. Two, they are designed to work together, providing a
-comprehensive solution; there are no gaps in our story. Both
-attributes make it possible for <em>anyone</em> to build the same end-to-end
-system that is running today in production networks.</p>
+concrete, but the particular components we describe have two important
+attributes. One, they are open source and freely available on GitHub.
+Two, they are designed to work together, providing a comprehensive
+solution; there are no gaps in our story. Both attributes make it
+possible for <em>anyone</em> to build the same end-to-end system that is
+running today in production networks.</p>
 <div class="section" id="software-stack">
 <h2>3.1 Software Stack<a class="headerlink" href="#software-stack" title="Permalink to this headline">¶</a></h2>
 <p>An overview of the software stack is given in <a class="reference internal" href="#fig-stack"><span class="std std-numref">Figure 12</span></a>, which includes a <em>White-Box Switch</em> running a local
@@ -255,8 +255,8 @@ the stack.</p>
 12</span></a> is from the perspective of a single switch, but it is
 important to also keep the network perspective in
 mind. <a class="reference internal" href="#fig-e2e"><span class="std std-numref">Figure 13</span></a> gives such a perspective by
-focusing on an end-to-end path through the network, connecting a pair
-of VMs.</p>
+focusing on an end-to-end path through the network, connecting
+Virtual Machines (VMs).</p>
 <div class="figure align-center" id="id6">
 <span id="fig-e2e"></span><a class="reference internal image-reference" href="_images/Slide19.png"><img alt="_images/Slide19.png" src="_images/Slide19.png" style="width: 500px;" /></a>
 <p class="caption"><span class="caption-number">Figure 13. </span><span class="caption-text">End-to-End Perspective of a Software-Defined Network, including
@@ -333,11 +333,12 @@ P4 programs are written to an abstract model of the forwarding
 pipeline, and whether the chip’s actual hardware pipeline is fixed or
 programmable, we still need to know how to map the abstract pipeline
 onto the physical pipeline. This is where <code class="docutils literal notranslate"><span class="pre">arch.p4</span></code> plays a role. As
-for the role of <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code>, this program actually prescribes the
+for the role of <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code>, this program actually <em>prescribes</em> the
 pipeline in the case of a programmable chip, whereas for the
-fixed-function chip, <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code> merely describes the pipeline. But
-we still need <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code> in both cases because the toolchain uses
-it to generate the API that sits between the control and data planes.</p>
+fixed-function chip, <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code> merely <em>describes</em> the
+pipeline. But we still need <code class="docutils literal notranslate"><span class="pre">forward.p4</span></code> in both cases because the
+toolchain uses it to generate the API that sits between the control
+and data planes.</p>
 </div>
 <div class="section" id="switch-os">
 <h2>3.3 Switch OS<a class="headerlink" href="#switch-os" title="Permalink to this headline">¶</a></h2>
