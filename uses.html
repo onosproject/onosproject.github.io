@@ -278,19 +278,19 @@ interconnects their servers entirely in software. This is the use case
 we explore in-depth throughout this book, so for now we give only a
 brief introduction.</p>
 <p>A datacenter switching fabric is a network often designed according to
-a leaf-spine topology, based on the well-studied <em>Clos Architecture</em>.
-The basic idea is illustrated by the small 4-rack/3-tier example shown
-in Figure 8. Each rack has a <em>Top-of-Rack (ToR)</em> switch that
-interconnects the servers in that rack; these are referred to as the
-<em>leaf</em> switches of the fabric. (There are typically two such ToR
-switches per rack for resilience, but the figure shows only one for
-simplicity.) Each leaf switch then connects to a subset of available
-<em>spine</em> switches, with two requirements: (1) that there be multiple
-paths between any pair of racks, and (2) that each rack-to-rack path
-is two-hops (i.e., via a single intermediate spine switch). Note that
-this means in 3-tier design like the one shown in <a class="reference internal" href="#fig-leaf-spine"><span class="std std-numref">Figure 9</span></a>, every server-to-server path is either two hops
-(server-leaf-server in the intra-rack case) or four hops
-(server-leaf-spine-leaf-server in the inter-rack case).</p>
+a <em>leaf-spine</em> topology. The basic idea is illustrated by the small
+4-rack/3-tier example shown in Figure 8. Each rack has a <em>Top-of-Rack
+(ToR)</em> switch that interconnects the servers in that rack; these are
+referred to as the <em>leaf</em> switches of the fabric. (There are typically
+two such ToR switches per rack for resilience, but the figure shows
+only one for simplicity.) Each leaf switch then connects to a subset
+of available <em>spine</em> switches, with two requirements: (1) that there
+be multiple paths between any pair of racks, and (2) that each
+rack-to-rack path is two-hops (i.e., via a single intermediate spine
+switch). Note that this means in 3-tier design like the one shown in
+<a class="reference internal" href="#fig-leaf-spine"><span class="std std-numref">Figure 9</span></a>, every server-to-server path is
+either two hops (server-leaf-server in the intra-rack case) or four
+hops (server-leaf-spine-leaf-server in the inter-rack case).</p>
 <div class="figure align-center" id="id3">
 <span id="fig-leaf-spine"></span><a class="reference internal image-reference" href="_images/Slide20.png"><img alt="_images/Slide20.png" src="_images/Slide20.png" style="width: 400px;" /></a>
 <p class="caption"><span class="caption-number">Figure 9. </span><span class="caption-text">Example of a leaf-spine switching fabric common to cloud
