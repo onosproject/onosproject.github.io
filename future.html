@@ -218,10 +218,11 @@ from (a) the ability to state intent, and (b) the ability to observe
 behavior at fine granularity and in real-time. This is exactly the
 value SDN brings to the table, which leads to optimism that
 <em>verifiable closed-loop control</em> is now within reach.</p>
-<div class="figure align-center" id="id4">
-<span id="fig-closed-loop"></span><a class="reference internal image-reference" href="_images/Slide30.png"><img alt="_images/Slide30.png" src="_images/Slide30.png" style="width: 600px;" /></a>
-<p class="caption"><span class="caption-number">Figure 39. </span><span class="caption-text">INT generates fine-grain measurements, which in turn feed a closed
-control loop that verifies the network’s behavior.</span></p>
+<div class="admonition-further-reading admonition" id="reading-pronto">
+<p class="first admonition-title">Further Reading</p>
+<p class="last">N. Foster, et. al. <a class="reference external" href="http://www.systemsapproach.org/uploads/4/7/7/4/47748257/pronto_ccr_2020.pdf">Using Deep Programmability to Put Network
+Owners in Control</a>.
+ACM SIGCOMM Computer Communication Review, October 2020.</p>
 </div>
 <p><a class="reference internal" href="#fig-closed-loop"><span class="std std-numref">Figure 39</span></a> illustrates the basic idea.  The
 software stack described in this book is augmented with the
@@ -234,6 +235,11 @@ These measurements can then be analyzed and fed back into code
 generation and formal verification tools. This closed loop complements
 the intrinsic value of disaggregation, which makes it possible to
 reason about correctness-by-construction.</p>
+<div class="figure align-center" id="id3">
+<span id="fig-closed-loop"></span><a class="reference internal image-reference" href="_images/Slide30.png"><img alt="_images/Slide30.png" src="_images/Slide30.png" style="width: 600px;" /></a>
+<p class="caption"><span class="caption-number">Figure 39. </span><span class="caption-text">INT generates fine-grain measurements, which in turn feed a closed
+control loop that verifies the network’s behavior.</span></p>
+</div>
 <div class="sidebar">
 <p class="first sidebar-title">Top-Down Verification</p>
 <p>The approach to verifying networks described in this section is
@@ -304,7 +310,7 @@ ways than are captured in the model. By exploiting the ability of P4
 data planes to collect rich telemetry and other monitoring data, it is
 possible to develop network verification tools that combine
 statically-verified components with runtime verification.</p>
-<div class="figure align-center" id="id5">
+<div class="figure align-center" id="id4">
 <span id="fig-phase3"></span><a class="reference internal image-reference" href="_images/Slide37.png"><img alt="_images/Slide37.png" src="_images/Slide37.png" style="width: 600px;" /></a>
 <p class="caption"><span class="caption-number">Figure 40. </span><span class="caption-text">Projecting into the future, with Phase 3 of SDN focusing on
 verifiable, top-down control of network behavior.</span></p>
@@ -329,7 +335,7 @@ immersive user interfaces (e.g., AR/VR), mission-critical applications
 principles are applied to the Radio Access Network (RAN), resulting in
 increased feature velocity. Because of this, mobile network operators
 are working to make Software-Defined RAN (SD-RAN) happen.</p>
-<div class="admonition-further-reading admonition" id="reading-5g">
+<div class="admonition-further-reading admonition" id="reading-sdran">
 <p class="first admonition-title">Further Reading</p>
 <p class="last"><a class="reference external" href="https://opennetworking.org/sd-ran/">SD-RAN Project</a>.
 Open Networking Foundation. August 2020.</p>
@@ -359,7 +365,7 @@ on each base station, just as an SDN-controlled ethernet switch still
 has a local packet scheduler), but they do exert near real-time
 control over the base stations, with control loops measured in less
 than ten milliseconds.</p>
-<div class="figure align-center" id="id6">
+<div class="figure align-center" id="id5">
 <span id="fig-ric"></span><a class="reference internal image-reference" href="_images/Slide36.png"><img alt="_images/Slide36.png" src="_images/Slide36.png" style="width: 500px;" /></a>
 <p class="caption"><span class="caption-number">Figure 41. </span><span class="caption-text">3GPP-compliant RAN Intelligent Controller (RIC) built by adapting
 and extending ONOS.</span></p>
@@ -403,7 +409,7 @@ its data delivery objectives.</p>
 <p>For a broad introduction into what’s involved in disaggregating 5G
 mobile networks so they can be implemented in software, we recommend
 the following companion book.</p>
-<div class="admonition-further-reading admonition" id="id3">
+<div class="admonition-further-reading admonition" id="reading-5g">
 <p class="first admonition-title">Further Reading</p>
 <p class="last">L. Peterson and O. Sunay.
 <a class="reference external" href="https://5g.systemsapproach.org/">5G Mobile Networks: A Systems Approach</a>.
