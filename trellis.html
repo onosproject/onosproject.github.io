@@ -105,7 +105,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="future.html">Chapter 8:  Future of SDN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exercises.html">Hands-on Programming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">About This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">About The Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">About The Authors</a></li>
 </ul>
 
             
@@ -332,7 +333,7 @@ manage the set of ECMP groups connecting leaf and spine switches.</p>
 </div>
 <div class="section" id="routes-and-multicast">
 <h2>7.3 Routes and Multicast<a class="headerlink" href="#routes-and-multicast" title="Permalink to this headline">¶</a></h2>
-<p>In addition to Segment Routing, which establies data paths between
+<p>In addition to Segment Routing, which establishes data paths between
 leaf switches, Trellis also takes advantage of the Route and Mcast
 services introduced in Chapter 6. They determine which of the
 leaf-spine switches serve each IP prefix, and where to find all the
@@ -392,7 +393,7 @@ indicating that the destination prefix is reachable via the leaf
 switches that connect the fabric to upstream networks (e.g., Switches 3
 and 4 in <a class="reference internal" href="#fig-netconfig"><span class="std std-numref">Figure 36</span></a>).</p>
 <p>The story with multicast is similar. Again using the ONOS CLI, it is
-possible to create a new muticast route and add a sink to it. For example:</p>
+possible to create a new multicast route and add a sink to it. For example:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">onos&gt; mcast-host-join -sAddr * -gAddr 224.0.0.1 -srcs 00:AA:00:00:00:01/None -srcs 00:AA:00:00:00:05/None -sinks 00:AA:00:00:00:03/None -sinks 00:CC:00:00:00:01/None</span>
 </pre></div>
 </div>
@@ -403,11 +404,11 @@ addresses (<code class="docutils literal notranslate"><span class="pre">sinks</s
 </pre></div>
 </div>
 <p>Again, there is no PIM running, but instead, Trellis offers a
-programmatic inteface for network operators to define a multicast tree
+programmatic interface for network operators to define a multicast tree
 through a sequence of such calls. For example, when Trellis runs as
 part of an access network that delivers IPTV to subscribers, one
 option is for software running on the operator’s set-top boxes to
-issue calls similar to the one’s shown above (except, of course, using
+issue calls similar to the ones shown above (except, of course, using
 the RESTful API rather than the CLI). Another option is to have
 set-top boxes send IGMP messages, which Trellis intercepts using the
 Packet Service (similar to how the Host service intercepts ARP and
@@ -475,7 +476,7 @@ beyond to scope of this book, but at a high level:</p>
 <p class="first sidebar-title">VNF Off-loading</p>
 <p>The SPGW and BNG extensions are examples of an optimization
 technique sometimes called <em>VNF off-loading</em>. VNF is an acronym
-for <em>Vitrual Network Function</em>, which refers to functionality that
+for <em>Virtual Network Function</em>, which refers to functionality that
 sometimes runs as software in virtual machines. Off-loading refers
 to the idea of re-implementing this functionality to run in switch
 forwarding pipeline, rather than on a general-purpose server. This

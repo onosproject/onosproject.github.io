@@ -114,7 +114,8 @@
 <li class="toctree-l1"><a class="reference internal" href="trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="future.html">Chapter 8:  Future of SDN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exercises.html">Hands-on Programming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">About This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">About The Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">About The Authors</a></li>
 </ul>
 
             
@@ -564,7 +565,7 @@ of varying network conditions.</p>
 <p>Each of the above services comprises its own distributed store and
 notification capabilities. Individual applications are free to extend
 this set with their own services and to back their implementations
-with their own distributes stores. This is why ONOS provides
+with their own distributed stores. This is why ONOS provides
 applications with direct access to Atomix primitives, such as
 <code class="docutils literal notranslate"><span class="pre">AtomicMaps</span></code> and <code class="docutils literal notranslate"><span class="pre">DistributedMaps</span></code>. We will see examples of such
 extensions in the next Chapter when we take a closer look at Trellis.</p>
@@ -611,7 +612,7 @@ managed by the Flow Objective Service, as depicted in <a class="reference intern
 33</span></a>. For simplicity, the example focuses on the selector
 (match) specified by a Filtering objective, where the key is to
 express the fact that you want to select a particular input port, MAC
-address, VLAN tag, and IP address combintation, without regard for
+address, VLAN tag, and IP address combination, without regard for
 the exact sequence of pipeline tables that implement that combination.</p>
 <div class="figure align-center" id="id11">
 <span id="fig-flowobj"></span><a class="reference internal image-reference" href="_images/Slide39.png"><img alt="_images/Slide39.png" src="_images/Slide39.png" style="width: 500px;" /></a>
@@ -788,7 +789,7 @@ instances, where the set of instances share network state via Atomix
 Maps. The figure also shows each instance being responsible for a
 subset of the underlying hardware switches. Should a given instance
 fail, the remaining instances use the Atomix leader-election primitive
-to select a new instance to take its place, thereby assuring high
+to select a new instance to take its place, thereby ensuring high
 availability.</p>
 <p>A refactoring of ONOS to more closely adhere to a microservice
 architecture is also underway. The new version, called µONOS,

@@ -123,7 +123,8 @@
 <li class="toctree-l1"><a class="reference internal" href="trellis.html">Chapter 7:  Leaf-Spine Fabric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="future.html">Chapter 8:  Future of SDN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="exercises.html">Hands-on Programming</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">About This Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">About The Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">About The Authors</a></li>
 </ul>
 
             
@@ -271,7 +272,7 @@ white-box switch includes a BIOS, which much like its microprocessor
 counterpart, is firmware that provisions and boots a bare-metal
 switch. A standard BIOS called the <em>Open Network Install Environment
 (ONIE)</em> has emerged under the OCP’s stewardship, and so we assume ONIE
-throughout the rest of chapter.</p>
+throughout the rest of the chapter.</p>
 </div>
 <div class="section" id="forwarding-pipeline">
 <h2>4.2 Forwarding Pipeline<a class="headerlink" href="#forwarding-pipeline" title="Permalink to this headline">¶</a></h2>
@@ -424,7 +425,7 @@ but in practice the architecture model would PSA specific, such as
 <span id="fig-psa"></span><a class="reference internal image-reference" href="_images/Slide13.png"><img alt="_images/Slide13.png" src="_images/Slide13.png" style="width: 650px;" /></a>
 <p class="caption"><span class="caption-number">Figure 19. </span><span class="caption-text">P4 architecture known as the Portable Switch Architecture
 (PSA). Includes the generic <code class="docutils literal notranslate"><span class="pre">arch.p4</span></code> as the the architecture
-model spec, but for PSA this would be a replaced by <code class="docutils literal notranslate"><span class="pre">psa.p4</span></code>.</span></p>
+model spec, but for PSA this would be replaced by <code class="docutils literal notranslate"><span class="pre">psa.p4</span></code>.</span></p>
 </div>
 <p>When compared to the simpler PISA model used in <a class="reference internal" href="#fig-pisa1"><span class="std std-numref">Figure 16</span></a> and <a class="reference internal" href="#fig-pisa2"><span class="std std-numref">17</span></a>, we see two major
 differences. First, the pipeline includes a new fixed-function stage:
@@ -526,7 +527,7 @@ every programmable element in the abstract depiction shown in
         <span class="p">...</span>
 <span class="p">}</span>
 
-<span class="cm">/* Ingress Proceessing */</span>
+<span class="cm">/* Ingress Processing */</span>
 <span class="n">control</span> <span class="n">MyIngress</span><span class="p">(</span>
                 <span class="n">inout</span> <span class="n">headers</span> <span class="n">hdr</span><span class="p">,</span>
                 <span class="n">inout</span> <span class="n">metadata</span> <span class="n">meta</span><span class="p">,</span>
@@ -534,7 +535,7 @@ every programmable element in the abstract depiction shown in
         <span class="p">...</span>
 <span class="p">}</span>
 
-<span class="cm">/* Egress Proceessing */</span>
+<span class="cm">/* Egress Processing */</span>
 <span class="n">control</span> <span class="n">MyEgress</span><span class="p">(</span>
                 <span class="n">inout</span> <span class="n">headers</span> <span class="n">hdr</span><span class="p">,</span>
                 <span class="n">inout</span> <span class="n">metadata</span> <span class="n">meta</span><span class="p">,</span>
