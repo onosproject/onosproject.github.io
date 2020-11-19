@@ -505,8 +505,8 @@ every programmable element in the abstract depiction shown in
 <span class="cp">#include</span> <span class="cpf">&lt;v1model.p4&gt;</span><span class="cp"></span>
 
 <span class="cm">/* Headers */</span>
-<span class="k">struct</span> <span class="n">metadata</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
-<span class="k">struct</span> <span class="n">headers</span> <span class="p">{</span>
+<span class="k">struct</span> <span class="nc">metadata</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}</span>
+<span class="k">struct</span> <span class="nc">headers</span> <span class="p">{</span>
         <span class="n">ethernet_t</span>      <span class="n">ethernet</span><span class="p">;</span>
         <span class="n">ipv4_t</span>          <span class="n">ipv4</span><span class="p">;</span>
 <span class="p">}</span>
@@ -764,11 +764,11 @@ the ingress and egress pipelines.</td></tr>
     <span class="n">ip4Addr_t</span> <span class="n">dstAddr</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="k">struct</span> <span class="n">metadata</span> <span class="p">{</span>
+<span class="k">struct</span> <span class="nc">metadata</span> <span class="p">{</span>
    <span class="cm">/* empty */</span>
 <span class="p">}</span>
 
-<span class="k">struct</span> <span class="n">headers</span> <span class="p">{</span>
+<span class="k">struct</span> <span class="nc">headers</span> <span class="p">{</span>
     <span class="n">ethernet_t</span>   <span class="n">ethernet</span><span class="p">;</span>
     <span class="n">ipv4_t</span>       <span class="n">ipv4</span><span class="p">;</span>
 <span class="p">}</span>
